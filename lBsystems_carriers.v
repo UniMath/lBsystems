@@ -38,15 +38,18 @@ Definition isasetBt ( BB : lBsystem_carrier_0 ) : isaset ( Tilde BB ) :=
 Definition lBsystem_carrier :=
   total2 ( fun BB :  lBsystem_carrier_0 =>
              dirprod
-               ( dirprod ( forall X : BB , ll ( ft X ) = ll X - 1 )
+               ( dirprod ( forall ( X : BB ) ( gt : ll X > 0 ) , 1 + ll ( ft X ) = ll X )
                          ( forall ( X : BB ) ( e : ll X = 0 ) , ft X = X ) )
                ( forall r : Tilde BB , ll ( dd r ) > 0 ) ) .
                                         
 Definition lBsystem_carrier_to_carrier_0 : lBsystem_carrier -> lBsystem_carrier_0 := pr1 .
 Coercion lBsystem_carrier_to_carrier_0 : lBsystem_carrier >-> lBsystem_carrier_0 .
 
-Definition ll_ft { BB : lBsystem_carrier } ( X : BB ) : ll ( ft X ) = ll X - 1 :=
-  pr1 ( pr1 ( pr2 BB ) ) X .
+Definition ft_choice { BB : lBsystem_carrier } ( X : BB ) : coprod ( ll X > 0 ) ( ll X = 0 ) :=
+  natgehchoice _ _ ( natgehn0 _ ) . 
+
+Definition inc_ll_ft { BB : lBsystem_carrier } ( X : BB ) ( gt : ll X > 0 ) :
+  1 + ll ( ft X ) = ll X := pr1 ( pr1 ( pr2 BB ) ) X gt .
 
 Definition ftX_eq_X { BB : lBsystem_carrier } { X : BB } ( e : ll X = 0 ) : ft X = X :=
   pr2 ( pr1 ( pr2 BB ) ) X e .
@@ -55,12 +58,61 @@ Definition ll_dd { BB : lBsystem_carrier } ( r : Tilde BB ) : ll ( dd r ) > 0 :=
   pr2 ( pr2 BB ) r .
 
 
+(* Lemma ll_ft { BB : lBsystem_carrier } ( X : BB ) : ll ( ft X ) = ll X - 1 .
+Proof .
+  intros .
+  destruct ( ft_choice X ) as [ gt | eq ] .
+  apply ( natpluslcan _ _ 1 ) . 
+  rewrite ( natpluscomm _ ( ll X - 1 ) ) .
+  rewrite minusplusnmm . 
+  exact ( inc_ll_ft _ gt ) . 
+
+  exact ( natgthtogehsn _ _ gt ) . 
+
+  rewrite eq . 
+  rewrite ( ftX_eq_X eq ) . 
+  exact eq . 
+
+
+Defined. *)
+
+
+  
+
+
+
 
 (** **** Useful lemmas *)
 
 
+Definition ftn_choice { BB : lBsystem_carrier } ( n : nat ) ( X : BB ) :
+  coprod ( ll X >= n ) ( ll X < n ) .
+Proof.
+  intros . destruct ( natgthorleh n ( ll X ) ) as [ gt | le ] .
+  exact ( ii2 gt ) . 
 
-Lemma ll_ftn { BB : lBsystem_carrier } ( n : nat ) ( X : BB ) : ll ( ftn n X ) = ll X - n . 
+  exact ( ii1 le ) .
+
+Defined.
+
+
+Lemma nplus_ll_ftn { BB : lBsystem_carrier } ( n : nat ) ( X : BB ) ( ge :  ll X >= n ) :
+  n + ll ( ftn n X ) = ll X .
+Proof .
+  intros BB n . induction n as [ | n IHn ] .
+  intros . apply idpath . 
+
+  *** Unfinished ***
+  
+
+
+
+
+
+
+
+  
+(* Lemma ll_ftn { BB : lBsystem_carrier } ( n : nat ) ( X : BB ) : ll ( ftn n X ) = ll X - n . 
 Proof.
   intros BB n .
   induction n as [ | n IHn ] .
@@ -68,7 +120,7 @@ Proof.
   intro . change ( ftn ( S n ) X ) with ( ft ( ftn n X ) ) .  rewrite ( ll_ft _ ) . 
   rewrite ( IHn X ) .  rewrite ( natminusassoc _ _ _ ) .  rewrite ( natpluscomm n 1 ) . 
   apply idpath .
-Defined .
+Defined . *)
 
   
 Lemma ftn_ft { BB : lBsystem_carrier_0 } ( n : nat ) ( X : BB ) :
@@ -92,14 +144,32 @@ Defined.
 Lemma llftgehll { BB : lBsystem_carrier } { X1 X2 : BB } ( gt : ll X2 > ll X1 ) :
   ll ( ft X2 ) >= ll X1 .
 Proof.
-  intros. rewrite ( ll_ft X2 ) . apply ( natgthtominus1geh gt ) . 
+  intros.
+  change ( 1 + ll (ft X2) >= 1 + ll X1 ) . 
+  assert ( gt' := natgthgehtrans _ _ _ gt ( natgehn0 _ ) ) . 
+  rewrite ( inc_ll_ft _ gt' ) . 
+  exact ( natgthtogehsn _ _ gt ) . 
+
 Defined .
+
+Lemma inc_ll_ft_geh { BB : lBsystem_carrier } ( X : BB ) : 1 + ll ( ft X ) >= ll X .
+Proof .
+  intros . destruct ( ft_choice X ) as [ gt | eq ] .
+  rewrite ( inc_ll_ft _ gt ) .  apply isreflnatgeh . 
+
+  rewrite eq .
+  apply ( natgehn0 _ ) . 
+
+Defined.
 
 Lemma llgehll { BB : lBsystem_carrier } { X1 X2 : BB } ( gt : ll X2 > ll ( ft X1 ) ) :
   ll X2 >= ll X1 .
 Proof.
-  intros. rewrite ( ll_ft X1 ) in gt . apply ( natgthminus1togeh gt ) . 
-Defined .
+  intros.
+  assert ( ge := natgthtogehsn _ _ gt ) .
+  exact ( istransnatgeh _ _ _ ge ( inc_ll_ft_geh _ ) ) .
+
+Defined.
 
 
 

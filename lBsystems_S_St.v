@@ -222,35 +222,56 @@ Definition St_ops_type ( BB : lBsystem_carrier ) :=
 Definition St_ax1_type { BB : lBsystem_carrier } ( S : S_ops_type BB )
            ( St : St_ops_type BB ) := 
   forall ( r : Tilde BB ) ( s : Tilde BB ) ( inn : St_dom r s ) ,
-    ft ( dd ( St r s inn ) ) = S r ( dd s ) inn .
+    dd ( St r s inn ) = S r ( dd s ) inn .
 
-
-(*
 
 (** Implications of the zeros and first properties of operations of type S and St
 that are required for the formulation of the properties StS and StSt *)
 
-Lemma inc_ll_dd_St { BB : lBsystem_carrier } { S : S_ops_type BB } { St : St_ops_type BB }
+
+Lemma ll_dd_St { BB : lBsystem_carrier } { S : S_ops_type BB } { St : St_ops_type BB }
       ( ax0 : S_ax0_type S ) ( ax1 : St_ax1_type S St )
-      { r : Tilede BB } { Y : BB } ( inn : S_dom r Y ) :
-  1 + ll ( dd ( S r Y inn ) ) = 
+      { r s : Tilde BB } ( inn : St_dom r s ) :
+  ll ( dd ( St r s inn ) ) = ll ( dd s ) - 1 . 
+Proof .
+  intros .
+  rewrite ax1 . 
+  exact ( ax0 _ _ inn ) . 
+
+Defined .
 
 
-
-      
-
+  
 Lemma St_dom_rs_sY_to_Strs_SrY { BB : lBsystem_carrier } { S : S_ops_type BB }
-           ( ax0 : S_ax0_type S ) ( ax1a : S_ax1a_type S ) ( ax1b : S_ax1b_type S )
+           ( ax0 : S_ax0_type S ) ( ax1a : S_ax1a_type S ) 
            { St : St_ops_type BB } ( ax1t : St_ax1_type S St )
            { r s : Tilde BB } { Y : BB } ( innrs : St_dom r s ) ( inn : S_dom s Y ) :
   S_dom ( St r s innrs ) ( S r Y ( St_S_dom_comp innrs inn ) ) .
 Proof .
   intros .
-  refine ( S_dom_constr _ _ ) . 
-  rewrite ax0 . 
+  unfold S_dom . 
   rewrite ax1t . 
+  exact ( isabove_S_S_2 ax0 ax1a _ _ inn ) . 
 
-  
+Defined.
+
+Lemma S_dom_rs_sY_to_r_SsY { BB : lBsystem_carrier } { S : S_ops_type BB }
+      ( ax1b : S_ax1b_type S ) { r s : Tilde BB } { Y : BB }
+      ( innrs : St_dom r s ) ( inn : S_dom s Y ) :
+  S_dom r ( S s Y inn ) .
+Proof .
+  intros . 
+  unfold S_dom . 
+  refine ( isabov_trans ( ax1b _ _ _ ) _ ) . 
+  exact ( isover_ft' innrs ) . 
+
+Defined.
+
+
+
+
+
+
 
 
 (** Property SSt *)
@@ -260,11 +281,11 @@ Definition SSt_type { BB : lBsystem_carrier } { S : S_ops_type BB }
            { St : St_ops_type BB } ( ax1t : St_ax1_type S St ) :=
   forall ( r s : Tilde BB ) ( Y : BB ) ( innrs : St_dom r s ) ( inn : S_dom s Y ) ,
     S ( St r s innrs ) ( S r Y ( St_S_dom_comp innrs inn ) )
-      ( St_dom_rs_sY_to_Strs_SrY ax0 ax1a ax1b ax1t inn12 inn2r ) =
-    S r ( S s Y inn ) ( Tt_dom_12_2r_to_Tt1Tt2r T ax0 ax1b Tt ax1at inn12 inn2r ) . 
+      ( St_dom_rs_sY_to_Strs_SrY ax0 ax1a ax1t innrs inn ) =
+    S r ( S s Y inn ) ( S_dom_rs_sY_to_r_SsY ax1b innrs inn ) . 
 
 
-*)
+
 
 
 

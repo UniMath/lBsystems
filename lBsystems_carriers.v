@@ -56,8 +56,12 @@ Definition ll_dd { BB : lBsystem_carrier } ( r : Tilde BB ) : ll ( dd r ) > 0 :=
 
 
 
+
 (** **** Useful lemmas *)
 
+
+Definition ll_dd_geh { BB : lBsystem_carrier } ( r : Tilde BB ) : ll ( dd r ) >= 1 :=
+  natgthtogehsn _ _ ( ll_dd r ) . 
 
 
 Lemma ll_ftn { BB : lBsystem_carrier } ( n : nat ) ( X : BB ) : ll ( ftn n X ) = ll X - n . 

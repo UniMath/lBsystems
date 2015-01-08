@@ -168,6 +168,18 @@ Definition nateqandplusl ( n m k : nat ) : n = m -> k + n = k + m :=
 
 
 
+(** **** Cancellation properties of minus on nat *)
+
+Lemma natminusrcan { n m k : nat } ( ge1 : n >= k ) ( ge2 : m >= k ) ( is : n - k = m - k ) :
+  n = m .
+Proof .
+  intros .
+  assert ( is' := nateqandplusr _ _ k is ) .
+  rewrite ( minusplusnmm _ _ ge1 ) in is' .
+  rewrite ( minusplusnmm _ _ ge2 ) in is' .
+  exact is' .
+
+Defined.
 
 
 

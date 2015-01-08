@@ -368,7 +368,7 @@ Definition TTt_type { BB : lBsystem_carrier } { T : T_ops_type BB }
            { Tt : Tt_ops_type BB } ( ax1t : Tt_ax1_type T Tt ) :=
   forall ( X1 X2 : BB ) ( r : Tilde BB ) ( inn12 : T_dom X1 X2 ) ( inn2r : Tt_dom X2 r ) ,
     Tt ( T X1 X2 inn12 ) ( Tt X1 r ( T_dom_comp inn12 inn2r ) )
-      ( Tt_dom_12_2r_to_T12_Tt1r T ax0 ax1a ax1b Tt ax1t inn12 inn2r ) =
+      ( Tt_dom_12_2r_to_T12_Tt1r ax0 ax1a ax1b ax1t inn12 inn2r ) =
     Tt X1 ( Tt X2 r inn2r ) ( Tt_dom_12_2r_to_Tt1Tt2r ax0 ax1b ax1t inn12 inn2r ) . 
 
 

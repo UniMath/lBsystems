@@ -29,7 +29,14 @@ Operations T and S are different in the forms of axiom 0 and axiom 1b .
 Definition S_dom { BB : lBsystem_carrier } ( r : Tilde BB ) ( Y : BB ) :=
   isabove Y ( dd r ) .
 
-Definition S_dom_gth { BB : lBsystem_carrier } { r : Tilde BB } { Y : BB } ( inn : S_dom r Y ) :
+Identity Coercion S_dom_to_isabove : S_dom >-> isabove . 
+
+Notation S_dom_constr := isabove_constr .
+Notation S_dom_gth := isabove_gth .
+
+
+
+Definition S_dom_gt0 { BB : lBsystem_carrier } { r : Tilde BB } { Y : BB } ( inn : S_dom r Y ) :
   ll Y > 0 .
 Proof .
   intros .  exact ( istransnatgth _ _ _ ( isabove_gth inn ) ( ll_dd _ ) )  . 
@@ -39,7 +46,7 @@ Defined.
 Definition S_dom_geh { BB : lBsystem_carrier } { r : Tilde BB } { Y : BB } ( inn : S_dom r Y ) :
   ll Y >= 1 .
 Proof .
-  intros .  exact ( natgthtogehsn _ _ ( S_dom_gth inn ) ) . 
+  intros .  exact ( natgthtogehsn _ _ ( S_dom_gt0 inn ) ) . 
 
 Defined.
 
@@ -80,7 +87,7 @@ Defined.
 (** The zeros property (later an axiom) of an operation of type S *)
 
 Definition S_ax0_type { BB : lBsystem_carrier } ( S : S_ops_type BB ) :=
-  forall ( r : Tilde BB ) ( Y : BB ) ( inn : S_dom r Y ) , ( ll ( S r Y inn ) ) = ( ll Y ) - 1 .
+  forall ( r : Tilde BB ) ( Y : BB ) ( inn : S_dom r Y ) , ll ( S r Y inn ) = ll Y - 1 .
 
 (** The first property (later an axiom) of an operation of type S *)
 
@@ -147,7 +154,7 @@ Proof .
   rewrite <- is . 
   exact inn' . 
 
-  rewrite ( natmiusmius1mminus1 ( S_dom_gth inn ) ( S_dom_gth inn' ) ) . 
+  rewrite ( natmiusmius1mminus1 ( S_dom_gt0 inn ) ( S_dom_gt0 inn' ) ) . 
   rewrite ( ftn_S ax1a _ isab inn ) .
   exact ( S_equals_2 _ is _ _ ) . 
 
@@ -172,19 +179,6 @@ Proof .
 Defined.
 
 
-  
-
-
-
-
-
-
-
-
-
-
-
-
 
 (** **** Operation(s) St  *)
 
@@ -193,7 +187,26 @@ Defined.
 
 
 Definition St_dom { BB : lBsystem_carrier } ( r : Tilde BB ) ( s : Tilde BB ) :=
-  S_dom r ( dd s ) . 
+  S_dom r ( dd s ) .
+
+Identity Coercion St_dom_to_S_dom : St_dom >-> S_dom . 
+
+Notation St_dom_constr := S_dom_constr .
+Notation St_dom_gth := S_dom_gth .
+
+Lemma St_S_dom_comp { BB : lBsystem_carrier } { r s : Tilde BB } { Y : BB }
+      ( innrs : St_dom r s ) ( inn : S_dom s Y ) : S_dom r Y .
+Proof .
+  intros .
+  refine ( S_dom_constr _ _ ) .
+  refine ( istransnatgth _ _ _ ( S_dom_gth inn ) ( St_dom_gth innrs ) ) . 
+
+  refine ( isover_trans inn innrs ) .
+  
+Defined.
+
+
+
 
 
 (** The type objects of which are candidates for operations St on an lB-system. *)
@@ -212,13 +225,46 @@ Definition St_ax1_type { BB : lBsystem_carrier } ( S : S_ops_type BB )
     ft ( dd ( St r s inn ) ) = S r ( dd s ) inn .
 
 
+(*
+
+(** Implications of the zeros and first properties of operations of type S and St
+that are required for the formulation of the properties StS and StSt *)
+
+Lemma inc_ll_dd_St { BB : lBsystem_carrier } { S : S_ops_type BB } { St : St_ops_type BB }
+      ( ax0 : S_ax0_type S ) ( ax1 : St_ax1_type S St )
+      { r : Tilede BB } { Y : BB } ( inn : S_dom r Y ) :
+  1 + ll ( dd ( S r Y inn ) ) = 
 
 
-(** Two implications of the zeros and first properties of operations of type S and St
-that are required for the formulation of the properties SS and SSt *) 
+
+      
+
+Lemma St_dom_rs_sY_to_Strs_SrY { BB : lBsystem_carrier } { S : S_ops_type BB }
+           ( ax0 : S_ax0_type S ) ( ax1a : S_ax1a_type S ) ( ax1b : S_ax1b_type S )
+           { St : St_ops_type BB } ( ax1t : St_ax1_type S St )
+           { r s : Tilde BB } { Y : BB } ( innrs : St_dom r s ) ( inn : S_dom s Y ) :
+  S_dom ( St r s innrs ) ( S r Y ( St_S_dom_comp innrs inn ) ) .
+Proof .
+  intros .
+  refine ( S_dom_constr _ _ ) . 
+  rewrite ax0 . 
+  rewrite ax1t . 
+
+  
 
 
+(** Property SSt *)
 
+Definition SSt_type { BB : lBsystem_carrier } { S : S_ops_type BB }
+           ( ax0 : S_ax0_type S ) ( ax1a : S_ax1a_type S ) ( ax1b : S_ax1b_type S )
+           { St : St_ops_type BB } ( ax1t : St_ax1_type S St ) :=
+  forall ( r s : Tilde BB ) ( Y : BB ) ( innrs : St_dom r s ) ( inn : S_dom s Y ) ,
+    S ( St r s innrs ) ( S r Y ( St_S_dom_comp innrs inn ) )
+      ( St_dom_rs_sY_to_Strs_SrY ax0 ax1a ax1b ax1t inn12 inn2r ) =
+    S r ( S s Y inn ) ( Tt_dom_12_2r_to_Tt1Tt2r T ax0 ax1b Tt ax1at inn12 inn2r ) . 
+
+
+*)
 
 
 

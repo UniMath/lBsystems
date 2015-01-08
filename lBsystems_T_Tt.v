@@ -278,7 +278,7 @@ Defined.
 
 (** Property TT *)
 
-Definition TT_type { BB : lBsystem_carrier } ( T : T_ops_type BB )
+Definition TT_type { BB : lBsystem_carrier } { T : T_ops_type BB }
            ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T ) :=
   forall ( X1 X2 X3 : BB ) ( inn12 : T_dom X1 X2 ) ( inn23 : T_dom X2 X3 ) ,
     T ( T X1 X2 inn12 ) ( T X1 X3 ( T_dom_comp inn12 inn23 ) )
@@ -331,9 +331,9 @@ Definition Tt_ax1_type { BB : lBsystem_carrier } ( T : T_ops_type BB ) ( Tt : Tt
 (** Two implications of the zeros and first properties of operations of type T and Tt
 that are required for the formulation of the property TT *) 
 
-Lemma Tt_dom_12_2r_to_T12_Tt1r { BB : lBsystem_carrier } ( T : T_ops_type BB )
+Lemma Tt_dom_12_2r_to_T12_Tt1r { BB : lBsystem_carrier } { T : T_ops_type BB }
       ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
-           ( Tt : Tt_ops_type BB ) ( ax1at : Tt_ax1_type T Tt )
+           { Tt : Tt_ops_type BB } ( ax1at : Tt_ax1_type T Tt )
            { X1 X2 : BB } { r : Tilde BB } ( inn12 : T_dom X1 X2 ) ( inn2r : Tt_dom X2 r ) :
   Tt_dom ( T X1 X2 inn12 ) ( Tt X1 r ( T_dom_comp inn12 inn2r ) ) .
 Proof.
@@ -344,9 +344,9 @@ Proof.
 Defined.
 
 
-Lemma Tt_dom_12_2r_to_Tt1Tt2r { BB : lBsystem_carrier } ( T : T_ops_type BB )
+Lemma Tt_dom_12_2r_to_Tt1Tt2r { BB : lBsystem_carrier } { T : T_ops_type BB }
       ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
-      ( Tt : Tt_ops_type BB ) ( ax1at : Tt_ax1_type T Tt )
+      { Tt : Tt_ops_type BB } ( ax1at : Tt_ax1_type T Tt )
       { X1 X2 : BB } { r : Tilde BB } ( inn12 : T_dom X1 X2 ) ( inn2r : Tt_dom X2 r ) :
   Tt_dom X1 ( Tt X2 r inn2r ) .
 Proof.
@@ -363,13 +363,13 @@ Defined.
   
 (** Property TTt *)
 
-Definition TTt_type { BB : lBsystem_carrier } ( T : T_ops_type BB )
+Definition TTt_type { BB : lBsystem_carrier } { T : T_ops_type BB }
            ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
-           ( Tt : Tt_ops_type BB ) ( ax1at : Tt_ax1_type T Tt ) :=
+           { Tt : Tt_ops_type BB } ( ax1t : Tt_ax1_type T Tt ) :=
   forall ( X1 X2 : BB ) ( r : Tilde BB ) ( inn12 : T_dom X1 X2 ) ( inn2r : Tt_dom X2 r ) ,
     Tt ( T X1 X2 inn12 ) ( Tt X1 r ( T_dom_comp inn12 inn2r ) )
-      ( Tt_dom_12_2r_to_T12_Tt1r T ax0 ax1a ax1b Tt ax1at inn12 inn2r ) =
-    Tt X1 ( Tt X2 r inn2r ) ( Tt_dom_12_2r_to_Tt1Tt2r T ax0 ax1b Tt ax1at inn12 inn2r ) . 
+      ( Tt_dom_12_2r_to_T12_Tt1r T ax0 ax1a ax1b Tt ax1t inn12 inn2r ) =
+    Tt X1 ( Tt X2 r inn2r ) ( Tt_dom_12_2r_to_Tt1Tt2r ax0 ax1b ax1t inn12 inn2r ) . 
 
 
 

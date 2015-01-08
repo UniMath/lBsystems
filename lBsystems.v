@@ -6,7 +6,7 @@ Started December 3, 2014.
 
 A companion code to the paper "B-systems". 
 
-*)
+ *)
 
 Require Export lBsystems_prelim.
 

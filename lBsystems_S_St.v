@@ -5,7 +5,7 @@ by Vladimir Voevodsky, file created on Jan. 6, 2015 *)
 
 Unset Automatic Introduction.
 
-Require Export lBsystems_T_Tt.
+Require Export lBsystems_carriers.
 
 
 
@@ -34,6 +34,12 @@ Identity Coercion S_dom_to_isabove : S_dom >-> isabove .
 Notation S_dom_constr := isabove_constr .
 Notation S_dom_gth := isabove_gth .
 
+Definition S_dom_gt1 { BB : lBsystem_carrier } { r : Tilde BB } { Y : BB } ( inn : S_dom r Y ) :
+  ll Y > 1 .
+Proof .
+  intros . exact ( natgthgehtrans _ _ _ ( isabove_gth inn ) ( natgthtogehsn _ _ ( ll_dd _ ) ) ) . 
+
+Defined.
 
 
 Definition S_dom_gt0 { BB : lBsystem_carrier } { r : Tilde BB } { Y : BB } ( inn : S_dom r Y ) :
@@ -43,7 +49,7 @@ Proof .
 
 Defined.
 
-Definition S_dom_geh { BB : lBsystem_carrier } { r : Tilde BB } { Y : BB } ( inn : S_dom r Y ) :
+Definition S_dom_ge1 { BB : lBsystem_carrier } { r : Tilde BB } { Y : BB } ( inn : S_dom r Y ) :
   ll Y >= 1 .
 Proof .
   intros .  exact ( natgthtogehsn _ _ ( S_dom_gt0 inn ) ) . 
@@ -172,7 +178,7 @@ Proof .
   refine ( natgthandminusinvr _ _ ) .
   exact ( isabove_gth is ) .
 
-  exact ( S_dom_geh inn' ) . 
+  exact ( S_dom_ge1 inn' ) . 
 
   exact ( isover_S_S_2 ax0 ax1a _ _ is ) . 
 
@@ -198,13 +204,21 @@ Lemma St_S_dom_comp { BB : lBsystem_carrier } { r s : Tilde BB } { Y : BB }
       ( innrs : St_dom r s ) ( inn : S_dom s Y ) : S_dom r Y .
 Proof .
   intros .
-  refine ( S_dom_constr _ _ ) .
-  refine ( istransnatgth _ _ _ ( S_dom_gth inn ) ( St_dom_gth innrs ) ) . 
-
-  refine ( isover_trans inn innrs ) .
+  exact ( isabove_trans inn innrs ) .
   
 Defined.
 
+Lemma St_St_dom_comp { BB : lBsystem_carrier } { r s t : Tilde BB }
+      ( innrs : St_dom r s ) ( innst : St_dom s t ) : St_dom r t .
+Proof .
+  intros .
+  unfold St_dom in * . 
+  unfold S_dom in * . 
+  exact ( isabove_trans innst innrs ) . 
+
+Defined.
+
+  
 
 
 
@@ -241,8 +255,7 @@ Proof .
 Defined .
 
 
-  
-Lemma St_dom_rs_sY_to_Strs_SrY { BB : lBsystem_carrier } { S : S_ops_type BB }
+Lemma S_dom_rs_sY_to_Strs_SrY { BB : lBsystem_carrier } { S : S_ops_type BB }
            ( ax0 : S_ax0_type S ) ( ax1a : S_ax1a_type S ) 
            { St : St_ops_type BB } ( ax1t : St_ax1_type S St )
            { r s : Tilde BB } { Y : BB } ( innrs : St_dom r s ) ( inn : S_dom s Y ) :
@@ -267,6 +280,32 @@ Proof .
 
 Defined.
 
+Lemma  St_dom_rs_st_to_Strs_Strt { BB : lBsystem_carrier } { S : S_ops_type BB }
+           ( ax0 : S_ax0_type S ) ( ax1a : S_ax1a_type S ) 
+           { St : St_ops_type BB } ( ax1t : St_ax1_type S St )
+           { r s t : Tilde BB } ( innrs : St_dom r s ) ( innst : St_dom s t ) :
+  St_dom ( St r s innrs ) ( St r t ( St_St_dom_comp innrs innst ) ) .
+Proof .
+  intros .
+  unfold St_dom .
+  rewrite ax1t . 
+  exact ( S_dom_rs_sY_to_Strs_SrY ax0 ax1a ax1t innrs innst ) . 
+
+Defined. 
+
+Lemma St_dom_rs_st_to_r_Stst { BB : lBsystem_carrier }
+      { S : S_ops_type BB } ( ax1b : S_ax1b_type S )
+      { St : St_ops_type BB } ( ax1t : St_ax1_type S St )
+      { r s t : Tilde BB } ( innrs : St_dom r s ) ( innst : St_dom s t ) :
+  St_dom r ( St s t innst ) .
+Proof .
+  intros . 
+  unfold St_dom . 
+  rewrite ax1t . 
+  exact ( S_dom_rs_sY_to_r_SsY ax1b innrs innst ) . 
+
+Defined.
+
 
 
 
@@ -281,8 +320,20 @@ Definition SSt_type { BB : lBsystem_carrier } { S : S_ops_type BB }
            { St : St_ops_type BB } ( ax1t : St_ax1_type S St ) :=
   forall ( r s : Tilde BB ) ( Y : BB ) ( innrs : St_dom r s ) ( inn : S_dom s Y ) ,
     S ( St r s innrs ) ( S r Y ( St_S_dom_comp innrs inn ) )
-      ( St_dom_rs_sY_to_Strs_SrY ax0 ax1a ax1t innrs inn ) =
+      ( S_dom_rs_sY_to_Strs_SrY ax0 ax1a ax1t innrs inn ) =
     S r ( S s Y inn ) ( S_dom_rs_sY_to_r_SsY ax1b innrs inn ) . 
+
+
+(** Property StSt *)
+
+Definition StSt_type { BB : lBsystem_carrier } { S : S_ops_type BB }
+           ( ax0 : S_ax0_type S ) ( ax1a : S_ax1a_type S ) ( ax1b : S_ax1b_type S )
+           { St : St_ops_type BB } ( ax1t : St_ax1_type S St ) :=
+  forall ( r s t : Tilde BB ) ( innrs : St_dom r s ) ( innst : St_dom s t ) ,
+    St ( St r s innrs ) ( St r t ( St_St_dom_comp innrs innst ) )
+      ( St_dom_rs_st_to_Strs_Strt ax0 ax1a ax1t innrs innst ) =
+    St r ( St s t innst ) ( St_dom_rs_st_to_r_Stst ax1b ax1t innrs innst ) . 
+
 
 
 

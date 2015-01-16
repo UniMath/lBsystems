@@ -88,7 +88,8 @@ endif
 #                    #
 ######################
 
-VFILES:=lBsystems_STid.v\
+VFILES:=lBsystems_delta.v\
+  lBsystems_STid.v\
   lBsystems_TS_ST.v\
   lBsystems_T_Tt.v\
   lBsystems.v\

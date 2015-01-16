@@ -95,6 +95,17 @@ Defined.
 Definition S_ax0_type { BB : lBsystem_carrier } ( S : S_ops_type BB ) :=
   forall ( r : Tilde BB ) ( Y : BB ) ( inn : S_dom r Y ) , ll ( S r Y inn ) = ll Y - 1 .
 
+Lemma ll_S_gt0 { BB : lBsystem_carrier }
+      { S : S_ops_type BB } ( ax0 :  S_ax0_type S )
+      { r : Tilde BB } { X : BB } ( inn : S_dom r X ) : ll ( S r X inn ) > 0 .
+Proof.
+  intros .
+  rewrite ax0 .
+  exact ( minusgth0 _ _ ( S_dom_gt1 inn ) ) . 
+
+Defined.
+
+
 (** The first property (later an axiom) of an operation of type S *)
 
 Definition S_ax1a_type { BB : lBsystem_carrier } ( S : S_ops_type BB ) :=
@@ -146,6 +157,10 @@ Proof.
   exact ( ! isov ) . 
 
 Defined.
+
+
+(** The isover and isabove properties of the expressions S r Y *)
+
 
 Lemma isover_S_S_2 { BB : lBsystem_carrier }
       { S : S_ops_type BB } ( ax0 :  S_ax0_type S ) ( ax1a : S_ax1a_type S )

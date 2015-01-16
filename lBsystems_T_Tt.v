@@ -43,6 +43,15 @@ Proof .
 
 Defined.
 
+Lemma T_dom_gt0_2 { BB : lBsystem_carrier } { X1 X2 : BB } ( inn : T_dom X1 X2 ) :
+  ll X2 > 0 .
+Proof .
+  intros .
+  exact ( natgehgthtrans _ _ _ ( T_dom_geh inn ) ( T_dom_gt0 inn ) ) .
+          
+Defined.
+          
+
   
   
 Lemma isaprop_T_dom { BB : lBsystem_carrier } ( X1 X2 : BB ) : isaprop ( T_dom X1 X2 ) . 
@@ -61,6 +70,8 @@ Proof .
   intros . apply ( proofirrelevance _ ( isaprop_T_dom X1 X2 ) ) .
 Defined .
 
+Definition T_dom_refl { BB : lBsystem_carrier } ( X : BB ) ( gt0 : ll X > 0 ) : T_dom X X :=
+  T_dom_constr gt0 ( isabove_X_ftX X gt0 ) . 
 
 Definition T_dom_comp { BB : lBsystem_carrier } { X1 X2 X3 : BB }
            ( inn12 : T_dom X1 X2 ) ( inn23 : T_dom X2 X3 ) : T_dom X1 X3 .
@@ -72,6 +83,13 @@ Proof.
   exact gt0 .
 
   exact ( isabov_trans is32 ( isover_ft' is21 ) ) . 
+
+Defined.
+
+Lemma T_dom_ftn { BB : lBsystem_carrier } { X1 X2 : BB } ( n : nat ) ( inn : T_dom X1 X2 )
+      ( isab : isabove ( ftn n X2 ) ( ft X1 ) ) : T_dom X1 ( ftn n X2 ) .
+Proof .
+  intros. exact ( T_dom_constr ( T_dom_gt0 inn ) isab ) . 
 
 Defined.
 
@@ -102,6 +120,17 @@ Defined.
 Definition T_ax0_type { BB : lBsystem_carrier } ( T : T_ops_type BB ) :=
   forall ( X1 X2 : BB ) ( inn : T_dom X1 X2 ) , ( ll ( T X1 X2 inn ) = 1 + ( ll X2 ) ) .
 
+Lemma ll_T_gt0 { BB : lBsystem_carrier }
+      { T : T_ops_type BB } ( ax0 :  T_ax0_type T )
+      { X1 X2 : BB } ( inn : T_dom X1 X2 ) : ll ( T X1 X2 inn ) > 0 .
+Proof.
+  intros .
+  rewrite ax0 . 
+  exact ( natgthsn0 _ ) .
+
+Defined.
+
+
 (** The first property (later an axiom) of an operation of type T *)
 
 
@@ -121,14 +150,9 @@ Definition T_ax1b_type { BB : lBsystem_carrier } ( T : T_ops_type BB ) :=
   forall ( X1 X2 : BB ) ( inn : T_dom X1 X2 ) , isabove ( T X1 X2 inn ) X1 .
 
 
-(** The computation of the iterated ft of ( T X1 X2 ) .  *)
+(** The computation of the iterated ft of ( T X1 X2 )  *)
 
-Lemma T_dom_ftn { BB : lBsystem_carrier } { X1 X2 : BB } ( n : nat ) ( inn : T_dom X1 X2 )
-      ( isab : isabove ( ftn n X2 ) ( ft X1 ) ) : T_dom X1 ( ftn n X2 ) .
-Proof .
-  intros. exact ( T_dom_constr ( T_dom_gt0 inn ) isab ) . 
 
-Defined.
 
 Lemma ftn_T { BB : lBsystem_carrier } { T : T_ops_type BB } ( ax1a : T_ax1a_type T )
       ( n : nat ) { X1 X2 : BB } ( isab : isabove ( ftn n X2 ) ( ft X1 ) )
@@ -186,7 +210,7 @@ Defined.
 (** The isover and isabove properties of the expressions T X1 X2 *)
 
 
-
+  
 Lemma isover_T_T_2 { BB : lBsystem_carrier }
       { T : T_ops_type BB } ( ax0 :  T_ax0_type T ) ( ax1a : T_ax1a_type T )
       { X1 X2 X2' : BB } ( inn : T_dom X1 X2 ) ( inn' : T_dom X1 X2' )

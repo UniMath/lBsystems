@@ -265,8 +265,20 @@ Definition isabove_gth { BB : lBsystem_carrier } { X A : BB } ( is : isabove X A
 
 Definition isabove_to_isover { BB : lBsystem_carrier } { X A : BB } :
   isabove X A -> isover X A := pr2 .
-Coercion isabove_to_isover : isabove >-> isover . 
+Coercion isabove_to_isover : isabove >-> isover .
 
+Lemma isabove_X_ftX { BB : lBsystem_carrier } ( X : BB ) ( gt0 : ll X > 0 ) : isabove X ( ft X ) .
+Proof .
+  intros .
+  refine ( isabove_constr _ _ ) .
+  rewrite ll_ft . 
+  exact ( natgthnnmius1 gt0 ) . 
+
+  exact ( isover_X_ftX _ ) . 
+
+Defined.
+
+  
 Lemma isabove_X_ftA { BB : lBsystem_carrier } { X A : BB }
       ( is : isabove X A ) : isabove X ( ft A ) .
 Proof .
@@ -277,6 +289,20 @@ Proof .
   exact (isover_X_ftA is ) .
 
 Defined.
+
+
+Lemma isabove_X_ftA' { BB : lBsystem_carrier } { X A : BB }
+      ( is : isover X A ) ( gt0 : ll A > 0 ) : isabove X ( ft A ) .
+Proof .
+  intros . refine ( isabove_constr _ _ ) .
+  rewrite ll_ft .
+  refine ( natgehgthtrans _ _ _ ( isover_geh is ) _ ) .
+  exact ( natgthnnmius1 gt0 ) . 
+
+  exact ( isover_X_ftA is ) . 
+
+Defined.
+
 
 
 Lemma isabove_trans { BB : lBsystem_carrier } { X A A' : BB } :

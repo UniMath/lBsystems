@@ -13,14 +13,6 @@ Require Export Foundations.hlevel2.finitesets.
 Notation isaproptotal2 := ( isofhleveltotal2 1 )  .
 
 
-Definition natgthsn_togthn { x n : nat } ( gt : x > S n ) : x > n .
-Proof.
-  intros . exact ( istransnatgth _ _ _ gt ( natgthsnn _ ) ) .
-
-Defined.
-
-
-
 
 Lemma natgthnnmius1 { n : nat } ( gt : n > 0 ) : n > n - 1 .
 Proof.

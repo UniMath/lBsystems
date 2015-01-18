@@ -41,6 +41,19 @@ Definition lBsystem_carrier :=
                ( dirprod ( forall X : BB , ll ( ft X ) = ll X - 1 )
                          ( forall ( X : BB ) ( e : ll X = 0 ) , ft X = X ) )
                ( forall r : Tilde BB , ll ( dd r ) > 0 ) ) .
+
+(** We can define a family BBn : nat -> UU by the formula
+
+BBn BB := fun n => total2 ( fun X : BB => ll X = 0 ) 
+
+The subobject in lBsystem_carrier defined by the condition 
+
+iscontr ( BBn BB 0 ) 
+
+is equivalent to the type of type-and-term structures, i.e. presheaves on the category H 
+that is defined in the paper by Richard Garner, "Combinatorial structure of type dependency".
+
+*)
                                         
 Definition lBsystem_carrier_to_carrier_0 : lBsystem_carrier -> lBsystem_carrier_0 := pr1 .
 Coercion lBsystem_carrier_to_carrier_0 : lBsystem_carrier >-> lBsystem_carrier_0 .

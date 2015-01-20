@@ -53,7 +53,7 @@ Definition dltSid { BB : lBsystem_carrier } { T : T_layer BB } ( dlt : dlt_layer
 
 
 
-(** Packaging dlt and the conditions it need to satisfy together *)
+(** Packaging dlt and the conditions it needs to satisfy together *)
 
 
 Definition dlt_and_five { BB : lBsystem_carrier }
@@ -65,14 +65,37 @@ Definition dlt_and_five { BB : lBsystem_carrier }
                    ( dirprod ( SdltT dlt S ) ( StdltTt dlt S ) ) )
                ( dltSid dlt S ) ) .
 
+Definition dlt_and_five_pr1 { BB : lBsystem_carrier }
+           ( T : T_Tt_layer BB ) ( S : S_St_layer BB ) :
+  dlt_and_five T S -> dlt_layer T := pr1 .
+Coercion  dlt_and_five_pr1 : dlt_and_five >-> dlt_layer . 
+
+
+
+(** Unital lBsystem *)
+
+Definition lB := total2 ( fun BB : nu_lB => dlt_and_five BB BB ) .
+
+Definition lB_pr1 : lB -> nu_lB := pr1 .
+Coercion lB_pr1 : lB >-> nu_lB .
+
+Definition lB_pr2 ( BB : lB ) : dlt_and_five BB BB := pr2 BB .
+Coercion lB_pr2 : lB >-> dlt_and_five . 
+
+Definition dltT_ax ( BB : lB ) : dltT BB := pr1 ( pr1 ( pr1 ( pr2 ( pr2 BB ) ) ) ) . 
+
+Definition dltS_ax ( BB : lB ) : dltS BB BB := pr2 ( pr1 ( pr1 ( pr2 ( pr2 BB ) ) ) ) .
+
+Definition SdltT_ax ( BB : lB ) : SdltT BB BB := pr1 ( pr2 ( pr1 ( pr2 ( pr2 BB ) ) ) ) . 
+
+Definition StdltTt_ax ( BB : lB ) : StdltTt BB BB := pr2 ( pr2 ( pr1 ( pr2 ( pr2 BB ) ) ) ) . 
+
+Definition dltSid_ax ( BB : lB ) : dltSid BB BB := pr2 ( pr2 ( pr2 BB ) ) . 
 
 
 
 
 
-(** Complete unital lBsystem *)
-
-Definition lB := total2 ( fun BB : nu_lB => dlt_and_five BB BB ) . 
 
 
 

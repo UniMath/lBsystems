@@ -99,6 +99,7 @@ Defined.
  
 Definition T_ops_type ( BB : lBsystem_carrier ) :=
   forall ( X1 X2 : BB ) ( inn : T_dom X1 X2 ) , BB .
+Identity Coercion T_ops_to_Fun : T_ops_type >-> Funclass . 
 
 
 Lemma T_equals_2 { BB : lBsystem_carrier } { X1 X2 X2' : BB } ( T : T_ops_type BB )
@@ -118,7 +119,8 @@ Defined.
 (** The zeros property (later an axiom) of an operation of type T *)
 
 Definition T_ax0_type { BB : lBsystem_carrier } ( T : T_ops_type BB ) :=
-  forall ( X1 X2 : BB ) ( inn : T_dom X1 X2 ) , ( ll ( T X1 X2 inn ) = 1 + ( ll X2 ) ) .
+  forall ( X1 X2 : BB ) ( inn : T_dom X1 X2 ) , ll ( T X1 X2 inn ) = 1 + ( ll X2 ) .
+Identity Coercion T_ax0_to_Fun : T_ax0_type >-> Funclass . 
 
 Lemma ll_T_gt0 { BB : lBsystem_carrier }
       { T : T_ops_type BB } ( ax0 :  T_ax0_type T )
@@ -144,10 +146,12 @@ Defined.
 Definition T_ax1a_type { BB : lBsystem_carrier } ( T : T_ops_type BB ) :=
   forall ( X1 X2 : BB ) ( inn : T_dom X1 X2 ) ( isab : isabove ( ft X2 ) ( ft X1 ) ) ,
     ft ( T X1 X2 inn ) = T X1 ( ft X2 ) ( T_ax1a_dom inn isab ) .
+Identity Coercion T_ax1a_to_Fun: T_ax1a_type >-> Funclass . 
 
 
 Definition T_ax1b_type { BB : lBsystem_carrier } ( T : T_ops_type BB ) :=
   forall ( X1 X2 : BB ) ( inn : T_dom X1 X2 ) , isabove ( T X1 X2 inn ) X1 .
+Identity Coercion T_ax1b_to_Fun: T_ax1b_type >-> Funclass . 
 
 
 (** The computation of the iterated ft of ( T X1 X2 )  *)
@@ -308,7 +312,7 @@ Definition TT_type { BB : lBsystem_carrier } { T : T_ops_type BB }
     T ( T X1 X2 inn12 ) ( T X1 X3 ( T_dom_comp inn12 inn23 ) )
       ( T_dom_12_23_to_T12_T13 ax0 ax1a ax1b inn12 inn23 ) =
     T X1 ( T X2 X3 inn23 ) ( T_dom_12_23_to_T1T23 ax1b inn12 inn23 ) . 
-
+Identity Coercion TT_to_Fun: TT_type >-> Funclass . 
 
 
 
@@ -329,6 +333,7 @@ Definition Tt_dom { BB : lBsystem_carrier } ( X : BB ) ( s : Tilde BB ) := T_dom
               
 Definition Tt_ops_type ( BB : lBsystem_carrier ) :=
   forall ( X : BB ) ( s : Tilde BB ) ( inn : Tt_dom X s ) , Tilde BB .
+Identity Coercion Tt_ops_to_Fun: Tt_ops_type >-> Funclass . 
 
 
 (** The zeros property (later an axiom) of an operation of type Tt 
@@ -350,6 +355,7 @@ Definition Tt_ax0_type { BB : lBsystem_carrier } ( Tt : Tt_ops_type BB ) :=
 Definition Tt_ax1_type { BB : lBsystem_carrier } ( T : T_ops_type BB ) ( Tt : Tt_ops_type BB ) :=
   forall ( X : BB ) ( s : Tilde BB ) ( inn : Tt_dom X s ) ,
     dd ( Tt X s inn ) = T X ( dd s ) inn .
+Identity Coercion Tt_ax1_to_Fun: Tt_ax1_type >-> Funclass . 
 
 
 (** Two implications of the zeros and first properties of operations of type T and Tt
@@ -394,7 +400,7 @@ Definition TTt_type { BB : lBsystem_carrier } { T : T_ops_type BB }
     Tt ( T X1 X2 inn12 ) ( Tt X1 r ( T_dom_comp inn12 inn2r ) )
       ( Tt_dom_12_2r_to_T12_Tt1r ax0 ax1a ax1b ax1t inn12 inn2r ) =
     Tt X1 ( Tt X2 r inn2r ) ( Tt_dom_12_2r_to_Tt1Tt2r ax0 ax1b ax1t inn12 inn2r ) . 
-
+Identity Coercion TTt_to_Fun: TTt_type >-> Funclass . 
 
 
 

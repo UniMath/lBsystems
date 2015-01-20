@@ -143,7 +143,9 @@ Definition TS_type { BB : lBsystem_carrier }
   forall ( r : Tilde BB ) ( X1 X2 : BB ) ( innr1 : S_dom r X1 ) ( inn12 : T_dom X1 X2 ) ,
     T ( S r X1 innr1 ) ( S r X2 ( S_T_dom_comp innr1 inn12 ) )
       ( T_dom_r1_12_to_Sr1_Sr2 Sax0 Sax1a Sax1b innr1 inn12 ) =
-    S r ( T X1 X2 inn12 ) ( S_dom_r1_12_to_r_T12 Tax1b innr1 inn12 ) . 
+    S r ( T X1 X2 inn12 ) ( S_dom_r1_12_to_r_T12 Tax1b innr1 inn12 ) .
+Identity Coercion TS_to_Fun: TS_type >-> Funclass . 
+
 
 
 (** Property TtS *)
@@ -157,7 +159,9 @@ Definition TtS_type { BB : lBsystem_carrier }
   forall ( r s : Tilde BB ) ( X1 : BB ) ( innr1 : S_dom r X1 ) ( inn1s : Tt_dom X1 s ) ,
     Tt ( S r X1 innr1 ) ( St r s ( S_Tt_dom_comp innr1 inn1s ) )
        ( Tt_dom_r1_1s_to_Sr1_Strs Sax0 Sax1a Sax1b Stax1 innr1 inn1s ) =
-    St r ( Tt X1 s inn1s ) ( St_dom_r1_1s_to_r_Tt1s Tax1b Ttax1 innr1 inn1s ) . 
+    St r ( Tt X1 s inn1s ) ( St_dom_r1_1s_to_r_Tt1s Tax1b Ttax1 innr1 inn1s ) .
+Identity Coercion TtS_to_Fun: TtS_type >-> Funclass . 
+
 
 
 (** Implications of the zeros and first properties of operations of type T, Tt, S and St
@@ -233,6 +237,8 @@ Definition STt_type { BB : lBsystem_carrier }
     S ( Tt X1 r inn1r ) ( T X1 X2 ( Tt_S_dom_comp inn1r innr2 ) )
       ( S_dom_1r_r2_to_Tt1r_T12  Tax0 Tax1a Ttax1 inn1r innr2 ) =
     T X1 ( S r X2 innr2 ) ( T_dom_1r_r2_to_1_Sr2 Sax1b inn1r innr2 ) .
+Identity Coercion STt_to_Fun: STt_type >-> Funclass . 
+
 
 
 (** Property StTt *)
@@ -247,6 +253,7 @@ Definition StTt_type { BB : lBsystem_carrier }
     St ( Tt X1 r inn1r ) ( Tt X1 s ( Tt_St_dom_comp inn1r innrs ) )
        ( St_dom_1r_rs_to_Tt1r_Tt1s Tax0 Tax1a Ttax1 inn1r innrs ) =
     Tt X1 ( St r s innrs ) ( Tt_dom_1r_rs_to_1_Strs Sax1b Stax1 inn1r innrs ) . 
+Identity Coercion StTt_to_Fun: StTt_type >-> Funclass . 
 
 
 

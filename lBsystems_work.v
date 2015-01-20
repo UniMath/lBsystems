@@ -335,9 +335,22 @@ Proof .
 
 Defined.
 
-  
 
 
+(* Jan. 18, 2015 *)
+
+
+Definition TT_layer_to_T_layer_1 ( BB : lBsystem_carrier ) ( T : TT_layer BB ) :
+  T_layer_1 BB := pr1 T .
+Coercion TT_layer_to_T_layer_1 : TT_layer >-> T_layer_1 .
+
+Definition TT_ax { BB : lBsystem_carrier } ( T : TT_layer BB ) :
+  TT_type ( T_ax0 T ) ( T_ax1a T ) ( T_ax1b T ) := pr2 T .
+
+
+Definition TTt_layer_to_Tt_layer_1 { BB : lBsystem_carrier } { T : T_layer_1 BB }
+           ( Tt : TTt_layer T ) : Tt_layer_1 T := pr1 Tt . 
+Coercion TTt_layer_to_Tt_layer_1 :  TTt_layer >-> Tt_layer_1 . 
 
 
 

@@ -94,6 +94,7 @@ Defined.
 
 Definition S_ax0_type { BB : lBsystem_carrier } ( S : S_ops_type BB ) :=
   forall ( r : Tilde BB ) ( Y : BB ) ( inn : S_dom r Y ) , ll ( S r Y inn ) = ll Y - 1 .
+Identity Coercion S_ax0_to_Fun: S_ax0_type >-> Funclass . 
 
 Lemma ll_S_gt0 { BB : lBsystem_carrier }
       { S : S_ops_type BB } ( ax0 :  S_ax0_type S )
@@ -110,12 +111,13 @@ Defined.
 
 Definition S_ax1a_type { BB : lBsystem_carrier } ( S : S_ops_type BB ) :=
   forall ( r : Tilde BB ) ( Y : BB ) ( inn : S_dom r Y ) ( isab : isabove ( ft Y ) ( dd r ) ) ,
-    ft ( S r Y inn ) = S r ( ft Y ) isab . 
+    ft ( S r Y inn ) = S r ( ft Y ) isab .
+Identity Coercion S_ax1a_to_Fun: S_ax1a_type >-> Funclass . 
 
 Definition S_ax1b_type { BB : lBsystem_carrier } ( S : S_ops_type BB ) :=
   forall ( r : Tilde BB ) ( Y : BB ) ( inn : S_dom r Y ) ,
     isabove ( S r Y inn ) ( ft ( dd r ) ) .
-
+Identity Coercion S_ax1b_to_Fun: S_ax1b_type >-> Funclass . 
 
 
 
@@ -243,6 +245,7 @@ Defined.
 
 Definition St_ops_type ( BB : lBsystem_carrier ) :=
   forall ( r : Tilde BB ) ( s : Tilde BB ) ( inn : St_dom r s ) , Tilde BB .
+Identity Coercion St_ops_to_Fun: St_ops_type >-> Funclass . 
 
 
 (** The first property (later an axiom) of an operation of type St *)
@@ -252,6 +255,7 @@ Definition St_ax1_type { BB : lBsystem_carrier } ( S : S_ops_type BB )
            ( St : St_ops_type BB ) := 
   forall ( r : Tilde BB ) ( s : Tilde BB ) ( inn : St_dom r s ) ,
     dd ( St r s inn ) = S r ( dd s ) inn .
+Identity Coercion St_ax1_to_Fun: St_ax1_type >-> Funclass . 
 
 
 (** Implications of the zeros and first properties of operations of type S and St
@@ -336,7 +340,8 @@ Definition SSt_type { BB : lBsystem_carrier } { S : S_ops_type BB }
   forall ( r s : Tilde BB ) ( Y : BB ) ( innrs : St_dom r s ) ( inn : S_dom s Y ) ,
     S ( St r s innrs ) ( S r Y ( St_S_dom_comp innrs inn ) )
       ( S_dom_rs_sY_to_Strs_SrY ax0 ax1a ax1t innrs inn ) =
-    S r ( S s Y inn ) ( S_dom_rs_sY_to_r_SsY ax1b innrs inn ) . 
+    S r ( S s Y inn ) ( S_dom_rs_sY_to_r_SsY ax1b innrs inn ) .
+Identity Coercion SSt_to_Fun: SSt_type >-> Funclass . 
 
 
 (** Property StSt *)
@@ -348,6 +353,7 @@ Definition StSt_type { BB : lBsystem_carrier } { S : S_ops_type BB }
     St ( St r s innrs ) ( St r t ( St_St_dom_comp innrs innst ) )
       ( St_dom_rs_st_to_Strs_Strt ax0 ax1a ax1t innrs innst ) =
     St r ( St s t innst ) ( St_dom_rs_st_to_r_Stst ax1b ax1t innrs innst ) . 
+Identity Coercion StSt_to_Fun: StSt_type >-> Funclass . 
 
 
 

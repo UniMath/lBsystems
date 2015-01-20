@@ -43,16 +43,20 @@ Definition STid_type { BB : lBsystem_carrier }
            { T : T_ops_type BB } ( Tax1b : T_ax1b_type T )
            ( S : S_ops_type BB ) :=
   forall ( r : Tilde BB ) ( X : BB ) ( inn : T_dom ( dd r ) X ) ,
-    S r ( T ( dd r ) X inn ) ( S_dom_STid Tax1b inn ) = X . 
+    S r ( T ( dd r ) X inn ) ( S_dom_STid Tax1b inn ) = X .
+Identity Coercion STid_to_Fun: STid_type >-> Funclass . 
 
-(** The property STid *)
+
+(** The property StTtid *)
 
 Definition StTtid_type { BB : lBsystem_carrier }
            { T : T_ops_type BB } ( Tax1b : T_ax1b_type T )
            { Tt : Tt_ops_type BB } ( Ttax1 : Tt_ax1_type T Tt ) 
            ( St : St_ops_type BB ) :=
   forall ( r s : Tilde BB ) ( inn : Tt_dom ( dd r ) s ) ,
-    St r ( Tt ( dd r ) s inn ) ( St_dom_StTtid Tax1b Ttax1 inn ) = r . 
+    St r ( Tt ( dd r ) s inn ) ( St_dom_StTtid Tax1b Ttax1 inn ) = r .
+Identity Coercion StTtid_to_Fun: StTtid_type >-> Funclass . 
+
 
 
   

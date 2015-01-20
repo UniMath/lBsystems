@@ -20,6 +20,8 @@ Definition T_layer_to_T_ops_type ( BB : lBsystem_carrier ) ( T : T_layer BB ) :
   T_ops_type BB := pr1 T .
 Coercion T_layer_to_T_ops_type : T_layer >-> T_ops_type .
 
+
+
 Definition T_ax0 { BB : lBsystem_carrier } ( T : T_layer BB ) : T_ax0_type T :=
   pr1 ( pr2 T ) .
 
@@ -59,6 +61,7 @@ Coercion T_Tt_layer_to_T_layer : T_Tt_layer >->  T_layer .
 Definition T_Tt_layer_to_Tt_layer { BB : lBsystem_carrier } ( T_Tt : T_Tt_layer BB ) :
   Tt_layer T_Tt := pr2 T_Tt .
 Coercion T_Tt_layer_to_Tt_layer : T_Tt_layer >-> Tt_layer .  
+
 
 
 

@@ -4,8 +4,8 @@ By Vladimir Voevodsky, started on Jan. 16, 2015 *)
 
 Unset Automatic Introduction.
 
-Require Export lBsystems_TS_ST.
-Require Export lBsystems_STid .
+Require Export lBsystems.lBsystems_TS_ST.
+Require Export lBsystems.lBsystems_STid .
 
 
 (** The structure formed by operations T *)

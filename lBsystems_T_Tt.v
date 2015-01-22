@@ -5,7 +5,7 @@ by Vladimir Voevodsky, file created on Jan. 6, 2015 *)
 
 Unset Automatic Introduction.
 
-Require Export lBsystems_carriers .
+Require Export lBsystems.lBsystems_carriers .
 
 
 (** **** Operation(s) T.

@@ -13,7 +13,6 @@ Require Export Foundations.hlevel2.finitesets.
 Notation isaproptotal2 := ( isofhleveltotal2 1 )  .
 
 
-
 Lemma natgthnnmius1 { n : nat } ( gt : n > 0 ) : n > n - 1 .
 Proof.
   intros . induction n as [ | n ] . 

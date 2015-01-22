@@ -6,8 +6,8 @@ By Vladimir Voevodsky, started Jan. 14, 2015 *)
 
 Unset Automatic Introduction.
 
-Require Export lBsystems_T_Tt.
-Require Export lBsystems_S_St.
+Require Export lBsystems.lBsystems_T_Tt.
+Require Export lBsystems.lBsystems_S_St.
 
 (** The structure dlt *)
 

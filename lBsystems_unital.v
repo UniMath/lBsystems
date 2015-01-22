@@ -4,8 +4,8 @@ By Vladimir Voevodsky, started on Jan. 18, 2015 *)
 
 Unset Automatic Introduction.
 
-Require Export lBsystems_non_unital.
-Require Export lBsystems_dlt.
+Require Export lBsystems.lBsystems_non_unital.
+Require Export lBsystems.lBsystems_dlt.
 
 
 (** The the structure formed by operations dlt and their elementary properties *)

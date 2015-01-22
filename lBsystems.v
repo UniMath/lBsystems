@@ -8,23 +8,23 @@ A companion code to the paper "B-systems".
 
  *)
 
-Require Export lBsystems_prelim.
+Require Export lBsystems.lBsystems_prelim.
 
-Require Export lBsystems_carriers.
+Require Export lBsystems.lBsystems_carriers.
 
-Require Export lBsystems_T_Tt.
+Require Export lBsystems.lBsystems_T_Tt.
 
-Require Export lBsystems_S_St.
+Require Export lBsystems.lBsystems_S_St.
 
-Require Export lBsystems_TS_ST.
+Require Export lBsystems.lBsystems_TS_ST.
 
-Require Export lBsystems_STid .
+Require Export lBsystems.lBsystems_STid .
 
-Require Export lBsystems_dlt .
+Require Export lBsystems.lBsystems_dlt .
 
-Require Export lBsystems_non_unital .
+Require Export lBsystems.lBsystems_non_unital .
 
-Require Export lBsystems_unital . 
+Require Export lBsystems.lBsystems_unital . 
 
 
 

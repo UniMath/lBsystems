@@ -4,21 +4,21 @@ by Vladimir Voevodsky, file created on Jan. 6, 2015 *)
 
 Unset Automatic Introduction.
 
-Require Export lBsystems.lTowers.
+Require Export lBsystems.ltowers.
 
 
 
 (** **** lBsystem carriers *)
 
 Definition lBsystem_carrier :=
-  total2 ( fun B :  hSet_lTower =>
+  total2 ( fun B :  hSet_ltower =>
              total2 ( fun TildeB : hSet =>
                         total2 ( fun dd : TildeB -> B =>
                                    forall r : TildeB , ll ( dd r ) > 0 ) ) ) .
 
 
-Definition lBsystem_carrier_pr1 : lBsystem_carrier -> lTower := pr1 .
-Coercion  lBsystem_carrier_pr1 : lBsystem_carrier >-> lTower .
+Definition lBsystem_carrier_pr1 : lBsystem_carrier -> ltower := pr1 .
+Coercion  lBsystem_carrier_pr1 : lBsystem_carrier >-> ltower .
                                                                      
                                
 Definition Tilde : lBsystem_carrier -> UU := fun BB => pr1 ( pr2 BB ) .

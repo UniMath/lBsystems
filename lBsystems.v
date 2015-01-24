@@ -12,7 +12,7 @@ A companion code to the paper "B-systems".
 
 Require Export lBsystems.lBsystems_prelim.
 
-Require Export lBsystems.lTowers.
+Require Export lBsystems.ltowers.
 
 Require Export lBsystems.lBsystems_carriers.
 

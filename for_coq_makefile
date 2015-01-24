@@ -1,5 +1,5 @@
 # coq_makefile -R . lBsystems -f for_coq_makefile -o Makefile
-lTowers.v
+ltowers.v
 lBsystems_prelim.v
 lBsystems_carriers.v
 lBsystems_T_Tt.v

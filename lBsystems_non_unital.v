@@ -1,4 +1,4 @@
-(** * The type of the non-unital lBsystems
+(** * Non unital lBsystems
 
 By Vladimir Voevodsky, started on Jan. 16, 2015 *)
 
@@ -6,61 +6,7 @@ Unset Automatic Introduction.
 
 Require Export lBsystems.lBsystems_TS_ST.
 Require Export lBsystems.lBsystems_STid .
-
-
-(** The structure formed by operations T *)
-
-
-Definition T_layer ( BB : lBsystem_carrier ) :=
-  total2 ( fun T : T_ops_type BB =>
-             dirprod ( T_ax0_type T )
-                     ( dirprod ( T_ax1a_type T ) ( T_ax1b_type T ) ) ) .
-
-Definition T_layer_to_T_ops_type ( BB : lBsystem_carrier ) ( T : T_layer BB ) :
-  T_ops_type BB := pr1 T .
-Coercion T_layer_to_T_ops_type : T_layer >-> T_ops_type .
-
-
-
-Definition T_ax0 { BB : lBsystem_carrier } ( T : T_layer BB ) : T_ax0_type T :=
-  pr1 ( pr2 T ) .
-
-Definition T_ax1a { BB : lBsystem_carrier } ( T : T_layer BB ) : T_ax1a_type T :=
-  pr1 ( pr2 ( pr2 T ) ) .
-
-Definition T_ax1b { BB : lBsystem_carrier } ( T : T_layer BB ) : T_ax1b_type T :=
-  pr2 ( pr2 ( pr2 T ) ) .
-
-
-
-
-(** The structure formed by operations Tt *)
-
-
-Definition Tt_layer { BB : lBsystem_carrier } ( T : T_ops_type BB ) :=
-  total2 ( fun Tt : Tt_ops_type BB => Tt_ax1_type T Tt ) .
-
-Definition Tt_layer_to_Tt_ops_type ( BB : lBsystem_carrier ) ( T : T_ops_type BB )
-  ( Tt_compl : Tt_layer T ) : Tt_ops_type BB := pr1 Tt_compl .
-Coercion Tt_layer_to_Tt_ops_type : Tt_layer >-> Tt_ops_type . 
-
-
-Definition Tt_ax1 { BB : lBsystem_carrier } { T : T_ops_type BB } ( Tt : Tt_layer T ) :
-  Tt_ax1_type T Tt := pr2 Tt .
-
-
-(** The structure formed by operations T and Tt *)
-
-Definition T_Tt_layer ( BB : lBsystem_carrier ) :=
-  total2 ( fun T : T_layer BB => Tt_layer T ) .
-
-Definition T_Tt_layer_to_T_layer { BB : lBsystem_carrier } ( T_Tt : T_Tt_layer BB ) :
-  T_layer BB := pr1 T_Tt .
-Coercion T_Tt_layer_to_T_layer : T_Tt_layer >->  T_layer .
-
-Definition T_Tt_layer_to_Tt_layer { BB : lBsystem_carrier } ( T_Tt : T_Tt_layer BB ) :
-  Tt_layer T_Tt := pr2 T_Tt .
-Coercion T_Tt_layer_to_Tt_layer : T_Tt_layer >-> Tt_layer .  
+Require Export lBsystems.lB0systems. 
 
 
 
@@ -101,56 +47,6 @@ Definition TTt_ax { BB : lBsystem_carrier } ( T : TT_TTt_layer BB ) :
   TTt T T := pr2 ( pr2 T ) .
 
 
-
-(** The structure formed by operations S *)
-
-
-Definition S_layer ( BB : lBsystem_carrier ) :=
-  total2 ( fun S : S_ops_type BB =>
-             dirprod ( S_ax0_type S )
-                     ( dirprod ( S_ax1a_type S ) ( S_ax1b_type S ) ) ) .
-
-Definition S_layer_to_S_ops_type ( BB : lBsystem_carrier ) ( S : S_layer BB ) :
-  S_ops_type BB := pr1 S .
-Coercion S_layer_to_S_ops_type : S_layer >-> S_ops_type .
-
-Definition S_ax0 { BB : lBsystem_carrier } ( S : S_layer BB ) : S_ax0_type S :=
-  pr1 ( pr2 S ) .
-
-Definition S_ax1a { BB : lBsystem_carrier } ( S : S_layer BB ) : S_ax1a_type S :=
-  pr1 ( pr2 ( pr2 S ) ) .
-
-Definition S_ax1b { BB : lBsystem_carrier } ( S : S_layer BB ) : S_ax1b_type S :=
-  pr2 ( pr2 ( pr2 S ) ) .
-
-
-(** The structure formed by operations St *)
-
-
-Definition St_layer { BB : lBsystem_carrier } ( S : S_ops_type BB ) :=
-  total2 ( fun St : St_ops_type BB => St_ax1_type S St ) .
-
-Definition St_layer_to_St_ops_type ( BB : lBsystem_carrier ) ( S : S_ops_type BB )
-  ( St_compl : St_layer S ) : St_ops_type BB := pr1 St_compl .
-Coercion St_layer_to_St_ops_type : St_layer >-> St_ops_type . 
-
-
-Definition St_ax1 { BB : lBsystem_carrier } { S : S_ops_type BB } ( St : St_layer S ) :
-  St_ax1_type S St := pr2 St .
-
-
-(** The structure formed by operations S and St *)
-
-Definition S_St_layer ( BB : lBsystem_carrier ) :=
-  total2 ( fun S : S_layer BB => St_layer S ) .
-
-Definition S_St_layer_to_S_layer { BB : lBsystem_carrier } ( S_St : S_St_layer BB ) :
-  S_layer BB := pr1 S_St .
-Coercion S_St_layer_to_S_layer : S_St_layer >->  S_layer .
-
-Definition S_St_layer_to_St_layer { BB : lBsystem_carrier } ( S_St : S_St_layer BB ) :
-  St_layer S_St := pr2 S_St .
-Coercion S_St_layer_to_St_layer : S_St_layer >-> St_layer .  
 
 
 

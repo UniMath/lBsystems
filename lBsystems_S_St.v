@@ -248,14 +248,35 @@ Definition St_ops_type ( BB : lBsystem_carrier ) :=
 Identity Coercion St_ops_to_Fun: St_ops_type >-> Funclass . 
 
 
+(** The zeros property (later an axiom) of an operation of type St 
+It will be shown to be a corollary of the first property of St and the zeros property of S. 
+However it is convenient to have it separately for the use in the definition of a prelBsystem. *)
+
+Definition St_ax0_type { BB : lBsystem_carrier } ( St : St_ops_type BB ) :=
+  forall ( r s : Tilde BB ) ( inn : St_dom r s ) ,
+    ll ( dd ( St r s inn ) ) = ll ( dd s ) - 1 .
+
 (** The first property (later an axiom) of an operation of type St *)
 
 
-Definition St_ax1_type { BB : lBsystem_carrier } ( S : S_ops_type BB )
+Definition St_ax1_type { BB : lBsystem_carrier }
+           ( S : S_ops_type BB )
            ( St : St_ops_type BB ) := 
   forall ( r : Tilde BB ) ( s : Tilde BB ) ( inn : St_dom r s ) ,
     dd ( St r s inn ) = S r ( dd s ) inn .
-Identity Coercion St_ax1_to_Fun: St_ax1_type >-> Funclass . 
+Identity Coercion St_ax1_to_Fun: St_ax1_type >-> Funclass .
+
+Lemma St_ax1_to_St_ax0 { BB : lBsystem_carrier }
+      { S : S_ops_type BB } ( ax0 : S_ax0_type S )
+      { St : St_ops_type BB } ( ax1 : St_ax1_type S St ) : St_ax0_type St .
+Proof .
+  intros .
+  unfold St_ax0_type . 
+  intros . 
+  rewrite ax1 . 
+  exact ( ax0 _ _ _ ) . 
+
+Defined.
 
 
 (** Implications of the zeros and first properties of operations of type S and St

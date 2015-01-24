@@ -8,17 +8,31 @@ Require Export lBsystems.lBsystems_non_unital.
 Require Export lBsystems.lBsystems_dlt.
 
 
-(** The the structure formed by operations dlt and their elementary properties *)
+(** The the structure formed by operations dlt *)
+
+
+Definition dlt_layer_0 ( BB : lBsystem_carrier ) :=
+  total2 ( fun dlt : dlt_ops_type BB => dlt_ax0_type dlt ) .
+
+Definition dlt_layer_0_to_dlt_ops_type ( BB : lBsystem_carrier ) :
+  dlt_layer_0 BB -> dlt_ops_type BB := pr1 .
+Coercion dlt_layer_0_to_dlt_ops_type : dlt_layer_0 >-> dlt_ops_type .
+
+
+
+(** The layer associated with operations dlt *)
 
 Definition dlt_layer { BB : lBsystem_carrier } ( T : T_ops_type BB ) :=
-  total2 ( fun dlt : dlt_type BB => dlt_ax1_type T dlt ) .
+  total2 ( fun dlt : dlt_layer_0 BB => dlt_ax1_type T dlt ) .
 
-Definition dlt_layer_pr1 { BB : lBsystem_carrier } ( T : T_ops_type BB )
-           ( dlt : dlt_layer T ) : dlt_type BB := pr1 dlt .
-Coercion dlt_layer_pr1 : dlt_layer >-> dlt_type . 
+Definition dlt_layer_pr1 { BB : lBsystem_carrier }
+           ( T : T_ops_type BB )
+           ( dlt : dlt_layer T ) : dlt_layer_0 BB := pr1 dlt .
+Coercion dlt_layer_pr1 : dlt_layer >-> dlt_layer_0 . 
 
-Definition dlt_ax1 { BB : lBsystem_carrier } { T : T_ops_type BB } ( dlt : dlt_layer T ) :
-  dlt_ax1_type T dlt := pr2 dlt .
+Definition dlt_ax1 { BB : lBsystem_carrier }
+           { T : T_ops_type BB }
+           ( dlt : dlt_layer T ) : dlt_ax1_type T dlt := pr2 dlt .
 
 
 (** Condition dltT *)

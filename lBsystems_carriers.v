@@ -16,6 +16,7 @@ Definition lBsystem_carrier :=
                         total2 ( fun dd : TildeB -> B =>
                                    forall r : TildeB , ll ( dd r ) > 0 ) ) ) .
 
+
 Definition lBsystem_carrier_pr1 : lBsystem_carrier -> lTower := pr1 .
 Coercion  lBsystem_carrier_pr1 : lBsystem_carrier >-> lTower .
                                                                      
@@ -38,7 +39,7 @@ The subobject in lBsystem_carrier defined by the condition
 iscontr ( BBn BB 0 ) 
 
 is equivalent to the type of type-and-term structures, i.e. presheaves on the category H 
-that is defined in the paper by Richard Garner, "Combinatorial structure of type dependency".
+from the paper by Richard Garner, "Combinatorial structure of type dependency".
 
 *)
                                         

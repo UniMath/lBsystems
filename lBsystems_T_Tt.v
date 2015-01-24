@@ -336,17 +336,13 @@ Definition Tt_ops_type ( BB : lBsystem_carrier ) :=
 Identity Coercion Tt_ops_to_Fun: Tt_ops_type >-> Funclass . 
 
 
-(** The zeros property (later an axiom) of an operation of type Tt 
-is not needed because it is a corollary of the first property of Tt and the
-zeros property of T. *
-
-
 Definition Tt_ax0_type { BB : lBsystem_carrier } ( Tt : Tt_ops_type BB ) :=
   forall ( X : BB ) ( s : Tilde BB ) ( inn : Tt_dom X s ) ,
     ll ( dd ( Tt X s inn ) ) = 1 + ll ( dd s ) .
 
-*)
-
+(* The zeros property (later an axiom) of an operation of type Tt 
+will be shown to be a corollary of the first property of Tt and the zeros property of T. 
+However it is conveninet to have it separately for definition of a prelBsystem. *)
 
 
 (** The first property (later an axiom) of an operation of type Tt *)
@@ -355,9 +351,24 @@ Definition Tt_ax0_type { BB : lBsystem_carrier } ( Tt : Tt_ops_type BB ) :=
 Definition Tt_ax1_type { BB : lBsystem_carrier } ( T : T_ops_type BB ) ( Tt : Tt_ops_type BB ) :=
   forall ( X : BB ) ( s : Tilde BB ) ( inn : Tt_dom X s ) ,
     dd ( Tt X s inn ) = T X ( dd s ) inn .
-Identity Coercion Tt_ax1_to_Fun: Tt_ax1_type >-> Funclass . 
+Identity Coercion Tt_ax1_to_Fun: Tt_ax1_type >-> Funclass .
+
+Lemma Tt_ax1_to_Tt_ax0 { BB : lBsystem_carrier }
+      { T : T_ops_type BB } ( ax0 : T_ax0_type T )
+      { Tt : Tt_ops_type BB } ( ax1 : Tt_ax1_type T Tt ) : Tt_ax0_type Tt .
+Proof .
+  intros . 
+  unfold Tt_ax0_type . 
+  intros . 
+  rewrite ax1 . 
+  exact ( ax0 _ _ _ ) . 
+
+Defined.
 
 
+
+
+  
 (** Two implications of the zeros and first properties of operations of type T and Tt
 that are required for the formulation of the property TT *) 
 

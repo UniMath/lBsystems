@@ -26,6 +26,15 @@ Definition lTower_str ( T : UU ) :=
 
 Definition lTower := total2 ( fun T : UU => lTower_str T ) .
 
+(** The type lTower is constructively equivalent to the type of pretowers defined as follows:
+
+Definition pretowerfam := ( fun T : nat -> UU => forall n : nat , T ( S n  ) -> T n ) .
+Definition pretower := total2 pretowerfam . 
+
+See pretowers.v 
+
+*)
+
 Definition lTower_data_pr1 : lTower -> UU := pr1 .
 Coercion lTower_data_pr1 : lTower >-> UU .
 
@@ -158,7 +167,18 @@ Proof.
 
 Defined.
 
-  
+Lemma isover_X_ftnX { BB : lTower } ( X : BB ) ( n : nat ) : isover X ( ftn n X ) .
+Proof .
+  intros . 
+  induction n as [ | n IHn ] . 
+  exact ( isover_XX _ ) . 
+
+  exact ( isover_trans IHn ( isover_X_ftX _ ) ) . 
+
+Defined.
+
+
+
   
 Lemma isover_X_ftA { BB : lTower } { X A : BB }
       ( is : isover X A ) : isover X ( ft A ) .

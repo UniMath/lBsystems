@@ -88,17 +88,21 @@ endif
 #                    #
 ######################
 
-VFILES:=lTowers.v\
+VFILES:=lBsystems.v\
+  lBsystems_to_precategories.v\
+  lBsystems_Tj_Ttj.v\
   lBsystems_unital.v\
   lBsystems_non_unital.v\
+  lB0systems.v\
+  prelBsystems.v\
   lBsystems_dlt.v\
   lBsystems_STid.v\
   lBsystems_TS_ST.v\
-  lBsystems_T_Tt.v\
-  lBsystems.v\
-  lBsystems_prelim.v\
   lBsystems_S_St.v\
-  lBsystems_carriers.v
+  lBsystems_T_Tt.v\
+  lBsystems_carriers.v\
+  lBsystems_prelim.v\
+  lTowers.v
 
 -include $(addsuffix .d,$(VFILES))
 .SECONDARY: $(addsuffix .d,$(VFILES))

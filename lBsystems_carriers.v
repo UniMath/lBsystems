@@ -4,7 +4,7 @@ by Vladimir Voevodsky, file created on Jan. 6, 2015 *)
 
 Unset Automatic Introduction.
 
-Require Export lBsystems.ltowers.
+Require Export lBsystems.hSet_ltowers.
 
 
 

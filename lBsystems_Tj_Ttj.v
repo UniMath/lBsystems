@@ -90,7 +90,17 @@ Definition Tj_int { BB : lBsystem_carrier }
       { A X1 : BB } ( isov : isover X1 A )
       ( ell : ll X1 - ll A = j )
       { X2 : BB } ( isab : isabove X2 A ) : BB :=
-  pr1 ( Tj_int_package ax0 ax1b j isov ell isab ) . 
+  pr1 ( Tj_int_package ax0 ax1b j isov ell isab ) .
+
+
+(* Lemma Tj_int_Sj { BB : lBsystem_carrier }
+      { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
+      ( j : nat )
+      { A X1 : BB } ( isov : isover X1 A )
+      ( ell : ll X1 - ll A = j )
+      { X2 : BB } ( isab : isabove X2 A ) :
+  Tj_int ax0 ax1b ( S j ) isov isab =
+  T X1 ( Tj_int ax0 ax1b j  isab2 ) ( T_dom_1_Tj ax0 ax1b isab1 isab2 ) . *)
 
 
 Lemma Tj_int_equals_Tj_int { BB : lBsystem_carrier }
@@ -190,11 +200,35 @@ Proof .
 
 Defined.
 
+(*
 
+(** The predicate isover of expressions of the form Tj *)
+
+Lemma isover_Tj_Tj_int { BB : lBsystem_carrier }
+      { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
+      ( j : nat )
+      { X1 A : BB } ( isov : isover X1 A )
+      ( ell : ll X1 - ll A = j )
+      { X2 : BB } ( isab : isabove X2 A )
+      { X2' : BB } ( isab' : isabove X2' A )
+      ( isov' : isover X2' X2 ) :
+  isover ( Tj_int ax0 ax1b j isov ell isab' ) ( Tj_int ax0 ax1b j isov ell isab ) .
+Proof .
+  intros BB T ax0 ax1b j .
+  induction j as [ | j IHj ] .
+  intros . exact isov' .  
+
+  intros . 
+  unfold Tj_int . 
+  unfold Tj_int_package . 
+  simpl . 
+
+
+  
 
 (** The monotone functions of the over-towers defined by the opration Tj *)
 
-(* Definition Tj_fun { BB : lBsystem_carrier }
+Definition Tj_fun { BB : lBsystem_carrier }
       { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
       { X1 A : BB } ( isov : isover X1 A ) :
   monotone_fun ( ltower_over A ) ( ltower_over X1 ) .
@@ -211,11 +245,12 @@ Proof .
   exact ( obj_over_constr ( isover_XX X1 ) ) .
 
   intros X Y isovXY .
-  simpl . 
+  simpl .
+  apply to_isover_over . 
   destruct (ovab_choice (pr2 X)) as [ isabX | eqX ] .
   destruct (ovab_choice (pr2 Y)) as [ isabY | eqY ] .
-  
-*)
+  simpl . 
+  apply isover_Tj_Tj . 
 
 
 
@@ -248,7 +283,7 @@ Definition
 
 
 
-
+*)
 
 
 

@@ -454,32 +454,7 @@ Defined.
 
 
   
-(** ltowers of sets *)
 
-Definition hSet_ltower := total2 ( fun T : ltower => isaset T ) .
-
-Definition hSet_ltower_pr1 : hSet_ltower -> ltower := pr1 . 
-Coercion hSet_ltower_pr1 : hSet_ltower >-> ltower .
-
-
-Definition isasetB ( X : hSet_ltower ) : isaset X := pr2 X .
-
-Lemma isaprop_isover { BB : hSet_ltower } ( X A : BB ) : isaprop ( isover X A ) .
-Proof .
-  intros . exact ( isasetB _ _ _ ) . 
-
-Defined.
-
-
-Lemma isaprop_isabove { BB : hSet_ltower } ( X A : BB ) : isaprop ( isabove X A ) . 
-Proof. 
-  intros . 
-  apply isapropdirprod . 
-  exact ( pr2 ( _ > _ ) ) .
-
-  exact ( isaprop_isover _ _ ) . 
-
-Defined.
 
 
 (** Pointed ltowers 
@@ -527,7 +502,8 @@ Definition isov_isov { T : ltower } { A : T } ( X' : ltower_over_carrier A ) :
 
 Definition ltower_over_ll { T : ltower } { A : T } ( X' : ltower_over_carrier A ) : nat :=
   ll X' - ll A .
-
+  
+    
 Definition ltower_over_ft { T : ltower } { A : T } ( X' : ltower_over_carrier A ) :
   ltower_over_carrier A .
 Proof .
@@ -643,10 +619,66 @@ Defined.
 
 Definition ltower_over { T : ltower } ( A : T ) : ltower :=
   ltower_constr ( @ltower_over_ll _ A ) ( @ltower_over_ft _ A )
-                ( @ltower_over_ll_ft_eq _ A ) ( @ltower_over_ll0_eq _ A ) . 
+                ( @ltower_over_ll_ft_eq _ A ) ( @ltower_over_ll0_eq _ A ) .
 
 
 
+Lemma ll_over_minus_ll_over { T : ltower } { A : T } ( X1 X2 : ltower_over A ) :
+  ll X1 - ll X2 = ll ( pr1 X1 ) - ll ( pr1 X2 ) .
+Proof .
+  intros .
+  destruct X1 as [ X1 isov1 ] . destruct X2 as [ X2 isov2 ] . 
+  unfold ll . 
+  simpl . 
+  unfold ltower_over_ll . 
+  change _ with ( ( ll X1 - ll A ) - ( ll X2 - ll A ) = ( ll X1 - ll X2 ) ) . 
+  rewrite natminusassoc . 
+  rewrite natpluscomm . 
+  rewrite ( minusplusnmm _ _ ( isover_geh isov2 ) ) . 
+  apply idpath . 
+
+Defined.
+
+Lemma ltower_over_ftn { T : ltower } { A : T } ( n : nat )
+      ( X : ltower_over A ) ( ge : ll X >= n ) : pr1 ( ftn n X ) = ftn n ( pr1 X ) .
+Proof .
+  intros T A n . 
+  induction n .
+  intros . 
+  apply idpath . 
+
+  intros. 
+  rewrite <- ftn_ft . 
+  rewrite <- ftn_ft . 
+  assert ( int : ft ( pr1 X ) = pr1 ( ft X ) ) . 
+  change ( ft X ) with ( ltower_over_ft X ) . 
+  unfold ltower_over_ft . 
+  destruct ( isover_choice (isov_isov X) ) as [ isov | eq ] . 
+  simpl . 
+  apply idpath . 
+
+  assert ( absd : empty ) . 
+  change ( ll X ) with ( ll ( ltower_over_carrier_pr1 _ X ) - ll A ) in ge .
+  rewrite <- eq in ge . 
+  rewrite natminusnn in ge . 
+  apply ( ge ( natgthsn0 _ ) ) . 
+
+  destruct absd .
+  rewrite int . 
+  refine ( IHn ( ft X ) _ ) . 
+  rewrite ll_ft . 
+
+  assert ( ge' := natgehandminusr _ _ 1 ge ) . 
+  change ( S n - 1 ) with ( n - 0 ) in ge' .
+  rewrite natminuseqn in ge' . 
+  exact ge' . 
+
+Defined.
+
+
+
+
+  
 
 (** Monotone functions between l-towers *)
 

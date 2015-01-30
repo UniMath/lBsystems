@@ -102,6 +102,7 @@ VFILES:=lBsystems.v\
   lBsystems_T_Tt.v\
   lBsystems_carriers.v\
   lBsystems_prelim.v\
+  hSet_ltowers.v\
   ltowers.v
 
 -include $(addsuffix .d,$(VFILES))

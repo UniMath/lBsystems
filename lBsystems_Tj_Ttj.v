@@ -9,6 +9,38 @@ Require Export lBsystems.lBsystems_T_Tt .
 
 (** Definition of operations Tj that are iterated operations T *)
 
+Lemma Tj_int_Sj_l1 { BB : lBsystem_carrier }
+      ( j : nat )
+      { A X1 : BB } ( isov : isover X1 A )
+      ( ell : ll X1 - ll A = S j ) :
+  isover ( ft X1 ) A .
+Proof .
+  intros .
+  assert ( gth : ll X1 > ll A ) .  
+  apply minusgth0inv .
+  rewrite ell . 
+  exact ( natgthsn0 _ ) . 
+
+  exact ( isover_ft' ( isabove_constr gth isov ) ) . 
+
+Defined.
+
+Lemma Tj_int_Sj_l2 { BB : lBsystem_carrier }
+      ( j : nat )
+      { A X1 : BB } ( isov : isover X1 A )
+      ( ell : ll X1 - ll A = S j ) :
+  ll ( ft X1 ) - ll A = j .
+Proof .
+  intros .
+  rewrite ll_ft . 
+  rewrite natminuscomm . 
+  rewrite ell . 
+  simpl . 
+  exact ( natminuseqn _ ) .
+
+Defined.
+
+
 Lemma Tj_int_package { BB : lBsystem_carrier }
       { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
       ( j : nat )
@@ -34,27 +66,19 @@ Proof .
   exact ( isover_geh isab ) . 
   
   intros .
-  refine ( tpair _ _ _ ) . 
-  refine ( T X1 ( pr1 ( IHj ( ft X1 ) _ _ X2 _ ) ) _ ) .  
-  refine ( isover_ft isov _ ) . 
-  apply minusgth0inv . 
-  rewrite ell . 
-  exact ( natgthsn0 _ ) . 
+  refine ( tpair _ _ _ ) .
+  set ( int1 := Tj_int_Sj_l1 j isov ell ) .
+  set ( int2 :=  Tj_int_Sj_l2 j isov ell ) .
+  
+  refine ( T X1 ( pr1 ( IHj ( ft X1 ) int1 int2 X2 isab ) ) _ ) .
+  refine ( T_dom_constr _ _ ) .
+  assert ( int : ll X1 >= ll X1 - ll A ) . apply natminuslehn .
+  rewrite ell in int . 
+  exact ( natgehgthtrans _ _ _ int ( natgthsn0 _ ) ) .
 
-  rewrite ll_ft . 
-  rewrite natminusassoc . 
-  rewrite natpluscomm . 
-  rewrite <- natminusassoc . 
-  rewrite ell . 
-  simpl . exact ( natminuseqn _ ) .  
-
-  exact isab . 
-
-  refine ( T_dom_constr _ _ ) . 
-  refine ( natgehgthtrans _ ( ll X1 - ll A ) _ ( natminuslehn _ _ ) _ ) . 
-  rewrite ell . exact ( natgthsn0 _ ) . 
-
-  refine ( pr1 ( pr2 ( IHj ( ft X1 ) _ _ X2 _ ) ) ) . 
+  assert ( int := pr2 ( ( IHj ( ft X1 ) int1 int2 X2 isab ) ) ) . 
+  simpl in int . 
+  exact ( pr1 int ) . 
 
   split .
   apply ax1b .
@@ -82,8 +106,6 @@ Proof .
 Defined.
 
 
-
-
 Definition Tj_int { BB : lBsystem_carrier }
       { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
       ( j : nat )
@@ -93,14 +115,46 @@ Definition Tj_int { BB : lBsystem_carrier }
   pr1 ( Tj_int_package ax0 ax1b j isov ell isab ) .
 
 
-(* Lemma Tj_int_Sj { BB : lBsystem_carrier }
+(** The inductive property of Tj *)
+
+  
+Lemma Tj_int_Sj_l3 { BB : lBsystem_carrier }
       { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
       ( j : nat )
       { A X1 : BB } ( isov : isover X1 A )
-      ( ell : ll X1 - ll A = j )
+      ( ell : ll X1 - ll A = S j )
       { X2 : BB } ( isab : isabove X2 A ) :
-  Tj_int ax0 ax1b ( S j ) isov isab =
-  T X1 ( Tj_int ax0 ax1b j  isab2 ) ( T_dom_1_Tj ax0 ax1b isab1 isab2 ) . *)
+  T_dom X1 ( Tj_int ax0 ax1b j ( Tj_int_Sj_l1 j isov ell ) ( Tj_int_Sj_l2 j isov ell ) isab) . 
+Proof .
+  intros .
+  refine ( T_dom_constr _ _ ) .
+  assert ( int : ll X1 >= ll X1 - ll A ) . apply natminuslehn .
+  rewrite ell in int . 
+  exact ( natgehgthtrans _ _ _ int ( natgthsn0 _ ) ) .
+
+  assert ( int := pr2 ( (Tj_int_package ax0 ax1b j (Tj_int_Sj_l1 j isov ell) (Tj_int_Sj_l2 j isov ell)
+        isab) ) ) . 
+  simpl in int . 
+  exact ( pr1 int ) . 
+
+Defined.
+  
+
+Lemma Tj_int_Sj { BB : lBsystem_carrier }
+      { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
+      ( j : nat )
+      { A X1 : BB } ( isov : isover X1 A )
+      ( ell : ll X1 - ll A = S j )
+      { X2 : BB } ( isab : isabove X2 A ) :
+  Tj_int ax0 ax1b ( S j ) isov ell isab =
+  T X1 ( Tj_int ax0 ax1b j
+                ( Tj_int_Sj_l1 j isov ell ) ( Tj_int_Sj_l2 j isov ell ) isab )
+    ( Tj_int_Sj_l3 ax0 ax1b j isov ell isab ) . 
+Proof . 
+   intros . 
+   apply idpath . 
+
+Defined.
 
 
 Lemma Tj_int_equals_Tj_int { BB : lBsystem_carrier }
@@ -200,12 +254,12 @@ Proof .
 
 Defined.
 
-(*
+
 
 (** The predicate isover of expressions of the form Tj *)
 
 Lemma isover_Tj_Tj_int { BB : lBsystem_carrier }
-      { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
+      { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T ) ( ax1a : T_ax1a_type T )
       ( j : nat )
       { X1 A : BB } ( isov : isover X1 A )
       ( ell : ll X1 - ll A = j )
@@ -214,14 +268,18 @@ Lemma isover_Tj_Tj_int { BB : lBsystem_carrier }
       ( isov' : isover X2' X2 ) :
   isover ( Tj_int ax0 ax1b j isov ell isab' ) ( Tj_int ax0 ax1b j isov ell isab ) .
 Proof .
-  intros BB T ax0 ax1b j .
+  intros BB T ax0 ax1b ax1a j .
   induction j as [ | j IHj ] .
   intros . exact isov' .  
 
-  intros . 
-  unfold Tj_int . 
-  unfold Tj_int_package . 
-  simpl . 
+  intros .
+  rewrite Tj_int_Sj .  rewrite Tj_int_Sj .
+  apply ( isover_T_T_2 ax0 ax1a ) .
+  apply IHj .
+  exact isov' . 
+
+Defined.
+
 
 
   
@@ -229,7 +287,7 @@ Proof .
 (** The monotone functions of the over-towers defined by the opration Tj *)
 
 Definition Tj_fun { BB : lBsystem_carrier }
-      { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
+      { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T ) ( ax1a : T_ax1a_type T )
       { X1 A : BB } ( isov : isover X1 A ) :
   monotone_fun ( ltower_over A ) ( ltower_over X1 ) .
 Proof .
@@ -250,7 +308,8 @@ Proof .
   destruct (ovab_choice (pr2 X)) as [ isabX | eqX ] .
   destruct (ovab_choice (pr2 Y)) as [ isabY | eqY ] .
   simpl . 
-  apply isover_Tj_Tj . 
+  apply isover_Tj_Tj_int .
+  exact ax1a . 
 
 
 

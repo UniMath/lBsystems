@@ -141,8 +141,19 @@ Proof. intros n m . revert n .
        induction m as [ | m IHm ] .  intros  . simpl .  rewrite ( natminuseqn n ) . apply idpath .
        intros .  rewrite ( natminusind n m ) .  rewrite ( IHm ( n - 1 ) k ) .
        rewrite ( ! ( natminusind _ _ ) ) .  apply idpath . 
-Defined. 
+Defined.
 
+
+Definition natminuscomm ( n m k : nat ) : ( n - m ) - k = ( n - k ) - m .
+Proof .
+  intros .
+  rewrite natminusassoc . 
+  rewrite natminusassoc . 
+  rewrite natpluscomm . 
+  apply idpath .
+
+Defined.
+ 
 
 Lemma nat1plusminusgt { n m : nat } ( gt : 1 + m > n ) : ( 1 + m ) - n = 1 + ( m - n ) .
 Proof.

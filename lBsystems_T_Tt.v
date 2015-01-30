@@ -15,22 +15,22 @@ Including constructions related to their domains of definition. *)
 (** **** Domains of definition of operations of type T *)
 
 Definition T_dom { BB : lBsystem_carrier } ( X1 X2 : BB ) :=
-  dirprod ( ll X1 > 0 ) ( isover X2 ( ft X1 ) ) .
+  dirprod ( ll X1 > 0 ) ( isabove X2 ( ft X1 ) ) .
 
 Definition T_dom_constr { BB : lBsystem_carrier } { X1 X2 : BB }
-           ( gt0 : ll X1 > 0 ) ( isov : isover X2 ( ft X1 ) ) : T_dom X1 X2 :=
-  tpair _ gt0 isov .
+           ( gt0 : ll X1 > 0 ) ( isab : isabove X2 ( ft X1 ) ) : T_dom X1 X2 :=
+  tpair _ gt0 isab .
   
 Definition T_dom_gt0 { BB : lBsystem_carrier } { X1 X2 : BB } ( inn : T_dom X1 X2 ) :
   ll X1 > 0 := pr1 inn .
 
-(* Definition T_dom_gth { BB : lBsystem_carrier } { X1 X2 : BB } ( inn : T_dom X1 X2 ) :
-  ll X2 > ll ( ft X1 ) := isabove_gth ( pr2 inn ) . *)
+Definition T_dom_gth { BB : lBsystem_carrier } { X1 X2 : BB } ( inn : T_dom X1 X2 ) :
+  ll X2 > ll ( ft X1 ) := isabove_gth ( pr2 inn ) .
 
-Definition T_dom_isover { BB : lBsystem_carrier } { X1 X2 : BB } ( inn : T_dom X1 X2 ) :
-  isover X2 ( ft X1 ) := pr2 inn . 
+Definition T_dom_isabove { BB : lBsystem_carrier } { X1 X2 : BB } ( inn : T_dom X1 X2 ) :
+  isabove X2 ( ft X1 ) := pr2 inn . 
 
-(* Definition T_dom_geh { BB : lBsystem_carrier } { X1 X2 : BB } ( inn : T_dom X1 X2 ) :
+Definition T_dom_geh { BB : lBsystem_carrier } { X1 X2 : BB } ( inn : T_dom X1 X2 ) :
   ll X2 >= ll X1 .
 Proof .
   intros . assert ( gt := T_dom_gth inn ) . 
@@ -41,15 +41,15 @@ Proof .
   rewrite natpluscomm . 
   exact ( minusplusnmmineq _ _ ) . 
 
-Defined. *)
+Defined.
 
-(* Lemma T_dom_gt0_2 { BB : lBsystem_carrier } { X1 X2 : BB } ( inn : T_dom X1 X2 ) :
+Lemma T_dom_gt0_2 { BB : lBsystem_carrier } { X1 X2 : BB } ( inn : T_dom X1 X2 ) :
   ll X2 > 0 .
 Proof .
   intros .
   exact ( natgehgthtrans _ _ _ ( T_dom_geh inn ) ( T_dom_gt0 inn ) ) .
           
-Defined. *)
+Defined.
           
 
   
@@ -60,7 +60,7 @@ Proof.
   apply isapropdirprod . 
   apply ( pr2 ( _ > _ ) ) .
   
-  exact ( isaprop_isover _ _ ) . 
+  exact ( isaprop_isabove _ _ ) . 
 
 Defined.
 
@@ -78,11 +78,11 @@ Definition T_dom_comp { BB : lBsystem_carrier } { X1 X2 X3 : BB }
 Proof.
   intros.
   assert ( gt0 := T_dom_gt0 inn12 ) . 
-  assert ( is21 := T_dom_isover inn12 ) . assert ( is32 := T_dom_isover inn23 ) .
+  assert ( is21 := T_dom_isabove inn12 ) . assert ( is32 := T_dom_isabove inn23 ) .
   refine ( T_dom_constr _ _ ) . 
   exact gt0 .
 
-  exact ( isover_trans is32 ( isover_ft' is21 ) ) . 
+  exact ( isabov_trans is32 ( isover_ft' is21 ) ) . 
 
 Defined.
 

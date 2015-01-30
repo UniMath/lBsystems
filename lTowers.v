@@ -10,6 +10,26 @@ Unset Automatic Introduction.
 Require Export lBsystems.lBsystems_prelim.
 
 
+(** To uu0a.v *)
+
+Lemma iscontrpathsfrom { T : UU } ( A : T ) :
+  iscontr ( total2 ( fun X : T => A = X ) ) .
+Proof .
+  intros .
+  split with ( tpair _ A ( idpath A ) ) . 
+  intro t . 
+  destruct t as [ t e ] .
+  destruct e . 
+  apply idpath . 
+
+Defined.
+
+
+
+
+
+  
+
 (** We formalize the sequences of types ...->B_{n+1}->B_n->...->B_0
 
 as one type B with a length function ll and an endomorphism ft. *)
@@ -26,6 +46,28 @@ Definition ltower_str ( T : UU ) :=
 
 Definition ltower := total2 ( fun T : UU => ltower_str T ) .
 
+Definition ltower_constr { T : UU } ( ll : T -> nat ) ( ft : T -> T )
+           ( ll_ft_eq : forall X : T , ll ( ft X ) = ll X - 1 )
+           ( ll0_eq : forall ( X : T ) ( e : ll X = 0 ) , ft X = X ) : ltower .
+Proof .
+  intros .
+  split with T .
+  
+  split with ( dirprodpair ll ft ) .
+
+  exact ( dirprodpair ll_ft_eq ll0_eq ) . 
+
+Defined.
+
+
+
+
+
+
+
+
+
+  
 (** The type ltower is constructively equivalent to the type of pretowers defined as follows:
 
 Definition pretowerfam := ( fun T : nat -> UU => forall n : nat , T ( S n  ) -> T n ) .
@@ -257,6 +299,14 @@ Definition isabove_constr { BB : ltower } { X A : BB }
 Definition isabove_gth { BB : ltower } { X A : BB } ( is : isabove X A ) :
   ll X > ll A := pr1 is .
 
+Lemma isabove_gt0 { BB : ltower } { X A : BB } ( is : isabove X A ) : ll X > 0 .
+Proof .
+  intros .
+  exact ( natgthgehtrans _ _ _ ( isabove_gth is ) ( natgehn0 _ ) ) .
+
+Defined.
+
+  
 Definition isabove_to_isover { BB : ltower } { X A : BB } :
   isabove X A -> isover X A := pr2 .
 Coercion isabove_to_isover : isabove >-> isover .
@@ -344,6 +394,22 @@ Proof .
 
 Defined.
 
+
+Lemma ovab_choice { BB : ltower } { X A : BB } ( isov : isover X A ) :
+  coprod ( isabove X A ) ( X = A ) .
+Proof .
+  intros .
+  destruct ( natgehchoice _ _ ( isover_geh isov ) ) as [ gth | eq ] . 
+  exact ( ii1 ( tpair _ gth isov ) ) .
+
+  unfold isover in isov . 
+  rewrite eq in isov . 
+  rewrite natminusnn in isov . 
+  exact ( ii2 ( ! isov ) ) . 
+
+Defined.
+
+  
 Lemma isabove_choice { BB : ltower } { X A : BB } ( isab : isabove X A ) :
   coprod ( isabove ( ft X ) A ) ( A = ft X ) . 
 Proof.
@@ -384,6 +450,8 @@ Proof .
   exact ( ii2 ( isover_X_ftA isov ) ) . 
 
 Defined.
+
+
 
   
 (** ltowers of sets *)
@@ -438,6 +506,160 @@ Proof .
   exact ( maponpaths ( @pr1 _ ( fun X : T => ll X = 0 ) ) eq ) . 
 
 Defined.
+
+
+
+(** ltowers of objects over an object *)
+
+
+Definition ltower_over_carrier { T : ltower } ( A : T ) :=
+  total2 ( fun X : T => isover X A ) .
+
+Definition obj_over_constr { T : ltower } { A : T } { X : T } ( isov : isover X A ) :
+  ltower_over_carrier A := tpair ( fun X : T => isover X A ) _ isov . 
+
+Definition ltower_over_carrier_pr1 { T : ltower } ( A : T ) ( X' : ltower_over_carrier A ) :
+  ltower_data_pr1 T := pr1 X' . 
+Coercion ltower_over_carrier_pr1 : ltower_over_carrier >-> ltower_data_pr1 .
+
+Definition isov_isov { T : ltower } { A : T } ( X' : ltower_over_carrier A ) :
+  isover X' A := pr2 X' . 
+
+Definition ltower_over_ll { T : ltower } { A : T } ( X' : ltower_over_carrier A ) : nat :=
+  ll X' - ll A .
+
+Definition ltower_over_ft { T : ltower } { A : T } ( X' : ltower_over_carrier A ) :
+  ltower_over_carrier A .
+Proof .
+  intros .
+  destruct ( isover_choice ( isov_isov X' ) ) as [ isov | eq ] .
+  exact ( tpair _ ( ft X' )  isov ) .
+
+  exact ( tpair ( fun X : T => isover X A ) A ( isover_XX A ) ) . 
+
+Defined.
+
+Lemma ltower_over_ll_ft_eq { T : ltower } { A : T } ( X' : ltower_over_carrier A ) :
+  ltower_over_ll ( ltower_over_ft X' ) = ltower_over_ll X' - 1 .
+Proof .
+  intros . 
+  unfold ltower_over_ft . 
+  destruct ( isover_choice ( isov_isov X' ) ) as [ isov | eq ] .
+  unfold ltower_over_ll .  
+  simpl .
+  rewrite ll_ft . 
+  rewrite natminusassoc . 
+  rewrite natpluscomm . 
+  rewrite <- natminusassoc . 
+  apply idpath . 
+
+  unfold ltower_over_ll .
+  simpl . 
+  rewrite natminusnn . 
+  rewrite <- eq . 
+  rewrite natminusnn .
+  apply idpath . 
+
+Defined.
+
+
+Lemma ispointed_ltower_over_int { T : ltower } ( A : T ) :
+  iscontr ( total2 ( fun X' : ltower_over_carrier A =>
+                       ltower_over_ll X' = 0 ) ) .
+Proof.
+  intros .
+  assert ( weq1 : weq ( total2 ( fun X' : ltower_over_carrier A =>
+                                   ltower_over_ll X' = 0 ) )
+                      ( total2 ( fun X : T => dirprod
+                                                ( isover X A ) ( ll X - ll A = 0 ) ) ) ) .
+  apply weqtotal2asstor . 
+
+  assert ( weq2 : weq ( total2 ( fun X : T => dirprod
+                                                ( isover X A ) ( ll X - ll A = 0 ) ) )
+                      ( total2 ( fun X : T => A = X ) ) ) .
+  refine ( weqfibtototal _ _ _ ) . 
+  intro X . 
+  assert ( weq3 : weq (dirprod (isover X A) (ll X - ll A = 0))
+                      (dirprod (ll X - ll A = 0) (isover X A)) ) .
+  apply weqdirprodcomm . 
+
+  assert ( weq4 : weq (dirprod (ll X - ll A = 0) (isover X A))
+                      (dirprod (ll X - ll A = 0) ( A = X ) ) ) .
+  refine ( weqfibtototal _ _ _ ) . 
+  intro eq . 
+  unfold isover . 
+  rewrite eq . 
+  apply idweq.
+
+  assert ( weq5 : weq (dirprod (ll X - ll A = 0) (A = X))
+                      (dirprod (A = X)(ll X - ll A = 0))).
+  apply weqdirprodcomm . 
+
+  assert ( weq6 : weq (dirprod (A = X) (ll X - ll A = 0))
+                      ( A = X ) ) .
+  apply weqpr1 . 
+  intro eq . 
+  rewrite eq . 
+  rewrite natminusnn . 
+  apply iscontraprop1 . 
+  apply isasetnat . 
+
+  apply idpath . 
+
+  apply ( weqcomp weq3 ( weqcomp weq4 ( weqcomp weq5 weq6 ) ) ) .  
+
+  assert ( weq := weqcomp weq1 weq2 ) . 
+  apply ( iscontrweqb weq ) .
+
+  apply iscontrpathsfrom .
+
+Defined.
+
+  
+
+         
+
+
+Lemma ltower_over_ll0_eq { T : ltower } { A : T }
+      ( X' : ltower_over_carrier A ) ( eq0 : ltower_over_ll X' = 0 ) : 
+  ltower_over_ft X' = X' .
+Proof .
+  intros .
+  assert ( eq0' : ltower_over_ll ( ltower_over_ft X' ) = 0 ) . 
+  rewrite ltower_over_ll_ft_eq . 
+  rewrite eq0 . 
+  apply idpath .
+
+  assert ( int : tpair ( fun X'' => ltower_over_ll X'' = 0 ) _ eq0' =
+                 tpair ( fun X'' => ltower_over_ll X'' = 0 ) X' eq0 ) .
+  apply ( proofirrelevancecontr ( ispointed_ltower_over_int _ ) _ _ ) .
+
+  apply ( maponpaths ( @pr1 _ ( fun X'' => ltower_over_ll X'' = 0 ) ) int ) .
+
+Defined.
+
+
+  
+
+Definition ltower_over { T : ltower } ( A : T ) : ltower :=
+  ltower_constr ( @ltower_over_ll _ A ) ( @ltower_over_ft _ A )
+                ( @ltower_over_ll_ft_eq _ A ) ( @ltower_over_ll0_eq _ A ) . 
+
+
+
+
+(** Monotone functions between l-towers *)
+
+Definition monotone_fun ( T1 T2 : ltower ) :=
+  total2 ( fun f : T1 -> T2 => forall ( X Y : T1 ) , isover X Y -> isover ( f X ) ( f Y ) ) . 
+
+Definition monotone_fun_constr { T1 T2 : ltower }
+           ( f : T1 -> T2 ) ( is : forall ( X Y : T1 ) , isover X Y -> isover ( f X ) ( f Y ) ) :
+  monotone_fun T1 T2 := tpair _ f is .
+
+
+Definition monotone_fun_pr1 ( T1 T2 : ltower ) : monotone_fun T1 T2 -> ( T1 -> T2 ) := pr1 . 
+Coercion monotone_fun_pr1 : monotone_fun >-> Funclass . 
 
 
 (* End of the file ltowers.v *)

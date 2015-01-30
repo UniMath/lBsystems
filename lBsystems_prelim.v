@@ -12,6 +12,26 @@ Require Export Foundations.hlevel2.finitesets.
 
 Notation isaproptotal2 := ( isofhleveltotal2 1 )  .
 
+Lemma natminusmequalsn { m n : nat } ( ge : n >= m ) ( eq0 : n - m = 0 ) : n = m .
+Proof .
+  intro m . induction m as [ | m IHm ] .
+  intros . 
+
+  rewrite natminuseqn in eq0 . 
+  exact eq0 .
+
+  intros .
+  induction n as [ | n ] . 
+  assert ( absd : empty ) .
+  exact ( ge ( natgthsn0 _ ) ) .
+  
+  destruct absd .
+
+  apply ( maponpaths S ) . exact ( IHm n ge eq0 ) . 
+
+Defined.
+
+  
 
 Lemma natgthnnmius1 { n : nat } ( gt : n > 0 ) : n > n - 1 .
 Proof.

@@ -9,36 +9,60 @@ Require Export lBsystems.lBsystems_S_St.
 
 
 
-(** Contractibility axiom and its consequences *)
 
 
+(*
 
 
 Definition Mor_and_fstar { BB : lBsystem_carrier } ( pax : ispointed BB )
-           { T : T_ops_type BB } ( ax1b : T_ax1b_type T )
-           ( n : nat )
-           ( X1 : BB ) :
-  total2 ( fun Mor_n : forall ( A : BB ) ( eq : ll A = n ) , UU =>
-             forall ( A : BB ) ( eq : ll A = n ) ( f : Mor_n A eq )
-                    ( X2 : BB ) ( isov : isabove X2 A ) ,
-               total2 ( fun fstar_n : BB =>
-                          dirprod ( isabove fstar_n X1 ) ( ll fstar_n - ll X1 = ll X2 - n ) ) ) .
+           { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
+           ( n : nat ) ( X1 A : BB ) ( eq : ll A = n ) : 
+  total2 ( fun Mor_X1_A : UU =>
+             forall f : Mor_X1_A , monotone_fun ( ltower_over A ) ( ltower_over X1 ) ) . 
 Proof .
-  intros BB pax T ax1b n . induction n as [ | n IHn ] . 
+  intros BB pax T ax0 ax1b n . induction n as [ | n IHn ] . 
   intros . 
-  split with ( fun x => fun eq => unit ) . 
-  intros . 
-  assert ( isov1 : isover X1 A ) . exact ( isoverll0 pax eq X1 ) .
+  split with unit .
 
-  
+  intro . 
   
 
+  
+  intros . 
+  assert ( isov : isover X1 A ) .
+  exact ( isoverll0 pax eq X1 ) .
 
+  split with ( Tj ax0 ax1b isov isab ) .
 
+  split with ( isabove_Tj _ _ _ _ ) . 
 
+  rewrite ( natminuseqn _ ) . 
+  rewrite ll_Tj . 
+  rewrite eq . 
+  rewrite natminuseqn . 
+  apply plusminusnmm . 
 
+  intros .
+  set ( Morn := fun X1 => pr1 ( IHn X1 ) ) . 
+  set ( fstarn := fun X1 A eq f X2 isab => pr1 ( pr2 ( IHn X1 ) A eq f X2 isab ) ) . 
+  set ( fstareq := fun X1 A eq f X2 isab => pr2 ( pr2 ( IHn X1 ) A eq f X2 isab ) ) . 
+  refine ( tpair _ _ _ ) . 
+  intros .
 
+  assert ( eqft : ll ( ft A ) = n ) . 
+  rewrite ll_ft . 
+  rewrite eq . 
+  simpl . rewrite natminuseqn . apply idpath . 
 
+  exact ( total2 ( fun ftf : Morn X1 ( ft A ) eqft =>
+                     total2 ( fun r : Tilde BB => dd r = X1 ) ) ) . 
+
+  intros . 
+  
+
+  
+
+*)
 
 
 

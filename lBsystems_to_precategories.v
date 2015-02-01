@@ -4,15 +4,10 @@ by Vladimir Voevodsky, started on Jan. 22, 2015 *)
 
 Unset Automatic Introduction.
 
-Require Export lBsystems.lBsystems_Tj_Ttj.
-Require Export lBsystems.lBsystems_S_St.
-
-
-
-
+Require Export lBsystems.lBsystems_T_fun_Tj_Ttj.
+Require Export lBsystems.lBsystems_S_fun.
 
 (*
-
 
 Definition Mor_and_fstar { BB : lBsystem_carrier } ( pax : ispointed BB )
            { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
@@ -24,7 +19,10 @@ Proof .
   intros . 
   split with unit .
 
-  intro . 
+  intro .
+
+
+  
   
 
   

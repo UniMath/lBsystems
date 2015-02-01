@@ -90,7 +90,8 @@ endif
 
 VFILES:=lBsystems.v\
   lBsystems_to_precategories.v\
-  lBsystems_Tj_Ttj.v\
+  lBsystems_S_fun.v\
+  lBsystems_T_fun_Tj_Ttj.v\
   lBsystems_unital.v\
   lBsystems_non_unital.v\
   lB0systems.v\

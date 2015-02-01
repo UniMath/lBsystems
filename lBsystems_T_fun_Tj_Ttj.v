@@ -1,4 +1,4 @@
-(** * Operations Tj and Ttj defined by operations T and Tt. 
+(** ** The functions of the over-towers defined by T and their iterations. 
 
 by Vladimir Voevodsky, started on Jan. 22, 2015 *)
 
@@ -7,7 +7,7 @@ Unset Automatic Introduction.
 Require Export lBsystems.lBsystems_T_Tt .
 
 
-(** The definition of an extended operation T and its elementary properties. *)
+(** *** The definition of an extended operation T and its elementary properties. *)
 
 Definition T_ext_dom { BB : lBsystem_carrier } ( X1 X2 : BB ) :=
   dirprod ( ll X1 > 0 ) ( isover X2 ( ft X1 ) ) .
@@ -70,7 +70,7 @@ Defined.
 
 
 
-(** The over-monotone function of the over-towers defined by the operation T *)
+(** *** The over-monotone function T_fun of the over-towers defined by the extended operation T *)
 
 
 
@@ -104,7 +104,9 @@ Defined.
 
 
 
-(** Definition of Tj as iterations of the functions T_fun *)
+(** *** Definition of Tj as iterations of the functions T_fun *)
+
+(** **** Construction of Tj *)
 
 Lemma Tj_fun_int_l0 { BB : lBsystem_carrier }
       { A X1 : BB } ( isov : isover X1 A )
@@ -198,7 +200,13 @@ Proof .
 Defined.
 
 
-         
+Definition Tj_fun { BB : lBsystem_carrier }
+           { T : T_ops_type BB } ( ax1b : T_ax1b_type T )
+           { A X1 : BB } ( isov : isover X1 A ) : ltower_over A -> ltower_over X1 :=
+  fun X2' => Tj_fun_int ax1b ( ll X1 - ll A ) isov ( idpath _ ) X2' . 
+
+
+(** **** Proof of monotonicity of Tj relative to the predicate isover *)         
 
 Lemma isovmonot_Tj_fun_int { BB : lBsystem_carrier }
       { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
@@ -233,10 +241,7 @@ Defined.
 
   
   
-Definition Tj_fun { BB : lBsystem_carrier }
-           { T : T_ops_type BB } ( ax1b : T_ax1b_type T )
-           { A X1 : BB } ( isov : isover X1 A ) : ltower_over A -> ltower_over X1 :=
-  fun X2' => Tj_fun_int ax1b ( ll X1 - ll A ) isov ( idpath _ ) X2' . 
+
 
 Lemma isovmonot_Tj_fun { BB : lBsystem_carrier }
       { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
@@ -253,7 +258,21 @@ Defined.
 
 
 
-  
+(** **** Operations Tprod X1 X2 for pointed l-Bsystems *)
+
+
+Definition Tprod_fun { BB : lBsystem_carrier } ( is : ispointed BB )
+           { T : T_ops_type BB } ( ax1b : T_ax1b_type T )
+           { X1 X2 : BB } : ltower_over X1 .
+Proof .
+  intros .
+  set ( X2' := to_ltower_over is X2 ) .
+  exact ( Tj_fun ax1b ( isoverll0 is ( ll_cntr is ) X1 ) X2' ) .  
+
+Defined.
+
+
+
 
 
 (*  
@@ -283,4 +302,4 @@ Definition ll_Tj { BB : lBsystem_carrier }
 
 
   
-(* End of the file lBsystems_Tj_Ttj.v *)
+(* End of the file lBsystems_T_fun_Tj_Ttj.v *)

@@ -52,7 +52,16 @@ Proof .
 Defined.
 
 
- 
+Lemma isovmonot_to_ltower_over { T : hSet_ltower } ( is : ispointed T ) : isovmonot ( to_ltower_over is ) .
+Proof .
+  intros .
+  unfold isovmonot . 
+  intros X Y isov . 
+  refine ( @isinvovmonot_pocto T ( cntr is ) (to_ltower_over is X) (to_ltower_over is Y) isov ) . 
+
+Defined.
+
+
   
 
 (* End of the file hSet_ltowers.v *)

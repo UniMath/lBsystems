@@ -457,33 +457,6 @@ Defined.
 
 
 
-(** Pointed ltowers 
-
-These are ltowers such that the zero's floor is contractible *)
-
-Definition ispointed ( T : ltower ) :=
-  iscontr ( total2 ( fun X : T => ll X = 0 ) ) . 
-
-Lemma isoverll0 { T : ltower } ( is : ispointed T )
-      { X1 : T } ( eq0 : ll X1 = 0 )
-      ( X2 : T ) : isover X2 X1 .
-Proof .
-  intros . 
-  unfold isover . 
-  assert ( eq0' : ll ( ftn ( ll X2 - ll X1 ) X2 ) = 0 ) . 
-  rewrite ll_ftn . 
-  rewrite eq0 . rewrite natminuseqn.
-  exact ( natminusnn _ ) . 
-
-  assert ( eq : tpair ( fun X : T => ll X = 0 ) _ eq0 = tpair ( fun X : T => ll X = 0 ) _ eq0' ) .
-  exact ( proofirrelevancecontr is _ _ ) .
-
-  exact ( maponpaths ( @pr1 _ ( fun X : T => ll X = 0 ) ) eq ) . 
-
-Defined.
-
-
-
 (** ltowers of objects over an object *)
 
 
@@ -736,5 +709,52 @@ Defined.
 
 
 
+
+(** Pointed ltowers 
+
+These are ltowers such that the zero's floor is contractible *)
+
+Definition ispointed ( T : ltower ) :=
+  iscontr ( total2 ( fun X : T => ll X = 0 ) ) .
+
+Definition cntr { T : ltower } ( is : ispointed T ) : T :=
+  pr1 ( pr1 is ) .
+
+Definition ll_cntr { T : ltower } ( is : ispointed T ) : ll ( cntr is ) = 0 :=
+  pr2 ( pr1 is ) . 
+
+Lemma isoverll0 { T : ltower } ( is : ispointed T )
+      { X1 : T } ( eq0 : ll X1 = 0 )
+      ( X2 : T ) : isover X2 X1 .
+Proof .
+  intros . 
+  unfold isover . 
+  assert ( eq0' : ll ( ftn ( ll X2 - ll X1 ) X2 ) = 0 ) . 
+  rewrite ll_ftn . 
+  rewrite eq0 . rewrite natminuseqn.
+  exact ( natminusnn _ ) . 
+
+  assert ( eq : tpair ( fun X : T => ll X = 0 ) _ eq0 = tpair ( fun X : T => ll X = 0 ) _ eq0' ) .
+  exact ( proofirrelevancecontr is _ _ ) .
+
+  exact ( maponpaths ( @pr1 _ ( fun X : T => ll X = 0 ) ) eq ) . 
+
+Defined.
+
+Definition to_ltower_over { T : ltower } ( is : ispointed T ) ( X : T ) : ltower_over ( cntr is ) .
+Proof .
+  intros . 
+  exact ( obj_over_constr ( isoverll0 is ( ll_cntr is ) X ) ) .
+
+Defined.
+
+(** The following lemma can be proved in full generality but we will only need it for hSet-towers
+and will prove it in that context in the file hSet-ltowers.v
+
+Lemma isovmonot_to_ltower_over { T : ltower } ( is : ispointed T ) : isovmonot ( to_ltower_over is ) . 
+
+*)
+
+  
   
 (* End of the file ltowers.v *)

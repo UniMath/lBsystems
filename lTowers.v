@@ -491,36 +491,31 @@ Definition ltower_over_carrier { T : ltower } ( A : T ) :=
   total2 ( fun X : T => isover X A ) .
 
 Definition obj_over_constr { T : ltower } { A : T } { X : T } ( isov : isover X A ) :
-  ltower_over_carrier A := tpair ( fun X : T => isover X A ) _ isov . 
+  ltower_over_carrier A := tpair ( fun X : T => isover X A ) _ isov .
 
-Definition ltower_over_carrier_pr1 { T : ltower } ( A : T ) ( X' : ltower_over_carrier A ) :
-  ltower_data_pr1 T := pr1 X' . 
-Coercion ltower_over_carrier_pr1 : ltower_over_carrier >-> ltower_data_pr1 .
+Definition isov_isov { T : ltower } { A : T } ( X : ltower_over_carrier A ) :
+  isover ( pr1 X ) A := pr2 X . 
 
-Definition isov_isov { T : ltower } { A : T } ( X' : ltower_over_carrier A ) :
-  isover X' A := pr2 X' . 
-
-Definition ltower_over_ll { T : ltower } { A : T } ( X' : ltower_over_carrier A ) : nat :=
-  ll X' - ll A .
-  
-    
-Definition ltower_over_ft { T : ltower } { A : T } ( X' : ltower_over_carrier A ) :
+Definition ltower_over_ll { T : ltower } { A : T } ( X : ltower_over_carrier A ) : nat :=
+  ll ( pr1 X ) - ll A .
+      
+Definition ltower_over_ft { T : ltower } { A : T } ( X : ltower_over_carrier A ) :
   ltower_over_carrier A .
 Proof .
   intros .
-  destruct ( isover_choice ( isov_isov X' ) ) as [ isov | eq ] .
-  exact ( tpair _ ( ft X' )  isov ) .
+  destruct ( isover_choice ( isov_isov X ) ) as [ isov | eq ] .
+  exact ( tpair _ ( ft ( pr1 X ) )  isov ) .
 
   exact ( tpair ( fun X : T => isover X A ) A ( isover_XX A ) ) . 
 
 Defined.
 
-Lemma ltower_over_ll_ft_eq { T : ltower } { A : T } ( X' : ltower_over_carrier A ) :
-  ltower_over_ll ( ltower_over_ft X' ) = ltower_over_ll X' - 1 .
+Lemma ltower_over_ll_ft_eq { T : ltower } { A : T } ( X : ltower_over_carrier A ) :
+  ltower_over_ll ( ltower_over_ft X ) = ltower_over_ll X - 1 .
 Proof .
   intros . 
   unfold ltower_over_ft . 
-  destruct ( isover_choice ( isov_isov X' ) ) as [ isov | eq ] .
+  destruct ( isover_choice ( isov_isov X ) ) as [ isov | eq ] .
   unfold ltower_over_ll .  
   simpl .
   rewrite ll_ft . 
@@ -540,12 +535,12 @@ Defined.
 
 
 Lemma ispointed_ltower_over_int { T : ltower } ( A : T ) :
-  iscontr ( total2 ( fun X' : ltower_over_carrier A =>
-                       ltower_over_ll X' = 0 ) ) .
+  iscontr ( total2 ( fun X : ltower_over_carrier A =>
+                       ltower_over_ll X = 0 ) ) .
 Proof.
   intros .
-  assert ( weq1 : weq ( total2 ( fun X' : ltower_over_carrier A =>
-                                   ltower_over_ll X' = 0 ) )
+  assert ( weq1 : weq ( total2 ( fun X : ltower_over_carrier A =>
+                                   ltower_over_ll X = 0 ) )
                       ( total2 ( fun X : T => dirprod
                                                 ( isover X A ) ( ll X - ll A = 0 ) ) ) ) .
   apply weqtotal2asstor . 
@@ -597,20 +592,20 @@ Defined.
 
 
 Lemma ltower_over_ll0_eq { T : ltower } { A : T }
-      ( X' : ltower_over_carrier A ) ( eq0 : ltower_over_ll X' = 0 ) : 
-  ltower_over_ft X' = X' .
+      ( X : ltower_over_carrier A ) ( eq0 : ltower_over_ll X = 0 ) : 
+  ltower_over_ft X = X .
 Proof .
   intros .
-  assert ( eq0' : ltower_over_ll ( ltower_over_ft X' ) = 0 ) . 
+  assert ( eq0' : ltower_over_ll ( ltower_over_ft X ) = 0 ) . 
   rewrite ltower_over_ll_ft_eq . 
   rewrite eq0 . 
   apply idpath .
 
-  assert ( int : tpair ( fun X'' => ltower_over_ll X'' = 0 ) _ eq0' =
-                 tpair ( fun X'' => ltower_over_ll X'' = 0 ) X' eq0 ) .
+  assert ( int : tpair ( fun X' => ltower_over_ll X' = 0 ) _ eq0' =
+                 tpair ( fun X' => ltower_over_ll X' = 0 ) X eq0 ) .
   apply ( proofirrelevancecontr ( ispointed_ltower_over_int _ ) _ _ ) .
 
-  apply ( maponpaths ( @pr1 _ ( fun X'' => ltower_over_ll X'' = 0 ) ) int ) .
+  apply ( maponpaths ( @pr1 _ ( fun X' => ltower_over_ll X' = 0 ) ) int ) .
 
 Defined.
 
@@ -621,6 +616,12 @@ Definition ltower_over { T : ltower } ( A : T ) : ltower :=
   ltower_constr ( @ltower_over_ll _ A ) ( @ltower_over_ft _ A )
                 ( @ltower_over_ll_ft_eq _ A ) ( @ltower_over_ll0_eq _ A ) .
 
+(** The name of the following function comes from the word octothrope that is the official name for the 
+"pound sign". This symbol, as a subscript, is used sometimes to denote the left adjoint to the pull-back 
+functor that takes a presheaf represneted by p : X -> B over B to the presheaf represented by X. *)
+
+Definition pocto { T : ltower } { A : T } ( X : ltower_over A ) : T := pr1 X . 
+(* Coercion ltower_over_carrier_pr1 : ltower_over_carrier >-> ltower_data_pr1 . *)
 
 
 Lemma ll_over_minus_ll_over { T : ltower } { A : T } ( X1 X2 : ltower_over A ) :
@@ -658,7 +659,7 @@ Proof .
   apply idpath . 
 
   assert ( absd : empty ) . 
-  change ( ll X ) with ( ll ( ltower_over_carrier_pr1 _ X ) - ll A ) in ge .
+  change ( ll X ) with ( ll ( pr1 X ) - ll A ) in ge .
   rewrite <- eq in ge . 
   rewrite natminusnn in ge . 
   apply ( ge ( natgthsn0 _ ) ) . 
@@ -677,13 +678,14 @@ Defined.
 
 
 
-
-  
-
 (** Monotone functions between l-towers *)
 
+
+Definition isovmonot { T1 T2 : ltower } ( f : T1 -> T2 ) :=
+  forall ( X Y : T1 ) , isover X Y -> isover ( f X ) ( f Y ) . 
+
 Definition monotone_fun ( T1 T2 : ltower ) :=
-  total2 ( fun f : T1 -> T2 => forall ( X Y : T1 ) , isover X Y -> isover ( f X ) ( f Y ) ) . 
+  total2 ( fun f : T1 -> T2 => isovmonot f ) . 
 
 Definition monotone_fun_constr { T1 T2 : ltower }
            ( f : T1 -> T2 ) ( is : forall ( X Y : T1 ) , isover X Y -> isover ( f X ) ( f Y ) ) :
@@ -691,7 +693,48 @@ Definition monotone_fun_constr { T1 T2 : ltower }
 
 
 Definition monotone_fun_pr1 ( T1 T2 : ltower ) : monotone_fun T1 T2 -> ( T1 -> T2 ) := pr1 . 
-Coercion monotone_fun_pr1 : monotone_fun >-> Funclass . 
+Coercion monotone_fun_pr1 : monotone_fun >-> Funclass .
 
 
+
+(** The projection pocto from the over-tower to the tower is over-monotone *)
+
+
+Definition isovmonot_pocto { T : ltower } ( A : T ) { X Y : ltower_over A } ( isov : isover X Y ) :
+isover ( pocto X ) ( pocto Y ) .  
+Proof .
+  intros . 
+  destruct X as [ X isovX ] .
+  destruct Y as [ Y isovY ] .
+  simpl . 
+  assert ( int := maponpaths pr1 isov ) . 
+  simpl in int .
+  rewrite ltower_over_ftn in int . 
+  simpl in int . 
+  rewrite ll_over_minus_ll_over in int . 
+  simpl in int . 
+  exact int . 
+
+  exact ( natminuslehn _ _ ) . 
+
+Defined.
+
+
+(** Composition of monotone functions is monotone *)
+
+Definition isovmonot_comp { T1 T2 T3 : ltower } ( f : T1 -> T2 ) ( g : T2 -> T3 )
+           ( isf : isovmonot f ) ( isg : isovmonot g ) : isovmonot ( funcomp f g ) .
+Proof .
+  intros . unfold isovmonot .  
+  intros X Y is . 
+  apply isg . 
+  apply isf . 
+  apply is . 
+
+Defined.
+
+
+
+
+  
 (* End of the file ltowers.v *)

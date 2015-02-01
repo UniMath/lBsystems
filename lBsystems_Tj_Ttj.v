@@ -311,6 +311,7 @@ Proof .
   apply isover_Tj_Tj_int .
   exact ax1a . 
 
+  exact isovXY . 
 
 
 (*

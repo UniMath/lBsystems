@@ -32,8 +32,8 @@ Proof.
 Defined .
 
 
-Lemma to_isover_over { T : hSet_ltower } { A : T } { X Y : ltower_over A }
-      ( isov : @isover T ( pr1 X ) ( pr1 Y ) ) : @isover ( ltower_over A ) X Y .  
+Lemma isinvovmonot_pocto { T : hSet_ltower } { A : T } { X Y : ltower_over A }
+      ( isov : isover ( pocto X ) ( pocto Y ) ) : isover X Y .  
 Proof .
   intros . 
   refine ( invmaponpathsincl pr1 _ _ _ _ ) . 

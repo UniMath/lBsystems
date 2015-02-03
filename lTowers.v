@@ -455,6 +455,81 @@ Defined.
 
 
 
+
+(** *** Monotone functions between l-towers *)
+
+
+Definition isovmonot { T1 T2 : ltower } ( f : T1 -> T2 ) :=
+  forall ( X Y : T1 ) , isover X Y -> isover ( f X ) ( f Y ) .
+
+Definition ovmonot_fun ( T1 T2 : ltower ) :=
+  total2 ( fun f : T1 -> T2 => isovmonot f ) . 
+
+Definition ovmonot_fun_constr { T1 T2 : ltower }
+           ( f : T1 -> T2 ) ( is : forall ( X Y : T1 ) , isover X Y -> isover ( f X ) ( f Y ) ) :
+  ovmonot_fun T1 T2 := tpair _ f is .
+
+
+Definition ovmonot_fun_pr1 ( T1 T2 : ltower ) : ovmonot_fun T1 T2 -> ( T1 -> T2 ) := pr1 . 
+Coercion ovmonot_fun_pr1 : ovmonot_fun >-> Funclass .
+
+
+
+(** Composition of monotone functions is monotone *)
+
+Definition isovmonot_comp { T1 T2 T3 : ltower } { f : T1 -> T2 } { g : T2 -> T3 }
+           ( isf : isovmonot f ) ( isg : isovmonot g ) : isovmonot ( funcomp f g ) .
+Proof .
+  intros . unfold isovmonot .  
+  intros X Y is . 
+  apply isg . 
+  apply isf . 
+  apply is . 
+
+Defined.
+
+
+Definition ovmonot_funcomp { T1 T2 T3 : ltower } ( f : ovmonot_fun T1 T2 ) ( g : ovmonot_fun T2 T3 ) :
+  ovmonot_fun T1 T3 :=
+  ovmonot_fun_constr ( funcomp f g ) ( isovmonot_comp ( pr2 f ) ( pr2 g ) ) . 
+
+
+
+
+(** Pointed ltowers 
+
+These are ltowers such that the zero's floor is contractible *)
+
+Definition ispointed ( T : ltower ) :=
+  iscontr ( total2 ( fun X : T => ll X = 0 ) ) .
+
+Definition cntr { T : ltower } ( is : ispointed T ) : T :=
+  pr1 ( pr1 is ) .
+
+Definition ll_cntr { T : ltower } ( is : ispointed T ) : ll ( cntr is ) = 0 :=
+  pr2 ( pr1 is ) . 
+
+Lemma isoverll0 { T : ltower } ( is : ispointed T )
+      { X1 : T } ( eq0 : ll X1 = 0 )
+      ( X2 : T ) : isover X2 X1 .
+Proof .
+  intros . 
+  unfold isover . 
+  assert ( eq0' : ll ( ftn ( ll X2 - ll X1 ) X2 ) = 0 ) . 
+  rewrite ll_ftn . 
+  rewrite eq0 . rewrite natminuseqn.
+  exact ( natminusnn _ ) . 
+
+  assert ( eq : tpair ( fun X : T => ll X = 0 ) _ eq0 = tpair ( fun X : T => ll X = 0 ) _ eq0' ) .
+  exact ( proofirrelevancecontr is _ _ ) .
+
+  exact ( maponpaths ( @pr1 _ ( fun X : T => ll X = 0 ) ) eq ) . 
+
+Defined.
+
+
+
+
   
   
 (* End of the file ltowers.v *)

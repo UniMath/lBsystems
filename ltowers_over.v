@@ -217,44 +217,6 @@ Definition X_over_ftX { T : ltower } ( X : T ) : ltower_over ( ft X ) :=
   obj_over_constr ( isover_X_ftX X ) . 
 
 
-(** *** Monotone functions between l-towers *)
-
-
-Definition isovmonot { T1 T2 : ltower } ( f : T1 -> T2 ) :=
-  forall ( X Y : T1 ) , isover X Y -> isover ( f X ) ( f Y ) .
-
-Definition ovmonot_fun ( T1 T2 : ltower ) :=
-  total2 ( fun f : T1 -> T2 => isovmonot f ) . 
-
-Definition ovmonot_fun_constr { T1 T2 : ltower }
-           ( f : T1 -> T2 ) ( is : forall ( X Y : T1 ) , isover X Y -> isover ( f X ) ( f Y ) ) :
-  ovmonot_fun T1 T2 := tpair _ f is .
-
-
-Definition ovmonot_fun_pr1 ( T1 T2 : ltower ) : ovmonot_fun T1 T2 -> ( T1 -> T2 ) := pr1 . 
-Coercion ovmonot_fun_pr1 : ovmonot_fun >-> Funclass .
-
-
-
-(** Composition of monotone functions is monotone *)
-
-Definition isovmonot_comp { T1 T2 T3 : ltower } { f : T1 -> T2 } { g : T2 -> T3 }
-           ( isf : isovmonot f ) ( isg : isovmonot g ) : isovmonot ( funcomp f g ) .
-Proof .
-  intros . unfold isovmonot .  
-  intros X Y is . 
-  apply isg . 
-  apply isf . 
-  apply is . 
-
-Defined.
-
-
-Definition ovmonot_funcomp { T1 T2 T3 : ltower } ( f : ovmonot_fun T1 T2 ) ( g : ovmonot_fun T2 T3 ) :
-  ovmonot_fun T1 T3 :=
-  ovmonot_fun_constr ( funcomp f g ) ( isovmonot_comp ( pr2 f ) ( pr2 g ) ) . 
-
-
 
 
 (** The projection pocto from the over-tower to the tower is over-monotone *)
@@ -281,67 +243,7 @@ Defined.
 
 
 
-(** **** Some constructions of over-monotone functions *)
-
-
-Definition from_ltower_over_pocto { T : ltower }
-           { X : T } { X' : ltower_over X } ( X'' : ltower_over ( pocto X' ) ) : ltower_over X .
-Proof .
-  intros .
-  split with ( pocto X'' ) . 
-  apply ( isover_trans ( isov_isov X'' ) ( isov_isov X' ) ) . 
-
-Defined.
-
-
-  
-
-(* Definition ovmonot_second { T : ltower }
-           { X Y : T } ( f : ovmonot_fun ( ltower_over X ) ( ltower_over Y ) )
-           ( X' : ltower_over X ) :
-  ovmonot_fun ( ltower_over ( pocto X' ) ) ( ltower_over ( pocto ( f X' ) ) ) .
-Proof .
-  intros .
-  refine ( ovmonot_fun_constr _ _ ) . 
-  intro ZX' . set ( ZX := from_ltower_over_pocto ZX' ) . 
-  set ( ZY := f ZX ) . 
-  split with ( pocto ZY ) .
-  apply isovmonot_pocto . 
-  apply ( pr2 f ) . 
-  
-*)
-
-
-(** Pointed ltowers 
-
-These are ltowers such that the zero's floor is contractible *)
-
-Definition ispointed ( T : ltower ) :=
-  iscontr ( total2 ( fun X : T => ll X = 0 ) ) .
-
-Definition cntr { T : ltower } ( is : ispointed T ) : T :=
-  pr1 ( pr1 is ) .
-
-Definition ll_cntr { T : ltower } ( is : ispointed T ) : ll ( cntr is ) = 0 :=
-  pr2 ( pr1 is ) . 
-
-Lemma isoverll0 { T : ltower } ( is : ispointed T )
-      { X1 : T } ( eq0 : ll X1 = 0 )
-      ( X2 : T ) : isover X2 X1 .
-Proof .
-  intros . 
-  unfold isover . 
-  assert ( eq0' : ll ( ftn ( ll X2 - ll X1 ) X2 ) = 0 ) . 
-  rewrite ll_ftn . 
-  rewrite eq0 . rewrite natminuseqn.
-  exact ( natminusnn _ ) . 
-
-  assert ( eq : tpair ( fun X : T => ll X = 0 ) _ eq0 = tpair ( fun X : T => ll X = 0 ) _ eq0' ) .
-  exact ( proofirrelevancecontr is _ _ ) .
-
-  exact ( maponpaths ( @pr1 _ ( fun X : T => ll X = 0 ) ) eq ) . 
-
-Defined.
+(** **** Some functions between over-towers *)
 
 
 Definition to_ltower_over { T : ltower } ( is : ispointed T ) ( X : T ) : ltower_over ( cntr is ) .
@@ -351,8 +253,28 @@ Proof .
 
 Defined.
 
-(** The following lemma can be proved in full generality but we will only need it for hSet-towers
-and will prove it in that context in the file hSet-ltowers.v
+
+
+
+
+
+(** The following constructions probably work for all ltowers 
+but we only give a proof for ltowers of sets in the file hSet_ltowers.v . 
+
+Definition ovmonot_to_over_pocto  { T : ltower } { X : T } { X' : ltower_over X } :
+  ovmonot_fun ( ltower_over X' ) ( ltower_over ( pocto X' ) ) .
+
+Definition ovmonot_over { T1 T2 : ltower } ( f : ovmonot_fun T1 T2 )
+           ( X : T1 ) : ovmonot_fun ( ltower_over X ) ( ltower_over ( f X ) ) .
+
+Definition lft { T : hSet_ltower }
+           { X : T } { X' : ltower_over X } ( X'' : ltower_over ( pocto X' ) ) : ltower_over X' .
+
+Definition ovmonot_second { T : ltower }
+           { X Y : T } ( f : ovmonot_fun ( ltower_over X ) ( ltower_over Y ) )
+           ( X' : ltower_over X ) :
+  ovmonot_fun ( ltower_over ( pocto X' ) ) ( ltower_over ( pocto ( f X' ) ) ) .
+
 
 Lemma isovmonot_to_ltower_over { T : ltower } ( is : ispointed T ) : isovmonot ( to_ltower_over is ) . 
 

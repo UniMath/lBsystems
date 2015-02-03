@@ -26,8 +26,8 @@ Operations T and S are different in the forms of axiom 0 and axiom 1b .
 (** Domains of definition of operations of type S *)
 
 
-Definition S_dom { BB : lBsystem_carrier } ( r : Tilde BB ) ( Y : BB ) :=
-  isabove Y ( dd r ) .
+Definition S_dom { BB : lBsystem_carrier } ( r : Tilde BB ) ( X : BB ) :=
+  isabove X ( dd r ) .
 
 Identity Coercion S_dom_to_isabove : S_dom >-> isabove . 
 

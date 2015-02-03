@@ -17,6 +17,18 @@ Definition lBsystem_carrier :=
                                    forall r : TildeB , ll ( dd r ) > 0 ) ) ) .
 
 
+Definition lBsystem_carrier_constr { B : hSet_ltower } { TildeB : hSet }
+           ( dd : TildeB -> B ) ( is : forall r : TildeB, ll ( dd r ) > 0 ) : lBsystem_carrier .
+Proof .
+  intros . 
+  split with B . 
+
+  split with TildeB . 
+
+  exact ( tpair _ dd is ) .
+
+Defined.
+
 Definition lBsystem_carrier_pr1 : lBsystem_carrier -> ltower := pr1 .
 Coercion  lBsystem_carrier_pr1 : lBsystem_carrier >-> ltower .
                                                                      
@@ -24,6 +36,9 @@ Coercion  lBsystem_carrier_pr1 : lBsystem_carrier >-> ltower .
 Definition Tilde : lBsystem_carrier -> UU := fun BB => pr1 ( pr2 BB ) .
 
 Definition dd { BB : lBsystem_carrier } : Tilde BB -> BB := pr1 ( pr2 ( pr2 BB ) ) .
+
+Definition Tilde_dd { BB : lBsystem_carrier } ( X : BB ) :=
+  total2 ( fun r : Tilde BB => dd r = X ) . 
 
 
 Definition isasetBt ( BB : lBsystem_carrier ) : isaset ( Tilde BB ) :=
@@ -56,6 +71,21 @@ Definition ll_dd { BB : lBsystem_carrier } ( r : Tilde BB ) : ll ( dd r ) > 0 :=
 
 Definition ll_dd_geh { BB : lBsystem_carrier } ( r : Tilde BB ) : ll ( dd r ) >= 1 :=
   natgthtogehsn _ _ ( ll_dd r ) . 
+
+
+
+
+(** **** lBsystem carriers over an object *)
+
+
+
+
+
+
+
+
+
+
 
 
 

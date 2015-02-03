@@ -4,7 +4,7 @@ by Vladimir Voevodsky. File created on January 30, 2015. *)
 
 Unset Automatic Introduction.
 
-Require Export lBsystems.ltowers .
+Require Export lBsystems.ltowers_over .
 
 
 
@@ -52,11 +52,10 @@ Proof .
 Defined.
 
 
-Lemma isovmonot_to_ltower_over { T : hSet_ltower } ( is : ispointed T ) : isovmonot ( to_ltower_over is ) .
+Lemma isovmonot_to_ltower_over { T : hSet_ltower } ( is : ispointed T )
+      { X Y : T } ( isov : isover X Y ) : isover ( to_ltower_over is X ) ( to_ltower_over is Y ) .
 Proof .
   intros .
-  unfold isovmonot . 
-  intros X Y isov . 
   refine ( @isinvovmonot_pocto T ( cntr is ) (to_ltower_over is X) (to_ltower_over is Y) isov ) . 
 
 Defined.

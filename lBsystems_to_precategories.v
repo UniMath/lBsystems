@@ -17,8 +17,7 @@ Definition Mor_and_fstar { BB : lBsystem_carrier } ( pax : ispointed BB )
            ( n : nat ) ( X1 A : BB ) ( eq : ll A = n ) : 
   total2 ( fun Mor_X1_A : UU =>
              forall f : Mor_X1_A ,
-               total2 ( fun fstar : ovmonot_fun ( ltower_over A ) ( ltower_over X1 ) =>
-                        isllmonot fstar ) ) . 
+               ltower_fun ( ltower_over A ) ( ltower_over X1 ) ) . 
 Proof .
   intros BB pax T tax0 tax1a tax1b S sax0 sax1a sax1b n . induction n as [ | n IHn ] . 
   intros . 
@@ -38,9 +37,13 @@ Proof .
   exact isov . 
 
   simpl . 
-  apply ( @isllmonot_funcomp _ _ _ ( ovmonot_Tprod_fun pax tax1b X1 ) pocto ) .  
+  apply ( @isllmonot_funcomp _ _ _ pocto ( Tprod_fun pax tax1b X1 ) ) .  
+  apply isllmonot_pocto . 
 
-  
+  apply isllmonot_Tprod_fun . 
+
+  apply tax0 . 
+
   intros .
   assert ( eqft : ll ( ft A ) = n ) . rewrite ll_ft . rewrite eq . simpl . rewrite natminuseqn .
   apply idpath .
@@ -48,13 +51,15 @@ Proof .
   set ( Mor_X1_ftA := pr1 ( IHn X1 ( ft A ) eqft ) ) .
   set ( Mor_X1_A :=
           total2 ( fun ftf : Mor_X1_ftA =>
-                     Tilde_dd ( pocto ( pr2 ( IHn X1 ( ft A ) eqft ) ftf ( X_over_ftX A ) ) ) ) ) .
+                     Tilde_dd ( pocto ( pr1 ( pr2 ( IHn X1 ( ft A ) eqft ) ftf ) ( X_over_ftX A ) ) ) ) ) .
   split with Mor_X1_A . 
 
   intro f .
   set ( ftf := pr1 f : Mor_X1_ftA ) .
-  set ( ftf_star := pr2 ( IHn X1 ( ft A ) eqft ) ftf :
-                     ovmonot_fun ( ltower_over ( ft A ) ) ( ltower_over X1 ) ) .
+  set ( ftf_star := pr1 ( pr2 ( IHn X1 ( ft A ) eqft ) ftf ) :
+                      ovmonot_fun ( ltower_over ( ft A ) ) ( ltower_over X1 ) ) .
+  set ( islm := pr2 ( pr2 ( IHn X1 ( ft A ) eqft ) ftf ) : isllmonot ftf_star ) .
+  set ( isom := pr2 ftf_star : isovmonot ftf_star ) . 
   set ( ftf_star_A := pocto ( ftf_star ( X_over_ftX A ) : ltower_over X1 ) ) .
   set ( s_f := pr1 ( pr2 f ) : Tilde BB ) .
   set ( eq_s_f := pr2 ( pr2 f ) : dd ( s_f ) = ftf_star_A ) . 
@@ -63,7 +68,16 @@ Proof .
 
   set ( fun2 := ovmonot_S_fun sax0 sax1a sax1b s_f ) .
   rewrite eq_s_f in fun2 .
-  assert ( eq' : ft ftf_star_A = X1 ) . 
+  assert ( eq' : ft ftf_star_A = X1 ) .
+  unfold ftf_star_A .
+  rewrite ( ft_f_X _ ( @isovmonot_pocto _ _ ) isllmonot_pocto ) .
+  rewrite ( ft_f_X _ isom islm ) .
+  
+
+
+
+
+  
   
   assert ( fun2 : ovmonot_fun ( ltower_over ftf_star_A ) ( ltower_over X1 ) ) .
   rewrite <- eq_s_f . 

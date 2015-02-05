@@ -67,7 +67,11 @@ Defined.
 
 Definition hSet_ltower_over { T : hSet_ltower } ( X : T ) : hSet_ltower :=
   tpair _ ( ltower_over X ) ( isaset_ltower_over X ) . 
-   
+
+
+
+(** **** Completing construction of the function to_ltower_over *)
+
   
 Lemma isovmonot_to_ltower_over { T : hSet_ltower } ( is : ispointed T )
       { X Y : T } ( isov : isover X Y ) : isover ( to_ltower_over is X ) ( to_ltower_over is Y ) .
@@ -77,6 +81,17 @@ Proof .
 
 Defined.
 
+
+Definition ltower_fun_to_ltower_over { T : hSet_ltower } ( is : ispointed T ) :
+  ltower_fun T ( hSet_ltower_over ( cntr is ) ) :=
+  ltower_fun_constr ( @isovmonot_to_ltower_over _ is )
+                     ( @isllmonot_to_ltower_over _ is ) ( @isbased_to_ltower_over _ is ) . 
+
+
+
+
+
+(** **** The function lft *)
 
 
 Definition lft { T : hSet_ltower }
@@ -133,12 +148,29 @@ Proof .
 
 Defined.
 
+Lemma isbased_lft { T : hSet_ltower }
+      { X : T } ( X' : ltower_over X ) : isbased ( @lft _ _ X' ) .
+Proof.
+  intros. unfold isbased. intros X0 eq0. rewrite ll_lft. exact eq0 .
+
+Defined.
+
+
+
+
 
 Definition ovmonot_lft { T : hSet_ltower } { X : T } ( X' : ltower_over X ) :
   ovmonot_fun ( ltower_over ( pocto X' ) ) ( ltower_over X' ) :=
-  ovmonot_fun_constr _ ( isovmonot_lft X' ) . 
+  ovmonot_fun_constr _ ( isovmonot_lft X' ) .
 
 
+Definition ltower_fun_lft { T : hSet_ltower } { X : T } ( X' : ltower_over X ) :
+  ltower_fun ( ltower_over ( pocto X' ) ) ( ltower_over X' ) :=
+  ltower_fun_constr ( isovmonot_lft X' ) ( isllmonot_lft X' ) ( isbased_lft X' ) . 
+
+
+
+(** **** The functions ovmonot_over and ltower_fun_over *)
 
 
 Definition ovmonot_over { T1 T2 : hSet_ltower } ( f : ovmonot_fun T1 T2 )
@@ -165,17 +197,42 @@ Lemma isllmonot_ovmonot_over { T1 T2 : hSet_ltower } { f : ovmonot_fun T1 T2 } (
 Proof.
   intros.
   unfold isllmonot .
-  intros X0 Y isov . 
+  intros X0 Y . 
   change _ with ( ll ( f ( pr1 X0 ) ) - ll ( f X ) - ( ll ( f ( pr1 Y ) ) - ll ( f X ) ) =
                   ll X0 - ll Y ) . 
   repeat rewrite isf . 
   apply idpath .
 
-  apply ( isov_isov Y ) . 
+Defined.
 
-  apply ( isov_isov X0 ) . 
+Lemma isbased_ovmonot_over { T1 T2 : hSet_ltower }
+      { f : ovmonot_fun T1 T2 } ( isf : isllmonot f ) 
+      ( X : T1 ) : isbased ( ovmonot_over f X ) .
+Proof.
+  intros. unfold isbased. intros X0 eq0 . 
+  change _ with ( ll ( pr1 X0 ) - ll X = 0 ) in eq0 . 
+  change _ with ( ll ( f ( pr1 X0 ) ) - ll ( f X ) = 0 ) .
+  rewrite isf . 
+  exact eq0 .
 
 Defined.
+
+
+
+Definition ltower_fun_over { T1 T2 : hSet_ltower } ( f : ovmonot_fun T1 T2 ) ( isf : isllmonot f )
+           ( X : T1 ) : ltower_fun ( ltower_over X ) ( ltower_over ( f X ) ) :=
+  ltower_fun_constr ( pr2 ( ovmonot_over f X )  )
+                    ( isllmonot_ovmonot_over isf X ) ( isbased_ovmonot_over isf X ) . 
+
+
+
+
+  
+
+(** **** The function to_over_pocto *)
+
+
+
 
 
 Definition to_over_pocto  { T : hSet_ltower } { X : T } ( X' : ltower_over X )
@@ -228,12 +285,35 @@ Lemma isllmonot_to_over_pocto { T : hSet_ltower } { X : T } ( X' : ltower_over X
   isllmonot ( to_over_pocto X' ) .
 Proof .
   intros .
-  unfold isllmonot . intros X0 Y isov .
+  unfold isllmonot . intros X0 Y .
   repeat rewrite ll_to_over_pocto . 
   apply idpath . 
 
 Defined.
 
+
+Lemma isbased_to_over_pocto { T : hSet_ltower } { X : T } ( X' : ltower_over X ) :
+  isbased ( to_over_pocto X' ) .
+Proof.
+  intros. unfold isbased .  intros X0 eq0 . 
+  rewrite ll_to_over_pocto . 
+  exact eq0 .
+
+Defined.
+
+
+
+Definition ltower_fun_to_over_pocto { T : hSet_ltower } { X : T } ( X' : ltower_over X ) :
+  ltower_fun ( ltower_over X' ) ( ltower_over ( pocto X' ) ) :=
+  ltower_fun_constr ( isovmonot_to_over_pocto X' )
+                    ( isllmonot_to_over_pocto X' ) ( isbased_to_over_pocto X' ) . 
+
+
+
+(** **** The function ltower_fun_second *)
+
+
+  
 
 Definition ovmonot_second { T : hSet_ltower }
            { X Y : T } ( f : ovmonot_fun ( ltower_over X ) ( ltower_over Y ) )
@@ -263,6 +343,40 @@ Proof .
   apply isllmonot_to_over_pocto . 
 
 Defined.
+
+
+Lemma isbased_second { T : hSet_ltower }
+           { X Y : T } ( f : ltower_fun ( ltower_over X ) ( ltower_over Y ) )
+           ( X' : ltower_over X ) :
+  isbased ( ovmonot_second f X' ) .
+Proof.
+  intros. unfold isbased. intros X0 eq0 .
+  unfold ovmonot_second .
+  apply isbased_funcomp. 
+  apply isbased_funcomp.
+  apply isbased_lft . 
+
+  apply ( @isbased_ovmonot_over ( hSet_ltower_over X ) ( hSet_ltower_over Y ) ) .
+
+  apply ( isllmonot_pr f ) . 
+
+  apply ( isbased_to_over_pocto ) .
+
+  exact eq0 . 
+
+Defined.
+
+
+Definition ltower_fun_second { T : hSet_ltower }
+           { X Y : T } ( f : ltower_fun ( ltower_over X ) ( ltower_over Y ) )
+           ( X' : ltower_over X ) :
+  ltower_fun ( ltower_over ( pocto X' ) ) ( ltower_over ( pocto ( f X' ) ) ) :=
+  ltower_fun_constr ( pr2 ( ovmonot_second f X' ) )
+                    ( isllmonot_ovmonot_second f ( isllmonot_pr f ) X' )
+                    ( isbased_second f X' ) .
+
+
+
 
   
 

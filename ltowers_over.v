@@ -250,7 +250,7 @@ Lemma isllmonot_pocto { T : ltower } { A : T } : isllmonot ( @pocto T A ) .
 Proof .
   intros .
   unfold isllmonot .
-  intros X Y isov .
+  intros X Y .
   apply ( ! ( ll_over_minus_ll_over X Y ) ) .
 
 Defined.
@@ -294,6 +294,15 @@ Proof .
 Defined.
 
 
+Lemma isbased_to_ltower_over { T : ltower } ( is : ispointed T ) :
+  isbased ( to_ltower_over is ) .
+Proof .
+  intros . 
+  unfold isbased. intros X eq0 .
+  rewrite ll_to_ltower_over . 
+  exact eq0 .
+
+Defined.
 
 
   

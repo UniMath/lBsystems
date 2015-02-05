@@ -498,28 +498,101 @@ Definition ovmonot_funcomp { T1 T2 T3 : ltower } ( f : ovmonot_fun T1 T2 ) ( g :
 (** **** The ll-monot property of over-monotone functions *)
 
 Definition isllmonot { T1 T2 : ltower } ( f : T1 -> T2 ) : UU :=
-  forall ( X Y : T1 ) ( isov : isover X Y ) ,
-    ll ( f X ) - ll ( f Y ) = ll X - ll Y . 
+  forall ( X Y : T1 ) , ll ( f X ) - ll ( f Y ) = ll X - ll Y . 
 
-Lemma isllmonot_funcomp { T1 T2 T3 : ltower } { f : ovmonot_fun T1 T2 } { g : ovmonot_fun T2 T3 }
-      ( isf : isllmonot f ) ( isg : isllmonot g ) : isllmonot ( ovmonot_funcomp f g ) .
+Lemma isllmonot_funcomp { T1 T2 T3 : ltower } { f : T1 -> T2 } { g : T2 -> T3 }
+      ( isf : isllmonot f ) ( isg : isllmonot g ) : isllmonot ( funcomp f g ) .
 Proof.
   intros.
   unfold isllmonot.
-  intros X Y isov .
+  intros X Y .
   assert ( int1 : ll ( g ( f X ) ) - ll ( g ( f Y ) ) = ll ( f X ) - ll ( f Y ) ) .
   apply isg . 
-  apply ( pr2 f ) . 
-  apply isov . 
 
   assert ( int2 : ll ( f X ) - ll ( f Y ) = ll X - ll Y ) .
   apply isf . 
-  apply isov . 
 
   exact ( int1 @ int2 ) . 
 
 Defined.
 
+
+Lemma ft_f_X { T1 T2 : ltower } ( f : T1 -> T2 ) ( is1 : isovmonot f ) ( is2 : isllmonot f )
+      { X : T1 } ( gt0 : ll X > 0 ) : ft ( f X ) = f ( ft X ) .
+Proof.
+  intros.
+  assert ( isov := isover_X_ftX X ) . 
+  assert ( isov' := is1 _ _ isov ) .
+  unfold isover in isov' . 
+  change _ with ( f ( ft X ) = ftn ( ll ( f X ) - ll ( f ( ft X ) ) ) ( f X ) ) in isov' . 
+  rewrite is2 in isov' . 
+  rewrite ll_ft in isov' . 
+  rewrite natminusmmk in isov' . 
+  exact ( ! isov' ) . 
+
+  apply ( @natgthminus1togeh 1 _ gt0 ) . 
+
+Defined.
+
+
+(** **** The based functions - the functions that take objects of length zero to objects of length zero *)
+
+Definition isbased { T1 T2 : ltower } ( f : T1 -> T2 ) : UU :=
+  forall ( X : T1 ) ( eq0 : ll X = 0 ) , ll ( f X ) = 0 .
+
+Lemma isbased_funcomp { T1 T2 T3 : ltower } { f : T1 -> T2 } { g : T2 -> T3 }
+      ( isf : isbased f ) ( isg : isbased g ) : isbased ( funcomp f g ) .
+Proof.
+  intros. unfold isbased. intros X0 eq0 . unfold funcomp.  
+  apply isg . 
+  apply isf .
+  exact eq0 .
+
+Defined.
+
+
+
+
+
+
+  
+(** **** Morphisms of l-towers *)
+
+Definition isltower_fun { T1 T2 : ltower } ( f : T1 -> T2 ) : UU :=
+  dirprod ( isovmonot f )
+          ( dirprod ( isllmonot f ) ( isbased f ) ) .
+
+
+Definition ltower_fun ( T1 T2 : ltower ) :=
+  total2 ( fun f : T1 -> T2 => isltower_fun f ) .
+
+Definition ltower_fun_to_ovmonot_fun ( T1 T2 : ltower ) ( f : ltower_fun T1 T2 ) :
+  ovmonot_fun T1 T2 := ovmonot_fun_constr _ ( pr1 ( pr2 f ) ) . 
+Coercion ltower_fun_to_ovmonot_fun : ltower_fun >-> ovmonot_fun .
+
+Definition isovmonot_pr { T1 T2 : ltower } ( f : ltower_fun T1 T2 ) : isovmonot f :=
+  pr1 ( pr2 f ) . 
+
+
+Definition isllmonot_pr { T1 T2 : ltower } ( f : ltower_fun T1 T2 ) : isllmonot f :=
+  pr1 ( pr2 ( pr2 f ) ) . 
+
+Definition isbased_pr { T1 T2 : ltower } ( f : ltower_fun T1 T2 ) : isbased f :=
+  pr2 ( pr2 ( pr2 f ) ) . 
+
+
+Definition ltower_fun_constr { T1 T2 : ltower } { f : T1 -> T2 }
+           ( is1 : isovmonot f ) ( is2 : isllmonot f ) ( is3 : isbased f ) :
+  ltower_fun T1 T2 :=
+  tpair _ f ( dirprodpair is1 ( dirprodpair is2 is3 ) ) . 
+
+
+
+
+
+
+
+  
 
 (** Pointed ltowers 
 

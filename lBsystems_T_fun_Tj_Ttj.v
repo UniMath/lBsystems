@@ -143,7 +143,7 @@ Lemma isllmonot_T_fun { BB : lBsystem_carrier }
       { X1 : BB } ( gt0 : ll X1 > 0 ) : isllmonot ( T_fun ax1b gt0 ) .
 Proof.
   intros. unfold isllmonot . 
-  intros X Y isov .
+  intros X Y .
   repeat rewrite ( ll_T_fun ax0 ) . 
   apply idpath . 
 
@@ -359,7 +359,7 @@ Lemma isllmonot_Tj_fun { BB : lBsystem_carrier }
 Proof.
   intros .
   unfold isllmonot . 
-  intros X Y isov' .
+  intros X Y .
   repeat rewrite ll_Tj_fun . 
   apply idpath .
 
@@ -436,7 +436,7 @@ Lemma isllmonot_Tprod_fun { BB : lBsystem_carrier } ( is : ispointed BB )
            { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
            ( X1 : BB ) : isllmonot ( Tprod_fun is ax1b X1 ) .
 Proof .
-  intros . unfold isllmonot .  intros X Y isov . 
+  intros . unfold isllmonot .  intros X Y . 
   repeat rewrite ll_Tprod_fun . apply idpath . 
 
   apply ax0 .

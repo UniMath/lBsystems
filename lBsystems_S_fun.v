@@ -132,7 +132,7 @@ Lemma isllmonot_S_fun { BB : lBsystem_carrier }
       { S : S_ops_type BB } ( ax0 : S_ax0_type S ) ( ax1b : S_ax1b_type S )
       ( r : Tilde BB ) : isllmonot ( S_fun ax1b r ) .
 Proof.
-  intros. unfold isllmonot. intros X Y isov .
+  intros. unfold isllmonot. intros X Y .
   repeat rewrite ll_S_fun .
   apply idpath .
 

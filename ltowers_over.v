@@ -155,21 +155,6 @@ Definition pocto { T : ltower } { A : T } ( X : ltower_over A ) : T := pr1 X .
 (* Coercion ltower_over_carrier_pr1 : ltower_over_carrier >-> ltower_data_pr1 . *)
 
 
-Lemma ll_over_minus_ll_over { T : ltower } { A : T } ( X1 X2 : ltower_over A ) :
-  ll X1 - ll X2 = ll ( pr1 X1 ) - ll ( pr1 X2 ) .
-Proof .
-  intros .
-  destruct X1 as [ X1 isov1 ] . destruct X2 as [ X2 isov2 ] . 
-  unfold ll . 
-  simpl . 
-  unfold ltower_over_ll . 
-  change _ with ( ( ll X1 - ll A ) - ( ll X2 - ll A ) = ( ll X1 - ll X2 ) ) . 
-  rewrite natminusassoc . 
-  rewrite natpluscomm . 
-  rewrite ( minusplusnmm _ _ ( isover_geh isov2 ) ) . 
-  apply idpath . 
-
-Defined.
 
 Lemma ltower_over_ftn { T : ltower } { A : T } ( n : nat )
       ( X : ltower_over A ) ( ge : ll X >= n ) : pr1 ( ftn n X ) = ftn n ( pr1 X ) .
@@ -222,6 +207,24 @@ Definition X_over_ftX { T : ltower } ( X : T ) : ltower_over ( ft X ) :=
 (** The projection pocto from the over-tower to the tower is over-monotone *)
 
 
+
+Lemma ll_over_minus_ll_over { T : ltower } { A : T } ( X1 X2 : ltower_over A ) :
+  ll X1 - ll X2 = ll ( pocto X1 ) - ll ( pocto X2 ) . 
+Proof .
+  intros . 
+  destruct X1 as [ X1 isov1 ] . destruct X2 as [ X2 isov2 ] . 
+  unfold ll . 
+  simpl . 
+  unfold ltower_over_ll .  simpl . 
+  change _ with ( ( ll X1 - ll A ) - ( ll X2 - ll A ) = ( ll X1 - ll X2 ) ) . 
+  rewrite natminusassoc . 
+  rewrite natpluscomm . 
+  rewrite ( minusplusnmm _ _ ( isover_geh isov2 ) ) . 
+  apply idpath . 
+
+Defined.
+
+
 Definition isovmonot_pocto { T : ltower } ( A : T ) { X Y : ltower_over A } ( isov : isover X Y ) :
 isover ( pocto X ) ( pocto Y ) .  
 Proof .
@@ -243,6 +246,19 @@ Defined.
 
 
 
+Lemma isllmonot_pocto { T : ltower } { A : T } : isllmonot ( @pocto T A ) . 
+Proof .
+  intros .
+  unfold isllmonot .
+  intros X Y isov .
+  apply ( ! ( ll_over_minus_ll_over X Y ) ) .
+
+Defined.
+
+
+
+
+
 (** **** Some functions between over-towers *)
 
 
@@ -254,10 +270,33 @@ Proof .
 Defined.
 
 
+Lemma ll_to_ltower_over { T : ltower } ( is : ispointed T ) ( X : T ) :
+  ll ( to_ltower_over is X ) = ll X .
+Proof .
+  intros.
+  unfold ll . 
+  simpl .
+  unfold ltower_over_ll . 
+  rewrite ll_cntr . 
+  rewrite natminuseqn .
+  apply idpath . 
+
+Defined.
+
+
+
+Lemma isllmonot_to_ltower_over { T : ltower } ( is : ispointed T ) :
+  isllmonot ( to_ltower_over is ) .
+Proof .
+  unfold isllmonot . intros .
+  repeat rewrite ll_to_ltower_over . apply idpath . 
+  
+Defined.
 
 
 
 
+  
 (** The following constructions probably work for all ltowers 
 but we only give a proof for ltowers of sets in the file hSet_ltowers.v . 
 

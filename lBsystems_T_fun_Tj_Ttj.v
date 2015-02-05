@@ -43,6 +43,9 @@ Proof .
 
 Defined.
 
+
+  
+
 Lemma isover_T_ext_T_ext_2 { BB : lBsystem_carrier }
       { T : T_ops_type BB } ( ax0 :  T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
       { X1 X2 X2' : BB } ( inn : T_ext_dom X1 X2 ) ( inn' : T_ext_dom X1 X2' )
@@ -102,6 +105,53 @@ Proof .
 
 Defined.
 
+Lemma ll_T_fun { BB : lBsystem_carrier }
+      { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
+      { X1 : BB } ( gt0 : ll X1 > 0 ) ( X2' : ltower_over ( ft X1 ) ) :
+  ll ( T_fun ax1b gt0 X2' ) = ll X2' .
+Proof.
+  intros. 
+  change _ with ( ll ( T_ext T ( dirprodpair gt0 ( pr2 X2' ) ) ) - ll X1 = ll X2' ) .
+  change ( ll X2' ) with ( ll ( pr1 X2' ) - ll ( ft X1 ) ) . 
+  unfold T_ext . 
+  destruct (ovab_choice (pr2 (dirprodpair gt0 (pr2 X2')))) as [ isab | eq ] . 
+  rewrite ax0 . 
+  rewrite ll_ft .
+  assert ( ge : ll (pr1 X2') >= ll X1 ) .
+  apply natgthminus1togeh . 
+  rewrite <- ll_ft . 
+  apply ( isabove_gth isab ) . 
+  
+  rewrite <- natassocmpeq . 
+  rewrite ( natpluscomm _ 1 ) . 
+  apply natassocpmeq . 
+  apply ge .
+
+  apply ge .
+
+  apply ( @natgthminus1togeh 1 _ gt0 ) .
+  rewrite natminusnn . 
+  rewrite eq . 
+  rewrite natminusnn . 
+  apply idpath .
+
+Defined.
+
+  
+Lemma isllmonot_T_fun { BB : lBsystem_carrier }
+      { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
+      { X1 : BB } ( gt0 : ll X1 > 0 ) : isllmonot ( T_fun ax1b gt0 ) .
+Proof.
+  intros. unfold isllmonot . 
+  intros X Y isov .
+  repeat rewrite ( ll_T_fun ax0 ) . 
+  apply idpath . 
+
+Defined.
+
+  
+
+  
 
 
 (** *** Definition of Tj as iterations of the functions T_fun *)
@@ -257,6 +307,80 @@ Defined.
 
 
 
+(** **** Functions Tj and the length function ll *)
+
+Lemma ll_Tj_fun_int { BB : lBsystem_carrier }
+      { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
+      { A : BB }
+      ( j : nat )
+      { X1 : BB } ( isov : isover X1 A )
+      ( ell : ll X1 - ll A = j )
+      ( X2' : ltower_over A ) :
+  ll ( Tj_fun_int ax1b j isov ell X2' ) = ll X2' .
+Proof .
+  intros BB T ax0 ax1b A j .
+  induction j as [ | j IHj ] . intros . 
+  simpl .
+  change _ with ( ll ( pr1 X2' ) - ll X1 = ll ( pr1 X2' ) - ll A ) . 
+  assert ( eq : ll X1 = ll A ) . apply natminusmequalsn .
+  apply ( isover_geh isov ) . 
+
+  apply ell .
+
+  rewrite eq . apply idpath .
+
+  simpl . 
+
+  intros . rewrite ll_T_fun . 
+  apply IHj .
+
+  apply ax0 .
+
+Defined.
+
+
+Lemma ll_Tj_fun { BB : lBsystem_carrier }
+      { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
+      { A X1 : BB } ( isov : isover X1 A )
+      ( X2' : ltower_over A ) :
+  ll ( Tj_fun ax1b isov X2' ) = ll X2' .
+Proof.
+  intros.
+  apply ll_Tj_fun_int .
+
+  apply ax0 . 
+
+Defined.
+
+
+Lemma isllmonot_Tj_fun { BB : lBsystem_carrier }
+      { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
+      { A X1 : BB } ( isov : isover X1 A ) : isllmonot ( Tj_fun ax1b isov ) . 
+Proof.
+  intros .
+  unfold isllmonot . 
+  intros X Y isov' .
+  repeat rewrite ll_Tj_fun . 
+  apply idpath .
+
+  apply ax0.
+
+  apply ax0.
+
+Defined.
+
+
+
+
+
+
+
+  
+
+
+
+
+
 
 (** **** Operations Tprod X1 X2 for pointed l-Bsystems *)
 
@@ -290,6 +414,39 @@ Definition Tprod_ovmonotfun { BB : lBsystem_carrier } ( is : ispointed BB )
            { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T )  ( ax1b : T_ax1b_type T )
            ( X1 : BB ) : ovmonot_fun BB ( ltower_over X1 ) :=
   ovmonot_fun_constr ( Tprod_fun is ax1b X1 ) ( isovmonot_Tprod_fun is ax0 ax1a ax1b X1 ) . 
+
+
+
+
+Lemma ll_Tprod_fun { BB : lBsystem_carrier } ( is : ispointed BB )
+           { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
+           ( X1 : BB ) ( X2 : BB ) : ll ( Tprod_fun is ax1b X1 X2 ) = ll X2 .
+Proof .
+  intros .
+  unfold Tprod_fun . 
+  rewrite ll_Tj_fun .
+  rewrite ll_to_ltower_over .
+  apply idpath . 
+
+  apply ax0 . 
+
+Defined.
+
+Lemma isllmonot_Tprod_fun { BB : lBsystem_carrier } ( is : ispointed BB )
+           { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
+           ( X1 : BB ) : isllmonot ( Tprod_fun is ax1b X1 ) .
+Proof .
+  intros . unfold isllmonot .  intros X Y isov . 
+  repeat rewrite ll_Tprod_fun . apply idpath . 
+
+  apply ax0 .
+
+  apply ax0 .
+
+Defined.
+
+  
+
 
 
 

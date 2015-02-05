@@ -65,13 +65,14 @@ Defined.
 
 
 
+
 (** *** The over-monotone function S_fun of the over-towers defined by the extended operation S *)
 
 
 
 Definition S_fun { BB : lBsystem_carrier }
       { S : S_ops_type BB } ( ax1b : S_ax1b_type S )
-      { r : Tilde BB } ( X2' : ltower_over ( dd r ) ) : ltower_over ( ft ( dd r ) ) .
+      ( r : Tilde BB ) ( X2' : ltower_over ( dd r ) ) : ltower_over ( ft ( dd r ) ) .
 Proof .
   intros .
   set ( X2 := pr1 X2' ) . set ( isov := pr2 X2' : isover X2 ( dd r ) ) .
@@ -84,9 +85,9 @@ Defined.
 
 Lemma isovmonot_S_fun { BB : lBsystem_carrier }
       { S : S_ops_type BB } ( ax0 : S_ax0_type S ) ( ax1a : S_ax1a_type S ) ( ax1b : S_ax1b_type S )
-      { r : Tilde BB }
-      { X2' X3' : ltower_over ( dd r ) } ( isov : isover X3' X2' ) :
-  isover ( S_fun ax1b X3' ) ( S_fun ax1b X2' ) .
+      ( r : Tilde BB )
+      ( X3' X2' : ltower_over ( dd r ) ) ( isov : isover X3' X2' ) :
+  isover ( S_fun ax1b r X3' ) ( S_fun ax1b r X2' ) .
 Proof .
   intros .
   apply isinvovmonot_pocto .
@@ -97,6 +98,52 @@ Proof .
 
 Defined.
 
+Definition ovmonot_S_fun { BB : lBsystem_carrier }
+      { S : S_ops_type BB } ( ax0 : S_ax0_type S ) ( ax1a : S_ax1a_type S ) ( ax1b : S_ax1b_type S )
+      ( r : Tilde BB ) : ovmonot_fun ( ltower_over ( dd r ) ) ( ltower_over ( ft ( dd r ) ) ) :=
+  ovmonot_fun_constr _ ( isovmonot_S_fun ax0 ax1a ax1b r ) .
 
+
+Lemma ll_S_fun { BB : lBsystem_carrier }
+      { S : S_ops_type BB } ( ax0 : S_ax0_type S ) ( ax1b : S_ax1b_type S )
+      { r : Tilde BB } ( X2' : ltower_over ( dd r ) ) : ll ( S_fun ax1b r X2' ) = ll X2' .
+Proof.
+  intros .
+  change _ with ( ll ( pr1 ( S_fun ax1b r X2' ) ) - ll ( ft ( dd r ) ) = ll ( pr1 X2' ) - ll ( dd r ) ) .  
+  unfold S_fun . unfold S_ext . 
+  simpl . 
+  destruct ( ovab_choice (pr2 X2') ) as [ isab | eq ] . 
+  rewrite ax0 . 
+  rewrite ll_ft . 
+  apply natmiusmius1mminus1 . 
+  apply ( isabove_gt0 isab ) . 
+
+  apply ll_dd . 
+
+  rewrite natminusnn . 
+  rewrite eq . 
+  rewrite natminusnn . 
+  apply idpath .
+
+Defined.
+
+
+Lemma isllmonot_S_fun { BB : lBsystem_carrier }
+      { S : S_ops_type BB } ( ax0 : S_ax0_type S ) ( ax1b : S_ax1b_type S )
+      ( r : Tilde BB ) : isllmonot ( S_fun ax1b r ) .
+Proof.
+  intros. unfold isllmonot. intros X Y isov .
+  repeat rewrite ll_S_fun .
+  apply idpath .
+
+  apply ax0.
+
+  apply ax0.
+
+Defined.
+
+
+
+  
 
 (* The end of the file lBsystems_S_fun.v *)

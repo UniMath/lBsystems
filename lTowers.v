@@ -456,8 +456,9 @@ Defined.
 
 
 
-(** *** Monotone functions between l-towers *)
+(** *** Functions between l-towers that are monotone relative to the predicate isover *)
 
+(** **** The basic definitions *)
 
 Definition isovmonot { T1 T2 : ltower } ( f : T1 -> T2 ) :=
   forall ( X Y : T1 ) , isover X Y -> isover ( f X ) ( f Y ) .
@@ -475,7 +476,7 @@ Coercion ovmonot_fun_pr1 : ovmonot_fun >-> Funclass .
 
 
 
-(** Composition of monotone functions is monotone *)
+(** **** Composition of over-monotone functions is over-monotone *)
 
 Definition isovmonot_comp { T1 T2 T3 : ltower } { f : T1 -> T2 } { g : T2 -> T3 }
            ( isf : isovmonot f ) ( isg : isovmonot g ) : isovmonot ( funcomp f g ) .
@@ -494,6 +495,30 @@ Definition ovmonot_funcomp { T1 T2 T3 : ltower } ( f : ovmonot_fun T1 T2 ) ( g :
   ovmonot_fun_constr ( funcomp f g ) ( isovmonot_comp ( pr2 f ) ( pr2 g ) ) . 
 
 
+(** **** The ll-monot property of over-monotone functions *)
+
+Definition isllmonot { T1 T2 : ltower } ( f : T1 -> T2 ) : UU :=
+  forall ( X Y : T1 ) ( isov : isover X Y ) ,
+    ll ( f X ) - ll ( f Y ) = ll X - ll Y . 
+
+Lemma isllmonot_funcomp { T1 T2 T3 : ltower } { f : ovmonot_fun T1 T2 } { g : ovmonot_fun T2 T3 }
+      ( isf : isllmonot f ) ( isg : isllmonot g ) : isllmonot ( ovmonot_funcomp f g ) .
+Proof.
+  intros.
+  unfold isllmonot.
+  intros X Y isov .
+  assert ( int1 : ll ( g ( f X ) ) - ll ( g ( f Y ) ) = ll ( f X ) - ll ( f Y ) ) .
+  apply isg . 
+  apply ( pr2 f ) . 
+  apply isov . 
+
+  assert ( int2 : ll ( f X ) - ll ( f Y ) = ll X - ll Y ) .
+  apply isf . 
+  apply isov . 
+
+  exact ( int1 @ int2 ) . 
+
+Defined.
 
 
 (** Pointed ltowers 

@@ -156,6 +156,10 @@ Definition pocto { T : ltower } { A : T } ( X : ltower_over A ) : T := pr1 X .
 
 
 
+Definition ispointed_ltower_over { T : ltower } ( A : T ) : ispointed ( ltower_over A ) :=
+  ispointed_ltower_over_int A . 
+
+
 Lemma ltower_over_ftn { T : ltower } { A : T } ( n : nat )
       ( X : ltower_over A ) ( ge : ll X >= n ) : pr1 ( ftn n X ) = ftn n ( pr1 X ) .
 Proof .
@@ -198,9 +202,32 @@ Defined.
 Definition X_over_X { T : ltower } ( X : T ) : ltower_over X :=
   obj_over_constr ( isover_XX X ) .
 
-Definition X_over_ftX { T : ltower } ( X : T ) : ltower_over ( ft X ) :=
-  obj_over_constr ( isover_X_ftX X ) . 
+Lemma ll_X_over_X { T : ltower } ( X : T ) : ll ( X_over_X X ) = 0 .
+Proof.
+  intros .
+  change _ with ( ll X - ll X = 0 ) .
+  apply natminusnn . 
 
+Defined.
+
+
+  
+
+Definition X_over_ftX { T : ltower } ( X : T ) : ltower_over ( ft X ) :=
+  obj_over_constr ( isover_X_ftX X ) .
+
+Lemma ll_X_over_ftX { T : ltower } { X : T } ( gt0 : ll X > 0 ) :
+  ll ( X_over_ftX X ) = 1 .
+Proof.
+  intros.
+  change _ with ( ltower_over_ll (X_over_ftX X) = 1 ) . 
+  unfold ltower_over_ll .
+  rewrite ll_ft . 
+  change _ with ( ll X - ( ll X - 1 ) = 1 ) . 
+  apply natminusmmk . 
+  apply ( @natgthminus1togeh 1 _ gt0 ) . 
+
+Defined.
 
 
 
@@ -256,9 +283,39 @@ Proof .
 Defined.
 
 
+(** **** The projection pocto and ft *)
+
+Lemma ft_pocto { T : ltower } { A : T } { X : ltower_over A } ( gt0 : ll X > 0 ) :
+  ft ( pocto X ) = pocto ( ft X ) .
+Proof.
+  intros . 
+  change ( ft X ) with ( ltower_over_ft X ) . 
+  unfold ltower_over_ft .
+  destruct (isover_choice (isov_isov X)) as [ isov | eq ] . 
+  simpl . 
+  apply idpath . 
+
+  assert ( absd : empty ) . 
+  assert ( eq0 : ll X = 0 ) .  change _ with ( ll ( pr1 X ) - ll A = 0 ) . 
+  rewrite <- eq . 
+  apply natminusnn .
+
+  rewrite eq0 in gt0 . apply ( negnatgthnn _ gt0 ) . 
+
+  destruct absd .
+
+Defined.
 
 
 
+
+
+
+
+
+
+
+  
 (** **** Some functions between over-towers *)
 
 

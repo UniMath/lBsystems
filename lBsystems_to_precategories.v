@@ -9,121 +9,82 @@ Require Export lBsystems.lBsystems_S_fun.
 
 
 
-Definition Mor_and_fstar { BB : lBsystem_carrier } ( pax : ispointed BB )
+Definition Mor_and_fstar { BB : lBsystem_carrier } ( is : ispointed BB )
            { T : T_ops_type BB } ( tax0 : T_ax0_type T )
            ( tax1a : T_ax1a_type T ) ( tax1b : T_ax1b_type T )
            { S : S_ops_type BB } ( sax0 : S_ax0_type S )
            ( sax1a : S_ax1a_type S ) ( sax1b : S_ax1b_type S )
-           ( n : nat ) ( X1 A : BB ) ( eq : ll A = n ) : 
+           ( X1 : BB ) ( n : nat ) ( A : BB ) ( eq : ll A = n ) : 
   total2 ( fun Mor_X1_A : UU =>
              forall f : Mor_X1_A ,
                ltower_fun ( ltower_over A ) ( ltower_over X1 ) ) . 
 Proof .
-  intros BB pax T tax0 tax1a tax1b S sax0 sax1a sax1b n . induction n as [ | n IHn ] . 
+  intros BB is T tax0 tax1a tax1b S sax0 sax1a sax1b X1 n . induction n as [ | n IHn ] . 
   intros . 
   split with unit .
 
   intro .
-  refine ( tpair _ _ _ ) . 
-  refine ( ovmonot_fun_constr _ _ ) . 
-  intro X2 . 
-  set ( X2' := pocto X2 ) .
-  exact ( Tprod_fun pax tax1b X1 X2' ) . 
-
-  intros X Y isov .
-  simpl . 
-  apply ( isovmonot_Tprod_fun pax tax0 tax1a tax1b ) .
-  apply isovmonot_pocto . 
-  exact isov . 
-
-  simpl . 
-  apply ( @isllmonot_funcomp _ _ _ pocto ( Tprod_fun pax tax1b X1 ) ) .  
-  apply isllmonot_pocto . 
-
-  apply isllmonot_Tprod_fun . 
-
-  apply tax0 . 
+  exact ( ltower_fun_Tj tax0 tax1a tax1b ( isoverll0 is eq X1 ) ) . 
 
   intros .
   assert ( eqft : ll ( ft A ) = n ) . rewrite ll_ft . rewrite eq . simpl . rewrite natminuseqn .
   apply idpath .
 
-  set ( Mor_X1_ftA := pr1 ( IHn X1 ( ft A ) eqft ) ) .
+  set ( Mor_X1_ftA := pr1 ( IHn ( ft A ) eqft ) ) .
   set ( Mor_X1_A :=
           total2 ( fun ftf : Mor_X1_ftA =>
-                     Tilde_dd ( pocto ( pr1 ( pr2 ( IHn X1 ( ft A ) eqft ) ftf ) ( X_over_ftX A ) ) ) ) ) .
+                     Tilde_dd ( pocto ( ( pr2 ( IHn ( ft A ) eqft ) ftf ) ( X_over_ftX A ) ) ) ) ) .
   split with Mor_X1_A . 
 
   intro f .
   set ( ftf := pr1 f : Mor_X1_ftA ) .
-  set ( ftf_star := pr1 ( pr2 ( IHn X1 ( ft A ) eqft ) ftf ) :
-                      ovmonot_fun ( ltower_over ( ft A ) ) ( ltower_over X1 ) ) .
-  set ( islm := pr2 ( pr2 ( IHn X1 ( ft A ) eqft ) ftf ) : isllmonot ftf_star ) .
-  set ( isom := pr2 ftf_star : isovmonot ftf_star ) . 
-  set ( ftf_star_A := pocto ( ftf_star ( X_over_ftX A ) : ltower_over X1 ) ) .
   set ( s_f := pr1 ( pr2 f ) : Tilde BB ) .
+  set ( ftf_star := pr2 ( IHn ( ft A ) eqft ) ftf :
+                      ltower_fun ( ltower_over ( ft A ) ) ( ltower_over X1 ) ) .
+  set ( ftf_star_A := pocto ( ftf_star ( X_over_ftX A ) : ltower_over X1 ) ) .
   set ( eq_s_f := pr2 ( pr2 f ) : dd ( s_f ) = ftf_star_A ) . 
-  assert ( fun1 : ovmonot_fun ( ltower_over A ) ( ltower_over ftf_star_A ) ) .
-  apply ( @ovmonot_second _ ( ft A ) X1 ftf_star ( X_over_ftX A ) ) .
+  assert ( fun1 : ltower_fun ( ltower_over A ) ( ltower_over ftf_star_A ) ) .
+  apply ( ltower_fun_second ftf_star ( X_over_ftX A ) ) .
 
-  set ( fun2 := ovmonot_S_fun sax0 sax1a sax1b s_f ) .
-  rewrite eq_s_f in fun2 .
+  assert ( fun2 : ltower_fun ( ltower_over ftf_star_A ) ( ltower_over ( ft ftf_star_A ) ) ) . 
+  rewrite <- eq_s_f .
+  apply ( ltower_fun_S sax0 sax1a sax1b s_f ) .
+
+  assert ( gt0 : ll (ftf_star (X_over_ftX A)) > 0 ) .
+  rewrite ll_ltower_fun .
+  rewrite ll_X_over_ftX . 
+  apply idpath . 
+
+  rewrite eq . apply natgthsn0 .
+
+  apply ispointed_ltower_over . 
+  
   assert ( eq' : ft ftf_star_A = X1 ) .
   unfold ftf_star_A .
-  rewrite ( ft_f_X _ ( @isovmonot_pocto _ _ ) isllmonot_pocto ) .
-  rewrite ( ft_f_X _ isom islm ) .
-  
-
-
-
-
-  
-  
-  assert ( fun2 : ovmonot_fun ( ltower_over ftf_star_A ) ( ltower_over X1 ) ) .
-  rewrite <- eq_s_f . 
-  apply ( S_fun 
-  
-
-
-  
-  
-  intros . 
-  assert ( isov : isover X1 A ) .
-  exact ( isoverll0 pax eq X1 ) .
-
-  split with ( Tj ax0 ax1b isov isab ) .
-
-  split with ( isabove_Tj _ _ _ _ ) . 
-
-  rewrite ( natminuseqn _ ) . 
-  rewrite ll_Tj . 
-  rewrite eq . 
-  rewrite natminuseqn . 
-  apply plusminusnmm . 
-
-  intros .
-  set ( Morn := fun X1 => pr1 ( IHn X1 ) ) . 
-  set ( fstarn := fun X1 A eq f X2 isab => pr1 ( pr2 ( IHn X1 ) A eq f X2 isab ) ) . 
-  set ( fstareq := fun X1 A eq f X2 isab => pr2 ( pr2 ( IHn X1 ) A eq f X2 isab ) ) . 
-  refine ( tpair _ _ _ ) . 
-  intros .
-
-  assert ( eqft : ll ( ft A ) = n ) . 
+  rewrite ft_pocto .
+  assert ( eq1 : ft (ftf_star (X_over_ftX A)) = X_over_X X1 ) . 
+  assert ( eq2 : ll ( ft (ftf_star (X_over_ftX A)) ) = 0 ) .
   rewrite ll_ft . 
-  rewrite eq . 
-  simpl . rewrite natminuseqn . apply idpath . 
+  rewrite ll_ltower_fun . 
+  rewrite ll_X_over_ftX .
+  apply idpath . 
 
-  exact ( total2 ( fun ftf : Morn X1 ( ft A ) eqft =>
-                     total2 ( fun r : Tilde BB => dd r = X1 ) ) ) . 
+  rewrite eq . apply natgthsn0 .
 
-  intros . 
-  
+  apply ispointed_ltower_over . 
 
-  
+  apply ( noparts_ispointed ( ispointed_ltower_over X1 ) eq2 ( ll_X_over_X X1 ) ) . 
 
-*)
+  rewrite eq1 .
+  apply idpath . 
 
+  apply gt0 . 
 
+  set ( fun12 := ltower_funcomp fun1 fun2 ) .
+  rewrite eq' in fun12 . 
+  exact fun12 . 
+
+Defined.
 
   
 

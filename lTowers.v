@@ -478,7 +478,7 @@ Coercion ovmonot_fun_pr1 : ovmonot_fun >-> Funclass .
 
 (** **** Composition of over-monotone functions is over-monotone *)
 
-Definition isovmonot_comp { T1 T2 T3 : ltower } { f : T1 -> T2 } { g : T2 -> T3 }
+Definition isovmonot_funcomp { T1 T2 T3 : ltower } { f : T1 -> T2 } { g : T2 -> T3 }
            ( isf : isovmonot f ) ( isg : isovmonot g ) : isovmonot ( funcomp f g ) .
 Proof .
   intros . unfold isovmonot .  
@@ -492,7 +492,7 @@ Defined.
 
 Definition ovmonot_funcomp { T1 T2 T3 : ltower } ( f : ovmonot_fun T1 T2 ) ( g : ovmonot_fun T2 T3 ) :
   ovmonot_fun T1 T3 :=
-  ovmonot_fun_constr ( funcomp f g ) ( isovmonot_comp ( pr2 f ) ( pr2 g ) ) . 
+  ovmonot_fun_constr ( funcomp f g ) ( isovmonot_funcomp ( pr2 f ) ( pr2 g ) ) . 
 
 
 (** **** The ll-monot property of over-monotone functions *)
@@ -556,7 +556,9 @@ Defined.
 
 
   
-(** **** Morphisms of l-towers *)
+(** **** Morphisms of l-towers - l-tower functions. *)
+
+
 
 Definition isltower_fun { T1 T2 : ltower } ( f : T1 -> T2 ) : UU :=
   dirprod ( isovmonot f )
@@ -578,8 +580,11 @@ Definition isllmonot_pr { T1 T2 : ltower } ( f : ltower_fun T1 T2 ) : isllmonot 
   pr1 ( pr2 ( pr2 f ) ) . 
 
 Definition isbased_pr { T1 T2 : ltower } ( f : ltower_fun T1 T2 ) : isbased f :=
-  pr2 ( pr2 ( pr2 f ) ) . 
+  pr2 ( pr2 ( pr2 f ) ) .
 
+
+
+  
 
 Definition ltower_fun_constr { T1 T2 : ltower } { f : T1 -> T2 }
            ( is1 : isovmonot f ) ( is2 : isllmonot f ) ( is3 : isbased f ) :
@@ -588,6 +593,22 @@ Definition ltower_fun_constr { T1 T2 : ltower } { f : T1 -> T2 }
 
 
 
+Definition ltower_funcomp { T1 T2 T3 : ltower } ( f : ltower_fun T1 T2 ) ( g : ltower_fun T2 T3 ) :
+  ltower_fun T1 T3 .
+Proof.
+  intros.
+  refine ( ltower_fun_constr _ _ _ ) . 
+  apply ( funcomp f g ) . 
+
+  apply ( isovmonot_funcomp ( isovmonot_pr f ) ( isovmonot_pr g ) ) . 
+
+  apply ( isllmonot_funcomp ( isllmonot_pr f ) ( isllmonot_pr g ) ) . 
+
+  apply ( isbased_funcomp ( isbased_pr f ) ( isbased_pr g ) ) . 
+
+Defined.
+
+  
 
 
 
@@ -625,7 +646,60 @@ Proof .
 
 Defined.
 
+Lemma noparts_ispointed { T : ltower } ( is : ispointed T )
+      { X Y : T } ( eqX : ll X = 0 ) ( eqY : ll Y = 0 ) : X = Y .
+Proof .
+  intros .
+  set ( int := proofirrelevancecontr is ( tpair _ _ eqX ) ( tpair _ _ eqY ) ) . 
+  apply ( maponpaths pr1 int ) . 
 
+Defined.
+
+      
+
+Definition ll_ltower_fun { T1 T2 : ltower } ( is : ispointed T1 ) ( f : ltower_fun T1 T2 ) ( X : T1 ) :
+  ll ( f X ) = ll X . 
+Proof.
+  intros.
+  rewrite <- natminuseqn .
+  rewrite <- ( ll_cntr is ) . 
+  rewrite <- ( natminuseqn ( ll ( f X ) ) ) . 
+  assert ( eq := isbased_pr f _ ( ll_cntr is ) ) .
+  rewrite <- eq . 
+  exact ( isllmonot_pr f _ _ ) . 
+
+Defined.
+
+Lemma ft_ltower_fun { T1 T2 : ltower } ( is : ispointed T1 ) ( f : ltower_fun T1 T2 ) ( X : T1 ) :
+  ft ( f X ) = f ( ft X ) .
+Proof.
+  intros.
+  assert ( isov : isover ( f X ) ( f ( ft X ) ) ) . 
+  apply ( isovmonot_pr f _ _ ( isover_X_ftX X ) ) . 
+  unfold isover in isov . 
+  rewrite ( ll_ltower_fun is f ) in isov .
+  rewrite ( ll_ltower_fun is f ) in isov .
+  rewrite ll_ft in isov . 
+  destruct ( natgehchoice _ _ ( natgehn0 ( ll X ) ) ) as [ gt0 | eq0 ] . 
+
+  assert ( eq1 : ll X - ( ll X - 1 ) = 1 ) .
+  apply natminusmmk .
+  apply ( @natgthminus1togeh 1 _ gt0 ) .
+
+  rewrite eq1 in isov . 
+  exact ( ! isov ) . 
+
+  assert ( eq : ft X = X ) .  apply ( ftX_eq_X eq0 ) .
+
+  rewrite eq. 
+  assert ( eq0' : ll ( f X ) = 0 ) . apply ( isbased_pr f _ eq0 ) .
+
+  apply ( ftX_eq_X eq0' ) . 
+
+Defined.
+
+
+  
 
 
   

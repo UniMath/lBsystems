@@ -93,7 +93,7 @@ Defined.
 Lemma isovmonot_T_fun { BB : lBsystem_carrier }
       { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
       { X1 : BB } ( gt0 : ll X1 > 0 )
-      { X2' X3' : ltower_over ( ft X1 ) } ( isov : isover X3' X2' ) :
+      ( X3' X2' : ltower_over ( ft X1 ) ) ( isov : isover X3' X2' ) :
   isover ( T_fun ax1b gt0 X3' ) ( T_fun ax1b gt0 X2' ) .
 Proof .
   intros .
@@ -139,7 +139,7 @@ Defined.
 
   
 Lemma isllmonot_T_fun { BB : lBsystem_carrier }
-      { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
+      { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
       { X1 : BB } ( gt0 : ll X1 > 0 ) : isllmonot ( T_fun ax1b gt0 ) .
 Proof.
   intros. unfold isllmonot . 
@@ -149,7 +149,27 @@ Proof.
 
 Defined.
 
-  
+Lemma isbased_T_fun { BB : lBsystem_carrier }
+      { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
+      { X1 : BB } ( gt0 : ll X1 > 0 ) : isbased ( T_fun ax1b gt0 ) .
+Proof.
+  intros. unfold isbased.  intros X eq0 . 
+  rewrite ll_T_fun . 
+  exact eq0.
+
+  exact ax0.
+
+Defined.
+
+
+Definition ltower_fun_T { BB : lBsystem_carrier }
+      { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
+      { X1 : BB } ( gt0 : ll X1 > 0 ) :
+  ltower_fun ( ltower_over ( ft X1 ) ) ( ltower_over X1 ) :=
+  ltower_fun_constr ( isovmonot_T_fun ax0 ax1a ax1b gt0 )
+                    ( isllmonot_T_fun ax0 ax1b gt0 )
+                    ( isbased_T_fun ax0 ax1b gt0 ) .   
+
 
   
 
@@ -253,7 +273,8 @@ Defined.
 Definition Tj_fun { BB : lBsystem_carrier }
            { T : T_ops_type BB } ( ax1b : T_ax1b_type T )
            { A X1 : BB } ( isov : isover X1 A ) : ltower_over A -> ltower_over X1 :=
-  fun X2' => Tj_fun_int ax1b ( ll X1 - ll A ) isov ( idpath _ ) X2' . 
+  fun X2' => Tj_fun_int ax1b ( ll X1 - ll A ) isov ( idpath _ ) X2' .
+
 
 
 (** **** Proof of monotonicity of Tj relative to the predicate isover *)         
@@ -371,7 +392,26 @@ Defined.
 
 
 
+Lemma isbased_Tj_fun { BB : lBsystem_carrier }
+      { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
+      { A X1 : BB } ( isov : isover X1 A ) : isbased ( Tj_fun ax1b isov ) .
+Proof.
+  intros. unfold isbased. intros X eq0 .
+  rewrite ll_Tj_fun . 
+  exact eq0.
 
+  exact ax0.
+
+Defined.
+
+
+Definition ltower_fun_Tj { BB : lBsystem_carrier }
+      { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
+      { A X1 : BB } ( isov : isover X1 A ) :
+  ltower_fun ( ltower_over A ) ( ltower_over X1 ) :=
+  ltower_fun_constr ( isovmonot_Tj_fun ax0 ax1a ax1b isov )
+                    ( isllmonot_Tj_fun ax0 ax1b isov )
+                    ( isbased_Tj_fun ax0 ax1b isov ) . 
 
 
 
@@ -446,6 +486,28 @@ Proof .
 Defined.
 
   
+
+Lemma isbased_Tprod_fun { BB : lBsystem_carrier } ( is : ispointed BB )
+           { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
+           ( X1 : BB ) : isbased ( Tprod_fun is ax1b X1 ) .
+Proof.
+  intros. unfold isbased . intros X eq0 .
+  rewrite ll_Tprod_fun . 
+
+  exact eq0.
+
+  exact ax0.
+
+Defined.
+
+
+Definition ltower_fun_Tprod { BB : lBsystem_carrier } ( is : ispointed BB )
+           { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
+           ( X1 : BB ) :
+  ltower_fun BB ( ltower_over X1 ) :=
+  ltower_fun_constr ( isovmonot_Tprod_fun is ax0 ax1a ax1b X1 )
+                    ( isllmonot_Tprod_fun is ax0 ax1b X1 )
+                    ( isbased_Tprod_fun is ax0 ax1b X1 ) .
 
 
 

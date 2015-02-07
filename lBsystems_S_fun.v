@@ -143,6 +143,42 @@ Proof.
 Defined.
 
 
+Lemma isbased_S_fun { BB : lBsystem_carrier }
+      { S : S_ops_type BB } ( ax0 : S_ax0_type S ) ( ax1b : S_ax1b_type S )
+      ( r : Tilde BB ) : isbased ( S_fun ax1b r ) .
+Proof.
+  intros. unfold isbased. intros X eq0 .
+  rewrite ll_S_fun . 
+
+  exact eq0.
+
+  exact ax0.
+
+Defined.
+
+
+Definition ltower_fun_S { BB : lBsystem_carrier }
+      { S : S_ops_type BB } ( ax0 : S_ax0_type S ) ( ax1a : S_ax1a_type S ) ( ax1b : S_ax1b_type S )
+      ( r : Tilde BB ) :
+  ltower_fun ( ltower_over ( dd r ) ) ( ltower_over ( ft ( dd r ) ) ) :=
+  ltower_fun_constr ( isovmonot_S_fun ax0 ax1a ax1b r )
+                    ( isllmonot_S_fun ax0 ax1b r )
+                    ( isbased_S_fun ax0 ax1b r ) . 
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
 
   
 

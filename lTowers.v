@@ -311,6 +311,8 @@ Definition isabove_to_isover { BB : ltower } { X A : BB } :
   isabove X A -> isover X A := pr2 .
 Coercion isabove_to_isover : isabove >-> isover .
 
+
+
 Lemma isabove_X_ftX { BB : ltower } ( X : BB ) ( gt0 : ll X > 0 ) : isabove X ( ft X ) .
 Proof .
   intros .
@@ -321,6 +323,28 @@ Proof .
   exact ( isover_X_ftX _ ) . 
 
 Defined.
+
+Lemma isabove_X_ftnX { BB : ltower } { X : BB } { n : nat } ( gt0' : n > 0 ) ( gt0 : ll X > 0 ) :
+  isabove X ( ftn n X ) .
+Proof.
+  intros .
+  induction n as [ | n IHn ] .
+  destruct ( negnatgthnn _ gt0' ) .
+
+  refine ( isabove_constr _ _ ) .
+  rewrite ll_ftn .
+  apply natminuslthn . 
+  exact gt0 . 
+
+  exact gt0'.
+
+  apply isover_X_ftnX . 
+
+Defined.
+
+
+
+  
 
   
 Lemma isabove_X_ftA { BB : ltower } { X A : BB }
@@ -378,6 +402,15 @@ Proof.
   exact ( isover_trans is is' ) .
 
 Defined.
+
+
+
+
+
+
+
+
+
 
 
 Lemma isover_ft' { BB : ltower } { X A : BB } ( is : isabove X A ) :

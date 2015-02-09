@@ -38,7 +38,10 @@ Definition Tilde : lBsystem_carrier -> UU := fun BB => pr1 ( pr2 BB ) .
 Definition dd { BB : lBsystem_carrier } : Tilde BB -> BB := pr1 ( pr2 ( pr2 BB ) ) .
 
 Definition Tilde_dd { BB : lBsystem_carrier } ( X : BB ) :=
-  total2 ( fun r : Tilde BB => dd r = X ) . 
+  total2 ( fun r : Tilde BB => dd r = X ) .
+
+Definition Tilde_dd_pr1 { BB : lBsystem_carrier } { X : BB } : Tilde_dd X -> Tilde BB := pr1 .
+Coercion Tilde_dd_pr1 : Tilde_dd >-> Tilde . 
 
 
 Definition isasetBt ( BB : lBsystem_carrier ) : isaset ( Tilde BB ) :=

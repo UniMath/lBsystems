@@ -73,7 +73,7 @@ Defined.
 
 
 
-(** *** The over-monotone function T_fun of the over-towers defined by the extended operation T *)
+(** *** The function T_fun of the over-towers defined by the extended operation T *)
 
 
 
@@ -162,7 +162,7 @@ Proof.
 Defined.
 
 
-Definition ltower_fun_T { BB : lBsystem_carrier }
+Definition ltower_T_fun { BB : lBsystem_carrier }
       { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
       { X1 : BB } ( gt0 : ll X1 > 0 ) :
   ltower_fun ( ltower_over ( ft X1 ) ) ( ltower_over X1 ) :=
@@ -174,7 +174,7 @@ Definition ltower_fun_T { BB : lBsystem_carrier }
   
 
 
-(** *** Definition of Tj as iterations of the functions T_fun *)
+(** *** Definition of Tj_fun as iterations of the functions T_fun *)
 
 (** **** Construction of Tj *)
 
@@ -405,7 +405,7 @@ Proof.
 Defined.
 
 
-Definition ltower_fun_Tj { BB : lBsystem_carrier }
+Definition ltower_Tj_fun { BB : lBsystem_carrier }
       { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
       { A X1 : BB } ( isov : isover X1 A ) :
   ltower_fun ( ltower_over A ) ( ltower_over X1 ) :=
@@ -415,6 +415,13 @@ Definition ltower_fun_Tj { BB : lBsystem_carrier }
 
 
 
+
+(** *** Function Tt_fun *)
+
+(* Definition Tt_fun { BB : lBsystem_carrier }
+           ( T : T_ops_type BB ) ( Tt : Tt_ops_type BB )
+           ( X : BB ) : *)
+      
   
 
 
@@ -422,7 +429,7 @@ Definition ltower_fun_Tj { BB : lBsystem_carrier }
 
 
 
-(** **** Operations Tprod X1 X2 for pointed l-Bsystems *)
+(** *** Function Tprod for pointed l-Bsystems *)
 
 
 Definition Tprod_fun { BB : lBsystem_carrier } ( is : ispointed BB )
@@ -501,13 +508,19 @@ Proof.
 Defined.
 
 
-Definition ltower_fun_Tprod { BB : lBsystem_carrier } ( is : ispointed BB )
+Definition ltower_Tprod_fun { BB : lBsystem_carrier } ( is : ispointed BB )
            { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
            ( X1 : BB ) :
   ltower_fun BB ( ltower_over X1 ) :=
   ltower_fun_constr ( isovmonot_Tprod_fun is ax0 ax1a ax1b X1 )
                     ( isllmonot_Tprod_fun is ax0 ax1b X1 )
                     ( isbased_Tprod_fun is ax0 ax1b X1 ) .
+
+
+
+
+
+
 
 
 

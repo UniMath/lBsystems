@@ -9,6 +9,42 @@ Require Export lBsystems.lBsystems_S_fun.
 
 
 
+
+Definition for_Mor { BB : lBsystem_carrier } 
+           { S : S_ops_type BB } ( sax0 : S_ax0_type S )
+           ( m : nat ) (Z : BB ) ( le : m <= ll Z ) : UU .
+Proof.
+  intros until m .
+  induction m as [ | m IHm ] .
+  intros. exact unit .
+
+  intros Z le .
+  destruct ( natgehchoice _ _ ( natgehn0 m ) ) as [ gt0 | eq0 ] . 
+  assert ( inn : forall s : Tilde_dd ( ftn m Z ), S_dom s Z ) .
+  intro s .
+  unfold S_dom .
+  set ( eq := pr2 s : dd s = ftn m Z ) . simpl in eq .
+  rewrite eq .  
+  apply ( isabove_X_ftnX gt0 ) .
+  apply ( natgehgthtrans _ _ _ le ( natgthsn0 _ ) ) . 
+
+  assert ( le' : forall s : Tilde_dd ( ftn m Z ), m <= ll ( S s Z ( inn s ) ) ) . 
+  intro s . 
+  rewrite sax0 . 
+  assert ( leint := natgehandminusr _ _ 1 le ) . 
+  simpl in leint . 
+  rewrite natminuseqn in leint .
+  exact leint . 
+
+  exact ( total2 ( fun s : Tilde_dd ( ftn m Z ) => IHm ( S s Z ( inn s ) ) (le' s) ) ) .
+
+  exact ( Tilde_dd Z ) . 
+
+Defined.
+
+
+  
+
 Definition Mor_and_fstar { BB : lBsystem_carrier } ( is : ispointed BB )
            { T : T_ops_type BB } ( tax0 : T_ax0_type T )
            ( tax1a : T_ax1a_type T ) ( tax1b : T_ax1b_type T )
@@ -19,12 +55,12 @@ Definition Mor_and_fstar { BB : lBsystem_carrier } ( is : ispointed BB )
              forall f : Mor_X1_A ,
                ltower_fun ( ltower_over A ) ( ltower_over X1 ) ) . 
 Proof .
-  intros BB is T tax0 tax1a tax1b S sax0 sax1a sax1b X1 n . induction n as [ | n IHn ] . 
+  intros until n . induction n as [ | n IHn ] . 
   intros . 
   split with unit .
 
   intro .
-  exact ( ltower_fun_Tj tax0 tax1a tax1b ( isoverll0 is eq X1 ) ) . 
+  exact ( ltower_Tj_fun tax0 tax1a tax1b ( isoverll0 is eq X1 ) ) . 
 
   intros .
   assert ( eqft : ll ( ft A ) = n ) . rewrite ll_ft . rewrite eq . simpl . rewrite natminuseqn .

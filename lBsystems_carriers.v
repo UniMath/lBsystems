@@ -11,13 +11,13 @@ Require Export lBsystems.hSet_ltowers.
 (** **** lBsystem carriers *)
 
 Definition lBsystem_carrier :=
-  total2 ( fun B :  hSet_ltower =>
+  total2 ( fun B :  hSet_pltower =>
              total2 ( fun TildeB : hSet =>
                         total2 ( fun dd : TildeB -> B =>
                                    forall r : TildeB , ll ( dd r ) > 0 ) ) ) .
 
 
-Definition lBsystem_carrier_constr { B : hSet_ltower } { TildeB : hSet }
+Definition lBsystem_carrier_constr { B : hSet_pltower } { TildeB : hSet }
            ( dd : TildeB -> B ) ( is : forall r : TildeB, ll ( dd r ) > 0 ) : lBsystem_carrier .
 Proof .
   intros . 
@@ -29,8 +29,11 @@ Proof .
 
 Defined.
 
-Definition lBsystem_carrier_pr1 : lBsystem_carrier -> ltower := pr1 .
-Coercion  lBsystem_carrier_pr1 : lBsystem_carrier >-> ltower .
+Definition lBsystem_carrier_to_ltower : lBsystem_carrier -> ltower := fun T => pr1 ( pr1 T ) .
+Coercion  lBsystem_carrier_to_ltower : lBsystem_carrier >-> ltower . 
+
+Definition lBsystem_carrier_pr1 : lBsystem_carrier -> pltower := pr1 .
+Coercion  lBsystem_carrier_pr1 : lBsystem_carrier >-> pltower .
                                                                      
                                
 Definition Tilde : lBsystem_carrier -> UU := fun BB => pr1 ( pr2 BB ) .

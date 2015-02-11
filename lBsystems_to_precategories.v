@@ -45,7 +45,7 @@ Defined.
 
   
 
-Definition Mor_and_fstar { BB : lBsystem_carrier } ( is : ispointed BB )
+Definition Mor_and_fstar { BB : lBsystem_carrier }
            { T : T_ops_type BB } ( tax0 : T_ax0_type T )
            ( tax1a : T_ax1a_type T ) ( tax1b : T_ax1b_type T )
            { S : S_ops_type BB } ( sax0 : S_ax0_type S )
@@ -60,7 +60,7 @@ Proof .
   split with unit .
 
   intro .
-  exact ( ltower_Tj_fun tax0 tax1a tax1b ( isoverll0 is eq X1 ) ) . 
+  exact ( ltower_Tj_fun tax0 tax1a tax1b ( @isoverll0 BB _ eq X1 ) ) . 
 
   intros .
   assert ( eqft : ll ( ft A ) = n ) . rewrite ll_ft . rewrite eq . simpl . rewrite natminuseqn .
@@ -87,13 +87,12 @@ Proof .
   apply ( ltower_fun_S sax0 sax1a sax1b s_f ) .
 
   assert ( gt0 : ll (ftf_star (X_over_ftX A)) > 0 ) .
-  rewrite ll_ltower_fun .
+  rewrite (@ll_ltower_fun (pltower_over ( ft A ) )).
+  change ( ll (X_over_ftX A) > 0 ) . 
   rewrite ll_X_over_ftX . 
   apply idpath . 
 
   rewrite eq . apply natgthsn0 .
-
-  apply ispointed_ltower_over . 
   
   assert ( eq' : ft ftf_star_A = X1 ) .
   unfold ftf_star_A .
@@ -101,15 +100,14 @@ Proof .
   assert ( eq1 : ft (ftf_star (X_over_ftX A)) = X_over_X X1 ) . 
   assert ( eq2 : ll ( ft (ftf_star (X_over_ftX A)) ) = 0 ) .
   rewrite ll_ft . 
-  rewrite ll_ltower_fun . 
-  rewrite ll_X_over_ftX .
+  rewrite (@ll_ltower_fun (pltower_over (ft A))). 
+  change ( ll (X_over_ftX A) - 1 = 0 ) . 
+  rewrite ll_X_over_ftX . 
   apply idpath . 
 
   rewrite eq . apply natgthsn0 .
 
-  apply ispointed_ltower_over . 
-
-  apply ( noparts_ispointed ( ispointed_ltower_over X1 ) eq2 ( ll_X_over_X X1 ) ) . 
+  apply ( @noparts_ispointed  ( pltower_over _ ) _ _ eq2 ( ll_X_over_X X1 ) ) . 
 
   rewrite eq1 .
   apply idpath . 

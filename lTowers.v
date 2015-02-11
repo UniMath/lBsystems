@@ -648,24 +648,44 @@ Defined.
 
   
 
-(** Pointed ltowers 
+(** *** Pointed ltowers
 
-These are ltowers such that the zero's floor is contractible *)
+A pointed ltower is an ltower such that the type of its elements of length 0 is contractible. 
+
+ *)
+
 
 Definition ispointed ( T : ltower ) :=
   iscontr ( total2 ( fun X : T => ll X = 0 ) ) .
 
-Definition cntr { T : ltower } ( is : ispointed T ) : T :=
-  pr1 ( pr1 is ) .
+Definition pltower := total2 ( fun T : ltower => ispointed T ) .
 
-Definition ll_cntr { T : ltower } ( is : ispointed T ) : ll ( cntr is ) = 0 :=
-  pr2 ( pr1 is ) . 
+Definition pltower_constr { T : ltower } ( is : ispointed T ) : pltower := tpair _ _ is . 
 
-Lemma isoverll0 { T : ltower } ( is : ispointed T )
+Definition pltower_pr1 : pltower -> ltower := pr1 .
+Coercion pltower_pr1 : pltower >-> ltower .
+
+Definition pltower_to_ltower { T : pltower } ( X : T ) : pltower_pr1 T := X . 
+
+Definition cntr ( T : pltower ) : T :=
+  pr1 ( pr1 ( pr2 T ) ) .
+
+Definition ll_cntr ( T : pltower ) : ll ( cntr T ) = 0 :=
+  pr2 ( pr1 ( pr2 T ) ) .
+
+Definition ft_cntr ( T : pltower ) : ft ( cntr T ) = cntr T .
+Proof .
+  intros .
+  apply ftX_eq_X .
+  apply ll_cntr . 
+
+Defined.
+
+Lemma isoverll0 { T : pltower } 
       { X1 : T } ( eq0 : ll X1 = 0 )
       ( X2 : T ) : isover X2 X1 .
 Proof .
-  intros . 
+  intros . set ( is := pr2 T ) . 
   unfold isover . 
   assert ( eq0' : ll ( ftn ( ll X2 - ll X1 ) X2 ) = 0 ) . 
   rewrite ll_ftn . 
@@ -679,10 +699,10 @@ Proof .
 
 Defined.
 
-Lemma noparts_ispointed { T : ltower } ( is : ispointed T )
+Lemma noparts_ispointed { T : pltower }
       { X Y : T } ( eqX : ll X = 0 ) ( eqY : ll Y = 0 ) : X = Y .
 Proof .
-  intros .
+  intros . set ( is := pr2 T ) . 
   set ( int := proofirrelevancecontr is ( tpair _ _ eqX ) ( tpair _ _ eqY ) ) . 
   apply ( maponpaths pr1 int ) . 
 
@@ -690,28 +710,28 @@ Defined.
 
       
 
-Definition ll_ltower_fun { T1 T2 : ltower } ( is : ispointed T1 ) ( f : ltower_fun T1 T2 ) ( X : T1 ) :
+Definition ll_ltower_fun { T1 : pltower } { T2 : ltower } ( f : ltower_fun T1 T2 ) ( X : T1 ) :
   ll ( f X ) = ll X . 
 Proof.
-  intros.
+  intros.  
   rewrite <- natminuseqn .
-  rewrite <- ( ll_cntr is ) . 
+  rewrite <- ( ll_cntr T1 ) . 
   rewrite <- ( natminuseqn ( ll ( f X ) ) ) . 
-  assert ( eq := isbased_pr f _ ( ll_cntr is ) ) .
+  assert ( eq := isbased_pr f _ ( ll_cntr T1 ) ) .
   rewrite <- eq . 
   exact ( isllmonot_pr f _ _ ) . 
 
 Defined.
 
-Lemma ft_ltower_fun { T1 T2 : ltower } ( is : ispointed T1 ) ( f : ltower_fun T1 T2 ) ( X : T1 ) :
+Lemma ft_ltower_fun { T1 : pltower } { T2 : ltower } ( f : ltower_fun T1 T2 ) ( X : T1 ) :
   ft ( f X ) = f ( ft X ) .
 Proof.
   intros.
   assert ( isov : isover ( f X ) ( f ( ft X ) ) ) . 
   apply ( isovmonot_pr f _ _ ( isover_X_ftX X ) ) . 
   unfold isover in isov . 
-  rewrite ( ll_ltower_fun is f ) in isov .
-  rewrite ( ll_ltower_fun is f ) in isov .
+  rewrite ( ll_ltower_fun f ) in isov .
+  rewrite ( ll_ltower_fun f ) in isov .
   rewrite ll_ft in isov . 
   destruct ( natgehchoice _ _ ( natgehn0 ( ll X ) ) ) as [ gt0 | eq0 ] . 
 

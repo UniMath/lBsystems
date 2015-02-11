@@ -79,7 +79,7 @@ Defined.
 
 Definition T_fun { BB : lBsystem_carrier }
       { T : T_ops_type BB } ( ax1b : T_ax1b_type T )
-      { X1 : BB } ( gt0 : ll X1 > 0 ) ( X2' : ltower_over ( ft X1 ) ) : ltower_over X1 .
+      { X1 : BB } ( gt0 : ll X1 > 0 ) ( X2' : ltower_over ( ft X1 ) ) : pltower_over X1 .
 Proof .
   intros .
   set ( X2 := pr1 X2' ) . set ( isov := pr2 X2' : isover X2 ( ft X1 ) ) .
@@ -165,7 +165,7 @@ Defined.
 Definition ltower_T_fun { BB : lBsystem_carrier }
       { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
       { X1 : BB } ( gt0 : ll X1 > 0 ) :
-  ltower_fun ( ltower_over ( ft X1 ) ) ( ltower_over X1 ) :=
+  ltower_fun ( ltower_over ( ft X1 ) ) ( pltower_over X1 ) :=
   ltower_fun_constr ( isovmonot_T_fun ax0 ax1a ax1b gt0 )
                     ( isllmonot_T_fun ax0 ax1b gt0 )
                     ( isbased_T_fun ax0 ax1b gt0 ) .   
@@ -254,7 +254,7 @@ Definition Tj_fun_int { BB : lBsystem_carrier }
            ( j : nat )
            { X1 : BB } ( isov : isover X1 A )
            ( ell : ll X1 - ll A = j )
-           ( X2' : ltower_over A ) : ltower_over X1 .
+           ( X2' : ltower_over A ) : pltower_over X1 .
 Proof .
   intros BB T ax1b A j . induction j as [ | j IHj ] .
   intros .
@@ -272,7 +272,7 @@ Defined.
 
 Definition Tj_fun { BB : lBsystem_carrier }
            { T : T_ops_type BB } ( ax1b : T_ax1b_type T )
-           { A X1 : BB } ( isov : isover X1 A ) : ltower_over A -> ltower_over X1 :=
+           { A X1 : BB } ( isov : isover X1 A ) : ltower_over A -> pltower_over X1 :=
   fun X2' => Tj_fun_int ax1b ( ll X1 - ll A ) isov ( idpath _ ) X2' .
 
 
@@ -408,7 +408,7 @@ Defined.
 Definition ltower_Tj_fun { BB : lBsystem_carrier }
       { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
       { A X1 : BB } ( isov : isover X1 A ) :
-  ltower_fun ( ltower_over A ) ( ltower_over X1 ) :=
+  ltower_fun ( ltower_over A ) ( pltower_over X1 ) :=
   ltower_fun_constr ( isovmonot_Tj_fun ax0 ax1a ax1b isov )
                     ( isllmonot_Tj_fun ax0 ax1b isov )
                     ( isbased_Tj_fun ax0 ax1b isov ) . 
@@ -434,10 +434,10 @@ Definition ltower_Tj_fun { BB : lBsystem_carrier }
 
 Definition Tprod_fun { BB : lBsystem_carrier } ( is : ispointed BB )
            { T : T_ops_type BB } ( ax1b : T_ax1b_type T )
-           ( X1 : BB ) ( X2 : BB ) : ltower_over X1 .
+           ( X1 : BB ) ( X2 : BB ) : pltower_over X1 .
 Proof .
   intros .
-  set ( X2' := to_ltower_over is X2 ) .
+  set ( X2' := to_pltower_over is X2 ) .
   exact ( Tj_fun ax1b ( isoverll0 is ( ll_cntr is ) X1 ) X2' ) .  
 
 Defined.
@@ -450,8 +450,8 @@ Proof .
   intros .
   unfold isovmonot . 
   intros X Y isov .
-  set ( X' := to_ltower_over is X ) . set ( Y' := to_ltower_over is Y ) .
-  set ( isov' := isovmonot_to_ltower_over is isov ) . 
+  set ( X' := to_pltower_over is X ) . set ( Y' := to_pltower_over is Y ) .
+  set ( isov' := isovmonot_to_pltower_over is isov ) . 
   exact ( isovmonot_Tj_fun ax0 ax1a ax1b ( isoverll0 is ( ll_cntr is ) X1 ) X' Y' isov' ) .  
 
 Defined.
@@ -459,7 +459,7 @@ Defined.
 
 Definition Tprod_ovmonotfun { BB : lBsystem_carrier } ( is : ispointed BB )
            { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T )  ( ax1b : T_ax1b_type T )
-           ( X1 : BB ) : ovmonot_fun BB ( ltower_over X1 ) :=
+           ( X1 : BB ) : ovmonot_fun BB ( pltower_over X1 ) :=
   ovmonot_fun_constr ( Tprod_fun is ax1b X1 ) ( isovmonot_Tprod_fun is ax0 ax1a ax1b X1 ) . 
 
 
@@ -472,7 +472,7 @@ Proof .
   intros .
   unfold Tprod_fun . 
   rewrite ll_Tj_fun .
-  rewrite ll_to_ltower_over .
+  rewrite ll_to_pltower_over .
   apply idpath . 
 
   apply ax0 . 
@@ -511,7 +511,7 @@ Defined.
 Definition ltower_Tprod_fun { BB : lBsystem_carrier } ( is : ispointed BB )
            { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
            ( X1 : BB ) :
-  ltower_fun BB ( ltower_over X1 ) :=
+  ltower_fun BB ( pltower_over X1 ) :=
   ltower_fun_constr ( isovmonot_Tprod_fun is ax0 ax1a ax1b X1 )
                     ( isllmonot_Tprod_fun is ax0 ax1b X1 )
                     ( isbased_Tprod_fun is ax0 ax1b X1 ) .

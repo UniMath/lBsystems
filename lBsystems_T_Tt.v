@@ -225,7 +225,10 @@ Proof .
   repeat rewrite ax0 .
   simpl .
   assert ( isab : isabove ( ftn ( ll X2 - ll X2') X2 ) ( ft X1 ) ) .
-  rewrite <- is . 
+  rewrite <- is .
+
+  Set Printing All .
+  
   exact ( T_dom_isabove inn' ) . 
 
   rewrite ( ftn_T ax1a _ isab inn ) .

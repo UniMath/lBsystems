@@ -10,6 +10,9 @@ Require Export lBsystems.ltowers_over .
 
 Definition hSet_ltower := total2 ( fun T : ltower => isaset T ) .
 
+Definition hSet_ltower_constr ( T : ltower ) ( is : isaset T ) : hSet_ltower :=
+  tpair _ T is . 
+
 Definition hSet_ltower_pr1 : hSet_ltower -> ltower := pr1 . 
 Coercion hSet_ltower_pr1 : hSet_ltower >-> ltower .
 
@@ -32,6 +35,9 @@ Proof.
 Defined .
 
 Definition hSet_pltower := total2 ( fun T : hSet_ltower => ispointed T ) .
+
+Definition hSet_pltower_constr ( T : hSet_ltower ) ( is : ispointed T ) : hSet_pltower :=
+  tpair _ T is . 
 
 
 Definition hSet_pltowers_to_pltowers : hSet_pltower -> pltower :=

@@ -17,6 +17,15 @@ Definition lBsystem_carrier :=
                                    forall r : TildeB , ll ( dd r ) > 0 ) ) ) .
 
 
+(** Note: the condition that the carrier of an lB-system is based on an h-set is used for the first
+time in the formulation of the condition TT (later an axiom TT of the lBsystems). It is possible to avoid 
+the use of the h-set condition in the formulation of the TT and other axioms at the cost of making the 
+domains of applicability of these axioms to have a much longer description or of introducing additional
+axioms to ensure that Lemma isover_T_T_2 and similar lemmas needed for the formulation of other axioms 
+hold. *)
+
+
+
 Definition lBsystem_carrier_constr { B : hSet_pltower } { TildeB : hSet }
            ( dd : TildeB -> B ) ( is : forall r : TildeB, ll ( dd r ) > 0 ) : lBsystem_carrier .
 Proof .

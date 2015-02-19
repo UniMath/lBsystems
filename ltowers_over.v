@@ -191,12 +191,7 @@ Proof .
   destruct absd .
   rewrite int . 
   refine ( IHn ( ft X ) _ ) . 
-  rewrite ll_ft . 
-
-  assert ( ge' := natgehandminusr _ _ 1 ge ) . 
-  change ( S n - 1 ) with ( n - 0 ) in ge' .
-  rewrite natminuseqn in ge' . 
-  exact ge' . 
+  apply ( ll_ft_gtn ge ) . 
 
 Defined.
 

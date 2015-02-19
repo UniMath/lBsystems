@@ -137,10 +137,33 @@ Proof.
   intros. rewrite ( ll_ft X1 ) in gt . apply ( natgthminus1togeh gt ) . 
 Defined .
 
+Lemma ll_ft_gtn { T : ltower } { X : T } { n : nat } ( gtsn : ll X >= S n ) : ll ( ft X ) >= n .
+Proof.
+  intros.
+  rewrite ll_ft . 
+  assert ( int := natgehandminusr _ _ 1 gtsn ) . 
+  change ( S n - 1 ) with ( n - 0 ) in int .
+  rewrite natminuseqn in int . 
+  apply int .
+
+Defined.
+
+
+Lemma S_ll_ft { T : ltower } { X : T } ( gt0 : ll X > 0 ) : 1 + ll ( ft X ) = ll X .
+Proof.
+  intros .
+  rewrite ll_ft .
+  rewrite natpluscomm .
+  apply ( minusplusnmm _ _ ( gth0_to_geh1 gt0 ) ) .
+
+Defined.
 
 
 
 
+
+  
+  
 Lemma lB_2014_12_07_l1 { m n : nat } ( gt : m > n ) : m - n = 1 + (( m - 1 ) - n ) .
 Proof.
   intros. induction m as [ | m IHm ] . induction ( natgehn0 _ gt ) .

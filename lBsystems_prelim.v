@@ -12,6 +12,33 @@ Require Export Foundations.hlevel2.finitesets.
 
 Notation isaproptotal2 := ( isofhleveltotal2 1 )  .
 
+
+Lemma gth0_to_geh1 { n : nat } ( gt0 : n > 0 ) : n >= 1 .
+Proof.
+  intros.
+  induction n as [ | n IHn ] .
+  assert ( absd : empty ) .
+  apply ( negnatgthnn _ gt0 ) . 
+  destruct absd .
+
+  apply ( natgehn0 n ) . 
+
+Defined.
+
+
+Lemma geh1_to_gth0 { n : nat } ( geh1 : n >= 1 ) : n > 0 .
+Proof.
+  intros .
+  apply ( natgehgthtrans _ _ _ geh1 ( natgthsnn 0 ) ) .
+
+Defined.
+
+
+
+
+
+
+  
 Lemma natminusmequalsn { m n : nat } ( ge : n >= m ) ( eq0 : n - m = 0 ) : n = m .
 Proof .
   intro m . induction m as [ | m IHm ] .
@@ -109,7 +136,7 @@ Proof.
 Defined .
 
 
-Definition natassocpmeq ( n m k : nat ) ( ge : m >= k ) : (( n + m ) - k ) =  ( n + ( m - k )) .
+Definition natassocpmeq ( n m k : nat ) ( ge : m >= k ) : ( n + m ) - k =  n + ( m - k ) .
 Proof. intros.  apply ( natplusrcan _ _ k ) . rewrite ( natplusassoc n _ k ) .
        rewrite ( minusplusnmm _ k ge ) .
        set ( ge' := istransnatgeh _ _ _ ( natgehplusnmm n m ) ge ) .

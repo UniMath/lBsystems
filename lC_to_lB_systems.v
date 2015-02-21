@@ -13,7 +13,7 @@ Require Export lBsystems.lBsystems.
 
 Unset Automatic Introduction.
 
-(** *** The function from lC-systems to pre-lB-systems. *)
+(** *** The function from lC-systems to lB0-systems. *)
 
 (** **** Constructing the lB-system carrier *)
 
@@ -21,11 +21,9 @@ Definition Tilde_from_C ( CC : ltower_precat_and_p ) :=
   total2 ( fun X : CC => dirprod ( ll X > 0 ) ( Ob_tilde_over X ) ) .
 
 
-Lemma isaset_Tilde_from_C { CC : ltower_precat_and_p }
-      ( is1 : has_homsets CC ) ( is2 : isaset CC ) :
-  isaset ( Tilde_from_C CC ) .
+Lemma isaset_Tilde_from_C ( CC : lC0system ) : isaset ( Tilde_from_C CC ) .
 Proof.
-  intros . 
+  intros . set ( is1 := C0_has_homsets CC ) . set ( is2 := C0_isaset_Ob CC ) .  
   apply ( isofhleveltotal2 2 ) . 
   apply is2 . 
 
@@ -63,17 +61,16 @@ Coercion Tilde_from_C_to_Ob_tilde_over : Tilde_from_C >-> Ob_tilde_over .
 
 
 
-Definition B_carrier_from_C { CC : pltower_precat_and_p }
-  ( is1 : has_homsets CC ) ( is2 : isaset CC ) : lBsystem_carrier .
+Definition B_carrier_from_C ( CC : lC0system ) : lBsystem_carrier .
 Proof .
-  intros .
+  intros . set ( is1 := C0_has_homsets CC ) . set ( is2 := C0_isaset_Ob CC ) . 
   refine ( lBsystem_carrier_constr _ _ ) . 
   refine ( hSet_pltower_constr _ _ ) .
   apply ( hSet_ltower_constr CC is2 ) . 
 
-  apply ( pr2 CC ) . 
+  apply ( ispointed CC ) . 
 
-  apply ( tpair _ _ ( isaset_Tilde_from_C is1 is2 ) ) . 
+  apply ( tpair _ _ ( isaset_Tilde_from_C CC ) ) . 
 
   apply dd_from_C . 
 
@@ -86,8 +83,7 @@ Defined.
 (** **** Constructing operation T and tax0 *)
 
 
-Definition T_op_from_C { CC : lC0system_data } ( is1 : has_homsets CC ) ( is2 : isaset CC ) :
-  T_ops_type ( B_carrier_from_C is1 is2 ) . 
+Definition T_op_from_C ( CC : lC0system ) : T_ops_type ( B_carrier_from_C CC ) . 
 Proof.
   intros.
   unfold T_ops_type . 
@@ -108,8 +104,7 @@ Defined.
 
 
 
-Lemma T_ax1a_from_C { CC : lC0system } ( is1 : has_homsets CC ) ( is2 : isaset CC ) :
-  T_ax1a_type ( T_op_from_C is1 is2 ) .
+Lemma T_ax1a_from_C { CC : lC0system } : T_ax1a_type ( T_op_from_C CC ) .
 Proof.
   intros.
   unfold T_ax1a_type.
@@ -143,7 +138,7 @@ Proof.
   rewrite ( @ft_f_star CC ).
   unfold fn_star . 
   apply ( maponpaths pr1 ) .  apply qn_equals_qn . 
-  exact is2 .
+  apply C0_isaset_Ob .
 
   apply idpath . 
 
@@ -151,8 +146,7 @@ Defined.
 
 
  
-Lemma T_ax1b_from_C { CC : lC0system } ( is1 : has_homsets CC ) ( is2 : isaset CC ) :
-  T_ax1b_type ( T_op_from_C is1 is2 ) .
+Lemma T_ax1b_from_C ( CC : lC0system ) : T_ax1b_type ( T_op_from_C CC ) .
 Proof.
   intros.
   unfold T_ax1b_type . 
@@ -176,8 +170,7 @@ Defined.
 
   
 
-Lemma T_ax0_from_C { CC : lC0system } ( is1 : has_homsets CC ) ( is2 : isaset CC ) :
-  T_ax0_type ( T_op_from_C is1 is2 ) . 
+Lemma T_ax0_from_C ( CC : lC0system ) : T_ax0_type ( T_op_from_C CC ) . 
 Proof.
   intros.
   unfold T_ax0_type . 
@@ -197,6 +190,14 @@ Proof.
 
 Defined.
 
+Notation T_ext_from_C := ( T_ext ( T_op_from_C _ ) ) . 
+
+
+
+
+
+
+
 
 
 
@@ -205,8 +206,7 @@ Defined.
 (** ***** Constructing operation S *)
 
 
-Definition S_op_from_C { CC : lC0system_data } ( is1 : has_homsets CC ) ( is2 : isaset CC ) :
-  S_ops_type ( B_carrier_from_C is1 is2 ) .
+Definition S_op_from_C ( CC : lC0system ) : S_ops_type ( B_carrier_from_C CC ) .
 Proof.
   intros.
   unfold S_ops_type.
@@ -229,8 +229,7 @@ Defined.
 
 
 
-Lemma S_ax1a_from_C { CC : lC0system } ( is1 : has_homsets CC ) ( is2 : isaset CC ) :
-  S_ax1a_type ( S_op_from_C is1 is2 ) .
+Lemma S_ax1a_from_C { CC : lC0system } : S_ax1a_type ( S_op_from_C CC ) .
 Proof.
   intros.
   unfold S_ax1a_type.
@@ -264,7 +263,7 @@ Proof.
   rewrite ( @ft_f_star CC ).
   unfold fn_star . 
   apply ( maponpaths pr1 ) .  apply qn_equals_qn . 
-  exact is2 .
+  apply C0_isaset_Ob .
 
   apply idpath .
 
@@ -272,8 +271,7 @@ Defined.
 
 
 
-Lemma S_ax1b_from_C { CC : lC0system } ( is1 : has_homsets CC ) ( is2 : isaset CC ) :
-  S_ax1b_type ( S_op_from_C is1 is2 ) .
+Lemma S_ax1b_from_C ( CC : lC0system ) : S_ax1b_type ( S_op_from_C CC ) .
 Proof.
   intros.
   unfold S_ax1b_type . 
@@ -291,8 +289,7 @@ Proof.
 Defined.
 
 
-Lemma S_ax0_from_C { CC : lC0system } ( is1 : has_homsets CC ) ( is2 : isaset CC ) :
-  S_ax0_type ( S_op_from_C is1 is2 ) . 
+Lemma S_ax0_from_C ( CC : lC0system ) : S_ax0_type ( S_op_from_C CC ) . 
 Proof.
   intros.
   unfold S_ax0_type . 
@@ -335,8 +332,10 @@ Proof .
   exact ( T_op_from_C is1 is2 _ _ inn ) . 
 
   split.
-  
-*)  
+  rewrite (@T_ax0_from_C CC is1 is2) . 
+  apply natgthsn0 . 
+
+  *)
 
   
 (* End of the file lC_to_lB_systems.v *)

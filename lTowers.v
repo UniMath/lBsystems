@@ -678,15 +678,17 @@ A pointed ltower is an ltower such that the type of its elements of length 0 is 
  *)
 
 
-Definition ispointed ( T : ltower ) :=
+Definition ispointed_type ( T : ltower ) :=
   iscontr ( total2 ( fun X : T => ll X = 0 ) ) .
 
-Definition pltower := total2 ( fun T : ltower => ispointed T ) .
+Definition pltower := total2 ( fun T : ltower => ispointed_type T ) .
 
-Definition pltower_constr { T : ltower } ( is : ispointed T ) : pltower := tpair _ _ is . 
+Definition pltower_constr { T : ltower } ( is : ispointed_type T ) : pltower := tpair _ _ is . 
 
 Definition pltower_pr1 : pltower -> ltower := pr1 .
 Coercion pltower_pr1 : pltower >-> ltower .
+
+Definition ispointed ( T : pltower ) : ispointed_type T := pr2 T .  
 
 Definition pltower_to_ltower { T : pltower } ( X : T ) : pltower_pr1 T := X . 
 

@@ -34,9 +34,9 @@ Proof.
 
 Defined .
 
-Definition hSet_pltower := total2 ( fun T : hSet_ltower => ispointed T ) .
+Definition hSet_pltower := total2 ( fun T : hSet_ltower => ispointed_type T ) .
 
-Definition hSet_pltower_constr ( T : hSet_ltower ) ( is : ispointed T ) : hSet_pltower :=
+Definition hSet_pltower_constr ( T : hSet_ltower ) ( is : ispointed_type T ) : hSet_pltower :=
   tpair _ T is . 
 
 

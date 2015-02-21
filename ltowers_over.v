@@ -156,7 +156,7 @@ functor that takes a presheaf represneted by p : X -> B over B to the presheaf r
 Definition pocto { T : ltower } { A : T } ( X : ltower_over A ) : T := pr1 X . 
 (* Coercion ltower_over_carrier_pr1 : ltower_over_carrier >-> ltower_data_pr1 . *)
 
-Definition ispointed_ltower_over { T : ltower } ( A : T ) : ispointed ( ltower_over A ) :=
+Definition ispointed_ltower_over { T : ltower } ( A : T ) : ispointed_type ( ltower_over A ) :=
   ispointed_ltower_over_int A .
 
 Definition pltower_over { T : ltower } ( A : T ) : pltower := pltower_constr ( ispointed_ltower_over A ) . 

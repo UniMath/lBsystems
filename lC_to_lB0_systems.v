@@ -1,6 +1,6 @@
-(** ** lC_to_lB_systems by Vladimir Voevodsky,
+(** ** lC_to_lB0_systems by Vladimir Voevodsky,
 
-started Feb. 15, 2015 
+started Feb. 15, 2015, renamed Fe. 21, 2015 
 
 We refer below to the paper "Subsystems and regular quotients of C-systems"
 by V. Voevodsky as "Csubsystems".
@@ -13,9 +13,7 @@ Require Export lBsystems.lBsystems.
 
 Unset Automatic Introduction.
 
-(** *** The function from lC-systems to lB0-systems. *)
-
-(** **** Constructing the lB-system carrier *)
+(** *** Constructing the lB-system carrier *)
 
 Definition Tilde_from_C ( CC : ltower_precat_and_p ) :=
   total2 ( fun X : CC => dirprod ( ll X > 0 ) ( Ob_tilde_over X ) ) .
@@ -63,10 +61,10 @@ Coercion Tilde_from_C_to_Ob_tilde_over : Tilde_from_C >-> Ob_tilde_over .
 
 Definition B_carrier_from_C ( CC : lC0system ) : lBsystem_carrier .
 Proof .
-  intros . set ( is1 := C0_has_homsets CC ) . set ( is2 := C0_isaset_Ob CC ) . 
+  intros .  
   refine ( lBsystem_carrier_constr _ _ ) . 
   refine ( hSet_pltower_constr _ _ ) .
-  apply ( hSet_ltower_constr CC is2 ) . 
+  apply ( hSet_ltower_constr CC ( C0_isaset_Ob CC ) ) . 
 
   apply ( ispointed CC ) . 
 
@@ -80,10 +78,11 @@ Proof .
 Defined.
 
 
-(** **** Constructing operation T and tax0 *)
+(** *** Operation T *)
 
+(** **** Constructing operation T *)
 
-Definition T_op_from_C ( CC : lC0system ) : T_ops_type ( B_carrier_from_C CC ) . 
+Definition T_from_C ( CC : lC0system ) : T_ops_type ( B_carrier_from_C CC ) . 
 Proof.
   intros.
   unfold T_ops_type . 
@@ -103,13 +102,14 @@ Proof.
 Defined.
 
 
+(** **** Proving properties ax1a, ax1b and ax0 of operation T *)
 
-Lemma T_ax1a_from_C { CC : lC0system } : T_ax1a_type ( T_op_from_C CC ) .
+Lemma T_ax1a_from_C { CC : lC0system } : T_ax1a_type ( T_from_C CC ) .
 Proof.
   intros.
   unfold T_ax1a_type.
   intros .
-  unfold T_op_from_C . 
+  unfold T_from_C . 
   assert ( eq : ll X2 - ll (ft X1)  = S ( ll ( ft X2 ) - ll ( ft X1 ) ) ) .
   rewrite ( ll_ft X2 ) . 
   rewrite natminuscomm .
@@ -121,38 +121,27 @@ Proof.
   apply gth0_to_geh1 . 
   apply minusgth0 . 
   apply ( T_dom_gth inn ) .
-  
-  set ( int1 := (! isabove_to_isover (T_dom_isabove inn))).
-  set ( int2 := (! isabove_to_isover (T_dom_isabove (T_ax1a_dom inn isab)))).
-  set ( int3 := (natminuslehn (ll X2) (ll (ft X1)))).
-  set ( int4 := (natminuslehn (ll (ft X2)) (ll (ft X1)))). 
-  generalize int1 . clear int1 .
-  generalize int2 . clear int2 .
-  generalize int3 . clear int3 .
-  generalize int4 . clear int4 .
-   
 
-  rewrite eq .
-  intros . 
-  rewrite fsn . 
+  rewrite ( fn_star_to_fsm_star _ _ _ eq ) .
+  rewrite fsn_strict . 
   rewrite ( @ft_f_star CC ).
   unfold fn_star . 
   apply ( maponpaths pr1 ) .  apply qn_equals_qn . 
   apply C0_isaset_Ob .
 
   apply idpath . 
-
+  
 Defined.
 
 
  
-Lemma T_ax1b_from_C ( CC : lC0system ) : T_ax1b_type ( T_op_from_C CC ) .
+Lemma T_ax1b_from_C ( CC : lC0system ) : T_ax1b_type ( T_from_C CC ) .
 Proof.
   intros.
   unfold T_ax1b_type . 
   intros .
   refine ( isabove_constr _ _ ) .
-  unfold T_op_from_C . 
+  unfold T_from_C . 
   rewrite (@ll_fn_star CC) . 
   rewrite ll_ft .
   rewrite ( natpluscomm ( ll X1 ) _ ) . 
@@ -163,19 +152,19 @@ Proof.
   rewrite <- ll_ft .
   apply ( isabove_gth ( T_dom_isabove inn ) ) . 
 
-  unfold T_op_from_C . apply isover_fn_star . 
+  unfold T_from_C . apply isover_fn_star . 
 
 Defined.
 
 
   
 
-Lemma T_ax0_from_C ( CC : lC0system ) : T_ax0_type ( T_op_from_C CC ) . 
+Lemma T_ax0_from_C ( CC : lC0system ) : T_ax0_type ( T_from_C CC ) . 
 Proof.
   intros.
   unfold T_ax0_type . 
   intros X1 X2 inn .
-  unfold T_op_from_C . 
+  unfold T_from_C . 
   rewrite ( @ll_fn_star CC ) . 
   rewrite ll_ft . 
   rewrite <- natassocmpeq . rewrite <- natplusassoc .  rewrite ( natpluscomm ( ll X1 ) _ ) .
@@ -190,7 +179,92 @@ Proof.
 
 Defined.
 
-Notation T_ext_from_C := ( T_ext ( T_op_from_C _ ) ) . 
+
+(** **** Morphism qT *)
+
+Definition qT { CC : lC0system } { X1 X2 : B_carrier_from_C CC } ( inn : T_dom X1 X2 ) :
+  mor_to X2 :=
+  qn (pX X1) (ll X2 - ll (ft X1)) (natminuslehn (ll X2) (ll (ft X1)))
+     (! ( isabove_to_isover ( T_dom_isabove inn) ) ).
+
+Definition dom_qT { CC : lC0system } { X1 X2 : B_carrier_from_C CC } ( inn : T_dom X1 X2 ) :
+  ( pr1 ( qT inn ) ) = T_from_C CC _ _ inn :=
+  idpath _ . 
+
+
+(** **** Operation T_ext and the inductive property of operation T *)
+
+
+Notation T_ext_from_C := ( T_ext ( T_from_C _ ) ) .
+
+Definition qT_ext { CC : lC0system } { X1 X2 : B_carrier_from_C CC } ( inn : T_ext_dom X1 X2 ) :
+  mor_to X2 .
+Proof.
+  intros. refine ( mor_to_constr _ ) . 
+  destruct (ovab_choice (pr2 inn)) as [ isab | iseq ] .
+  apply ( pr1 ( qT ( T_dom_constr ( T_ext_dom_gt0 inn ) isab ) ) ) . 
+
+  apply X1 .
+
+  destruct (ovab_choice (pr2 inn)) as [ isab | iseq ] .
+  apply ( pr2 ( qT ( T_dom_constr ( T_ext_dom_gt0 inn ) isab ) ) ) . 
+
+  apply (( pX X1 ) ;; ( id_to_mor ( ! iseq ) ) ) . 
+
+Defined.
+
+Definition dom_qT_ext { CC : lC0system } { X1 X2 : B_carrier_from_C CC } ( inn : T_ext_dom X1 X2 ) :
+  ( pr1 ( qT_ext inn ) ) = T_ext_from_C inn :=
+  idpath _ . 
+
+
+(* Lemma qT_as_q_of_f { CC : lC0system } { X1 X2 : B_carrier_from_C CC } ( inn : T_dom X1 X2 ) :
+  qT inn = q_of_f ( T_dom_gt0_2 inn ) ( qT_ext ( T_dom_to_T_ext_dom_ft inn ) ) . 
+Proof.
+  intros.
+  unfold qT . 
+  assert ( eq : ll X2 - ll (ft X1)  = S ( ll ( ft X2 ) - ll ( ft X1 ) ) ) .
+  rewrite ( ll_ft X2 ) . 
+  rewrite natminuscomm .
+  change  ( ll X2 - ll (ft X1) = 1 + ( ll X2 - ll ( ft X1 ) - 1 ) ) .  
+  rewrite <- natassocpmeq . 
+  simpl . rewrite natminuseqn . 
+  apply idpath . 
+
+  apply gth0_to_geh1 . 
+  apply minusgth0 . 
+  apply ( T_dom_gth inn ) .
+  
+  rewrite ( qn_to_qsm _ _ _ eq ) .
+  rewrite qsn_strict .
+  unfold qT_ext .
+  set ( gt0_1 := (natgehgthtrans (ll X2) (S (ll (ft X2) - ll (ft X1))) 0
+        (qsn_new_gtn (natminuslehn (ll X2) (ll (ft X1))) eq)
+        (natgthsn0 (ll (ft X2) - ll (ft X1))))).
+  change ((natgehgthtrans (ll X2) (S (ll (ft X2) - ll (ft X1))) 0
+        (qsn_new_gtn (natminuslehn (ll X2) (ll (ft X1))) eq)
+        (natgthsn0 (ll (ft X2) - ll (ft X1))))) with gt0_1 .
+  assert ( int : gt0_1 = (T_dom_gt0_2 inn) ) .  
+  apply ( proofirrelevance _ ( pr2 ( _ > _ ) ) ) .
+  
+  rewrite int .
+  destruct ( ovab_choice (pr2 (T_dom_to_T_ext_dom_ft inn)) ) as [ isab | iseq ] .
+  unfold qT .
+  rewrite ( qn_equals_qn ( C0_isaset_Ob CC ) _ ( idpath (ll (ft X2) - ll (ft X1))) _
+                         (natminuslehn (ll (ft X2)) (ll (ft X1))) _ (! ( isabove_to_isover isab))).
+  apply idpath .
+
+  assert ( int' : (qn (pX X1) (ll (ft X2) - ll (ft X1))
+        (ll_ft_gtn (qsn_new_gtn (natminuslehn (ll X2) (ll (ft X1))) eq))
+        (ftn_ft (ll (ft X2) - ll (ft X1)) X2 @
+                qsn_new_eq (! ( isabove_to_isover ( T_dom_isabove inn))) eq)) =
+                   (mor_to_constr (pX X1;; id_to_mor (! iseq)))) . 
+  assert ( eq0 : (ll (ft X2) - ll (ft X1)) = 0 ) . 
+  rewrite iseq . 
+  apply natminusnn .
+  apply q0 .
+
+  rewrite ( maponpaths ( pr2 _ ) int' ) . 
 
 
 
@@ -199,7 +273,16 @@ Notation T_ext_from_C := ( T_ext ( T_op_from_C _ ) ) .
 
 
 
+  
 
+  exact ( @maponpaths _ _ ( fun x => q_of_f (T_dom_gt0_2 inn) x ) (qn (pX X1) (ll (ft X2) - ll (ft X1))
+        (ll_ft_gtn (qsn_new_gtn (natminuslehn (ll X2) (ll (ft X1))) eq))
+        (ftn_ft (ll (ft X2) - ll (ft X1)) X2 @
+         qsn_new_eq (! ( isabove_to_isover ( T_dom_isabove inn)))  eq)) (pr2 (mor_to_constr (pX X1;; id_to_mor (! iseq)))) int' ) . 
+
+*)
+  
+  
 
   
 
@@ -259,7 +342,7 @@ Proof.
 
   rewrite eq .
   intros . 
-  rewrite fsn . 
+  rewrite fsn_strict . 
   rewrite ( @ft_f_star CC ).
   unfold fn_star . 
   apply ( maponpaths pr1 ) .  apply qn_equals_qn . 
@@ -329,7 +412,7 @@ Proof .
   simpl . 
   unfold Tilde_from_C . 
   refine ( tpair _ _ _ ) . 
-  exact ( T_op_from_C is1 is2 _ _ inn ) . 
+  exact ( T_from_C is1 is2 _ _ inn ) . 
 
   split.
   rewrite (@T_ax0_from_C CC is1 is2) . 

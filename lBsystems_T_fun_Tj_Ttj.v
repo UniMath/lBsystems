@@ -12,11 +12,24 @@ Require Export lBsystems.lBsystems_T_Tt .
 Definition T_ext_dom { BB : lBsystem_carrier } ( X1 X2 : BB ) :=
   dirprod ( ll X1 > 0 ) ( isover X2 ( ft X1 ) ) .
 
+Definition T_ext_dom_constr { BB : lBsystem_carrier } { X1 X2 : BB }
+           ( gt0 : ll X1 > 0 ) ( isov : isover X2 ( ft X1 ) ) : T_ext_dom X1 X2 :=
+  dirprodpair gt0 isov . 
+
 Definition T_ext_dom_gt0 { BB : lBsystem_carrier } { X1 X2 : BB } ( inn : T_ext_dom X1 X2 ) :=
   pr1 inn .
 
 Definition T_ext_dom_isov { BB : lBsystem_carrier } { X1 X2 : BB } ( inn : T_ext_dom X1 X2 ) :=
   pr2 inn .
+
+Definition T_dom_to_T_ext_dom { BB : lBsystem_carrier } { X1 X2 : BB } ( inn : T_dom X1 X2 ) :
+  T_ext_dom X1 X2 := T_ext_dom_constr ( T_dom_gt0 inn ) ( T_dom_isabove inn ) . 
+Coercion T_dom_to_T_ext_dom : T_dom >-> T_ext_dom . 
+
+Definition T_dom_to_T_ext_dom_ft { BB : lBsystem_carrier } { X1 X2 : BB } ( inn : T_dom X1 X2 ) :
+  T_ext_dom X1 ( ft X2 ) := T_ext_dom_constr ( T_dom_gt0 inn ) ( isover_ft' ( T_dom_isabove inn ) ) . 
+
+
 
 Definition T_ext { BB : lBsystem_carrier } ( T : T_ops_type BB )
            { X1 X2 : BB } ( inn : T_ext_dom X1 X2 ) : BB .
@@ -70,6 +83,9 @@ Proof .
   exact ( isover_XX _ ) . 
 
 Defined.
+
+
+
 
 
 

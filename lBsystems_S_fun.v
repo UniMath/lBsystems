@@ -11,7 +11,8 @@ Require Export lBsystems.lBsystems_S_St .
 
 Definition S_ext_dom { BB : lBsystem_carrier } ( r : Tilde BB ) ( X : BB ) := isover X ( dd r ) .
 
-Identity Coercion S_dom_to_isabove : S_ext_dom >-> isover . 
+Identity Coercion S_dom_to_isabove : S_ext_dom >-> isover .
+
 
 Definition S_ext { BB : lBsystem_carrier } ( S : S_ops_type BB )
            { r : Tilde BB } { X : BB } ( inn : S_ext_dom r X ) : BB .

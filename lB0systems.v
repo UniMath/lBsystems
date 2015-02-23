@@ -81,12 +81,20 @@ Definition S_ax1b { BB : lBsystem_carrier } ( S : S_layer BB ) : S_ax1b_type S :
 (** **** The layer associated with operations St *)
 
 
-Definition St_layer { BB : lBsystem_carrier } ( S : S_ops_type BB ) :=
+(* Definition St_layer { BB : lBsystem_carrier } ( S : S_ops_type BB ) :=
   total2 ( fun St : St_layer_0 BB => St_ax1_type S St ) .
 
 Definition St_layer_to_St_layer_0 ( BB : lBsystem_carrier ) ( S : S_ops_type BB )
   ( St : St_layer S ) : St_layer_0 BB := pr1 St.
-Coercion St_layer_to_St_layer_0 : St_layer >-> St_layer_0 . 
+Coercion St_layer_to_St_layer_0 : St_layer >-> St_layer_0 . *)
+
+Definition St_layer { BB : lBsystem_carrier } ( S : S_ops_type BB ) :=
+  total2 ( fun St : St_ops_type BB => St_ax1_type S St ) .
+
+Definition St_layer_to_St_ops_type ( BB : lBsystem_carrier ) ( S : S_ops_type BB )
+  ( St : St_layer S ) : St_ops_type BB := pr1 St.
+Coercion St_layer_to_St_ops_type : St_layer >-> St_ops_type .
+
 
 Definition St_ax1 { BB : lBsystem_carrier } { S : S_ops_type BB } ( St : St_layer S ) :
   St_ax1_type S St := pr2 St .
@@ -111,20 +119,20 @@ Coercion S_St_layer_to_St_layer : S_St_layer >-> St_layer .
 Definition T_ax1_type ( BB : prelBsystem_non_unital ) :=
   dirprod ( T_ax1a_type ( T_op BB ) ) ( T_ax1b_type ( T_op BB ) ) .
 
-Definition Tt_ax1_type ( BB : prelBsystem_non_unital ) :=
+Definition Tt_ax1_type' ( BB : prelBsystem_non_unital ) :=
   Tt_ax1_type ( T_op BB ) ( Tt_op BB ) .
 
 Definition S_ax1_type ( BB : prelBsystem_non_unital ) :=
   dirprod ( S_ax1a_type ( S_op BB ) ) ( S_ax1b_type ( S_op BB ) ) .
 
-Definition St_ax1_type ( BB : prelBsystem_non_unital ) :=
+Definition St_ax1_type' ( BB : prelBsystem_non_unital ) :=
   St_ax1_type ( S_op BB ) ( St_op BB ) .
 
 Definition lB0system_non_unital :=
   total2 ( fun BB : prelBsystem_non_unital =>
              dirprod
-               ( dirprod ( T_ax1_type BB ) ( Tt_ax1_type BB ) )
-               ( dirprod ( S_ax1_type BB ) ( St_ax1_type BB ) ) ) . 
+               ( dirprod ( T_ax1_type BB ) ( Tt_ax1_type' BB ) )
+               ( dirprod ( S_ax1_type BB ) ( St_ax1_type' BB ) ) ) . 
 
 Definition lB0system_non_unital_pr1 : lB0system_non_unital -> prelBsystem_non_unital := pr1 .
 Coercion lB0system_non_unital_pr1 : lB0system_non_unital >-> prelBsystem_non_unital .

@@ -268,6 +268,7 @@ Proof.
 
 
 
+ 
 
 
 
@@ -280,9 +281,9 @@ Proof.
         (ftn_ft (ll (ft X2) - ll (ft X1)) X2 @
          qsn_new_eq (! ( isabove_to_isover ( T_dom_isabove inn)))  eq)) (pr2 (mor_to_constr (pX X1;; id_to_mor (! iseq)))) int' ) . 
 
-*)
+
   
-  
+  *)
 
   
 

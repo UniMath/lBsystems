@@ -1,4 +1,4 @@
-(** * lB-systems to precategories.  
+(** ** lB-systems to precategories.  
 
 by Vladimir Voevodsky, started on Jan. 22, 2015 *)
 
@@ -7,14 +7,22 @@ Unset Automatic Introduction.
 Require Export lBsystems.lBsystems_T_fun_Tj_Ttj.
 Require Export lBsystems.lBsystems_S_fun.
 
+Require Export lBsystems.lB0systems . 
 
 
+(** *** The first construction of the types Mor_from_B *)
 
-Definition for_Mor { BB : lBsystem_carrier } 
-           { S : S_ops_type BB } ( sax0 : S_ax0_type S )
+
+(** We first define for Z in an lB-system and m <= ll Z the type
+( iterated_sections m Z ) that corresponds to the sections of the projection Z -> ft^m Z 
+in the associated lC-system. We do it for non-unital prelBsystems but the only structure that
+is actually required is an lBsystem_carrier and an operation of type S_ops_type satisfying
+axiom ax0. *)
+
+Definition iterated_sections { BB : prelBsystem_non_unital }
            ( m : nat ) (Z : BB ) ( le : m <= ll Z ) : UU .
 Proof.
-  intros until m .
+  intros until m . set ( S := @S_op BB ) . set ( sax0 := @S_ax0 BB ) . 
   induction m as [ | m IHm ] .
   intros. exact unit .
 
@@ -43,13 +51,24 @@ Proof.
 Defined.
 
 
-  
+(** We now define morphisms X --> Y as iterated sections of the projection Tprod X Y --> X *)
 
-Definition Mor_and_fstar { BB : lBsystem_carrier }
-           { T : T_ops_type BB } ( tax0 : T_ax0_type T )
-           ( tax1a : T_ax1a_type T ) ( tax1b : T_ax1b_type T )
-           { S : S_ops_type BB } ( sax0 : S_ax0_type S )
-           ( sax1a : S_ax1a_type S ) ( sax1b : S_ax1b_type S )
+
+Definition Mor_from_B { BB : lB0system_non_unital } ( X Y : BB ) : UU .
+Proof.
+  intros.
+  refine ( iterated_sections ( ll Y ) ( Tprod X Y ) _ ) .
+  rewrite ll_Tprod . 
+  apply natlehmplusnm . 
+
+Defined.
+
+
+(** Here is another definition of morphisms that defines them together with the corresponding
+operation f_star *)
+
+
+Definition Mor_and_fstar { BB : lB0system_non_unital }
            ( X1 : BB ) ( n : nat ) ( A : BB ) ( eq : ll A = n ) : 
   total2 ( fun Mor_X1_A : UU =>
              forall f : Mor_X1_A ,
@@ -60,7 +79,7 @@ Proof .
   split with unit .
 
   intro .
-  exact ( ltower_Tj_fun tax0 tax1a tax1b ( @isoverll0 BB _ eq X1 ) ) . 
+  exact ( Tj_fun ( @isoverll0 BB _ eq X1 ) ) . 
 
   intros .
   assert ( eqft : ll ( ft A ) = n ) . rewrite ll_ft . rewrite eq . simpl . rewrite natminuseqn .
@@ -84,7 +103,7 @@ Proof .
 
   assert ( fun2 : ltower_fun ( ltower_over ftf_star_A ) ( ltower_over ( ft ftf_star_A ) ) ) . 
   rewrite <- eq_s_f .
-  apply ( ltower_fun_S sax0 sax1a sax1b s_f ) .
+  apply ( S_fun s_f ) .
 
   assert ( gt0 : ll (ftf_star (X_over_ftX A)) > 0 ) .
   rewrite (@ll_ltower_fun (pltower_over ( ft A ) )).

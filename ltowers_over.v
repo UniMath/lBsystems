@@ -154,8 +154,22 @@ Definition ltower_over { T : ltower } ( A : T ) : ltower :=
 functor that takes a presheaf represneted by p : X -> B over B to the presheaf represented by X. *)
 
 Definition pocto { T : ltower } { A : T } ( X : ltower_over A ) : T := pr1 X . 
-(* Coercion ltower_over_carrier_pr1 : ltower_over_carrier >-> ltower_data_pr1 . *)
 
+Definition ll_pocto { T : ltower } { A : T } ( X : ltower_over A ) :
+  ll ( pocto X ) = ll X + ll A .
+Proof.
+  intros .
+  change ( ll X ) with ( ltower_over_ll X ) . 
+  unfold ltower_over_ll .
+  rewrite minusplusnmm . 
+  apply idpath . 
+
+  apply ( isover_geh ( pr2 X ) ) . 
+
+Defined.
+
+
+  
 Definition ispointed_ltower_over { T : ltower } ( A : T ) : ispointed_type ( ltower_over A ) :=
   ispointed_ltower_over_int A .
 

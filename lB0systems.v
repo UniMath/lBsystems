@@ -10,6 +10,7 @@ Require Export lBsystems.lBsystems_STid .
 Require Export lBsystems.lBsystems_dlt .
 
 Require Export lBsystems.lBsystems_T_fun_Tj_Ttj.
+Require Export lBsystems.lBsystems_S_fun.
 
 
 
@@ -140,7 +141,51 @@ Definition St_ax1 { BB : lB0system_non_unital } : St_ax1_type ( @S_op BB ) ( @St
   pr2 ( pr2 ( pr2 BB ) ) .
 
 Definition St_ax0 { BB : lB0system_non_unital } : St_ax0_type ( @St_op BB ) :=
-  St_ax1_to_St_ax0 ( @S_ax0 BB ) ( @St_ax1 BB ) .  
+  St_ax1_to_St_ax0 ( @S_ax0 BB ) ( @St_ax1 BB ) .
+
+
+
+(** **** Derived operations re-defined in a more streamlined form *)
+
+
+
+
+Definition Tj_fun { BB : lB0system_non_unital } { A X1 : BB } ( isov : isover X1 A ) :
+  ltower_fun ( ltower_over A ) ( ltower_over X1 ) :=
+  ltower_Tj_fun ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) isov .
+
+
+Definition Tprod_over { BB : lB0system_non_unital } ( X1 : BB ) :
+  ltower_fun BB ( ltower_over X1 ) :=
+  lBsystems.lBsystems_T_fun_Tj_Ttj.ltower_fun_Tprod ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) X1 .  
+           
+
+Definition Tprod { BB : lB0system_non_unital } ( X Y : BB ) : BB := pocto ( Tprod_over X Y ) .
+
+Lemma ll_Tprod { BB : lB0system_non_unital } ( X Y : BB ) : ll ( Tprod X Y ) = ll X + ll Y .
+Proof.
+  intros.
+  unfold Tprod .
+  rewrite ll_pocto .
+  rewrite natpluscomm . 
+  rewrite ( @ll_ltower_fun BB _ ( Tprod_over X ) ) . 
+  apply idpath . 
+
+Defined.
+
+Definition S_fun { BB : lB0system_non_unital } ( r : Tilde BB ) :
+  ltower_fun ( ltower_over ( dd r ) ) ( ltower_over ( ft ( dd r ) ) ) :=
+  ltower_fun_S ( @S_ax0 BB ) ( @S_ax1a BB ) ( @S_ax1b BB ) r . 
+
+
+
+
+
+
+
+
+
+
 
 
 

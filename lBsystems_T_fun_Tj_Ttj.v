@@ -524,7 +524,7 @@ Proof.
 Defined.
 
 
-Definition ltowerfun_Tprod { BB : lBsystem_carrier }
+Definition ltower_fun_Tprod { BB : lBsystem_carrier }
            { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
            ( X1 : BB ) :
   ltower_fun BB ( ltower_over X1 ) :=

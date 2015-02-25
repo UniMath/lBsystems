@@ -7,7 +7,9 @@ Unset Automatic Introduction.
 Require Export lBsystems.prelBsystems. 
 Require Export lBsystems.lBsystems_TS_ST.
 Require Export lBsystems.lBsystems_STid .
-Require Export lBsystems.lBsystems_dlt . 
+Require Export lBsystems.lBsystems_dlt .
+
+Require Export lBsystems.lBsystems_T_fun_Tj_Ttj.
 
 
 
@@ -25,11 +27,6 @@ Definition T_layer_to_T_layer_0 ( BB : lBsystem_carrier ) : T_layer BB -> T_laye
   pr1 . 
 Coercion T_layer_to_T_layer_0 : T_layer >-> T_layer_0 . 
  
-Definition T_ax1a { BB : lBsystem_carrier } ( T : T_layer BB ) : T_ax1a_type T :=
-  pr1 ( pr2 T ) .
-
-Definition T_ax1b { BB : lBsystem_carrier } ( T : T_layer BB ) : T_ax1b_type T :=
-  pr2 ( pr2 T ) .
 
 
 (** **** The layer associated with operations Tt *)
@@ -41,10 +38,6 @@ Definition Tt_layer { BB : lBsystem_carrier } ( T : T_ops_type BB ) :=
 Definition Tt_layer_to_Tt_ops_type ( BB : lBsystem_carrier ) ( T : T_ops_type BB )
   ( Tt : Tt_layer T ) : Tt_ops_type BB := pr1 Tt .
 Coercion Tt_layer_to_Tt_ops_type : Tt_layer >-> Tt_ops_type . 
-
-
-Definition Tt_ax1 { BB : lBsystem_carrier } { T : T_ops_type BB } ( Tt : Tt_layer T ) :
-  Tt_ax1_type T Tt := pr2 Tt .
 
 
 (** **** The structure formed by operations T and Tt *)
@@ -71,22 +64,9 @@ Definition S_layer_to_S_layer_0 ( BB : lBsystem_carrier ) :
   S_layer BB -> S_layer_0 BB := pr1 .
 Coercion S_layer_to_S_layer_0 : S_layer >-> S_layer_0 . 
 
-Definition S_ax1a { BB : lBsystem_carrier } ( S : S_layer BB ) : S_ax1a_type S :=
-  pr1 ( pr2 S ) .
-
-Definition S_ax1b { BB : lBsystem_carrier } ( S : S_layer BB ) : S_ax1b_type S :=
-  pr2 ( pr2 S ) .
-
 
 (** **** The layer associated with operations St *)
 
-
-(* Definition St_layer { BB : lBsystem_carrier } ( S : S_ops_type BB ) :=
-  total2 ( fun St : St_layer_0 BB => St_ax1_type S St ) .
-
-Definition St_layer_to_St_layer_0 ( BB : lBsystem_carrier ) ( S : S_ops_type BB )
-  ( St : St_layer S ) : St_layer_0 BB := pr1 St.
-Coercion St_layer_to_St_layer_0 : St_layer >-> St_layer_0 . *)
 
 Definition St_layer { BB : lBsystem_carrier } ( S : S_ops_type BB ) :=
   total2 ( fun St : St_ops_type BB => St_ax1_type S St ) .
@@ -94,10 +74,6 @@ Definition St_layer { BB : lBsystem_carrier } ( S : S_ops_type BB ) :=
 Definition St_layer_to_St_ops_type ( BB : lBsystem_carrier ) ( S : S_ops_type BB )
   ( St : St_layer S ) : St_ops_type BB := pr1 St.
 Coercion St_layer_to_St_ops_type : St_layer >-> St_ops_type .
-
-
-Definition St_ax1 { BB : lBsystem_carrier } { S : S_ops_type BB } ( St : St_layer S ) :
-  St_ax1_type S St := pr2 St .
 
 
 (** **** The structure formed by operations S and St *)
@@ -117,16 +93,16 @@ Coercion S_St_layer_to_St_layer : S_St_layer >-> St_layer .
 (** **** Complete definition of a non-unital lB0-system *)
 
 Definition T_ax1_type ( BB : prelBsystem_non_unital ) :=
-  dirprod ( T_ax1a_type ( T_op BB ) ) ( T_ax1b_type ( T_op BB ) ) .
+  dirprod ( T_ax1a_type ( @T_op BB ) ) ( T_ax1b_type ( @T_op BB ) ) .
 
 Definition Tt_ax1_type' ( BB : prelBsystem_non_unital ) :=
-  Tt_ax1_type ( T_op BB ) ( Tt_op BB ) .
+  Tt_ax1_type ( @T_op BB ) ( @Tt_op BB ) .
 
 Definition S_ax1_type ( BB : prelBsystem_non_unital ) :=
-  dirprod ( S_ax1a_type ( S_op BB ) ) ( S_ax1b_type ( S_op BB ) ) .
+  dirprod ( S_ax1a_type ( @S_op BB ) ) ( S_ax1b_type ( @S_op BB ) ) .
 
 Definition St_ax1_type' ( BB : prelBsystem_non_unital ) :=
-  St_ax1_type ( S_op BB ) ( St_op BB ) .
+  St_ax1_type ( @S_op BB ) ( @St_op BB ) .
 
 Definition lB0system_non_unital :=
   total2 ( fun BB : prelBsystem_non_unital =>
@@ -136,6 +112,36 @@ Definition lB0system_non_unital :=
 
 Definition lB0system_non_unital_pr1 : lB0system_non_unital -> prelBsystem_non_unital := pr1 .
 Coercion lB0system_non_unital_pr1 : lB0system_non_unital >-> prelBsystem_non_unital .
+
+
+(** **** Access functions to the and axioms *)
+
+ 
+Definition T_ax1a { BB : lB0system_non_unital } : T_ax1a_type ( @T_op BB ) :=
+  pr1 ( pr1 ( pr1 ( pr2 BB ) ) ) .
+
+Definition T_ax1b { BB : lB0system_non_unital } : T_ax1b_type ( @T_op BB ) :=
+  pr2 ( pr1 ( pr1 ( pr2 BB ) ) ) .
+
+Definition Tt_ax1 { BB : lB0system_non_unital } : Tt_ax1_type ( @T_op BB ) ( @Tt_op BB ) :=
+  pr2 ( pr1 ( pr2 BB ) ) .
+
+Definition Tt_ax0 { BB : lB0system_non_unital } : Tt_ax0_type ( @Tt_op BB ) :=
+  Tt_ax1_to_Tt_ax0 ( @T_ax0 BB ) ( @Tt_ax1 BB ) .  
+
+
+Definition S_ax1a { BB : lB0system_non_unital } : S_ax1a_type ( @S_op BB ) :=
+  pr1 ( pr1 ( pr2 ( pr2 BB ) ) ) .
+
+Definition S_ax1b { BB : lB0system_non_unital } : S_ax1b_type ( @S_op BB ) :=
+  pr2 ( pr1 ( pr2 ( pr2 BB ) ) ) .
+
+Definition St_ax1 { BB : lB0system_non_unital } : St_ax1_type ( @S_op BB ) ( @St_op BB ) :=
+  pr2 ( pr2 ( pr2 BB ) ) .
+
+Definition St_ax0 { BB : lB0system_non_unital } : St_ax0_type ( @St_op BB ) :=
+  St_ax1_to_St_ax0 ( @S_ax0 BB ) ( @St_ax1 BB ) .  
+
 
 
 (** *** Unital lB0-systems *)
@@ -149,11 +155,10 @@ Definition dlt_layer { BB : lBsystem_carrier } ( T : T_ops_type BB ) :=
 Definition dlt_layer_pr1 { BB : lBsystem_carrier }
            ( T : T_ops_type BB )
            ( dlt : dlt_layer T ) : dlt_layer_0 BB := pr1 dlt .
-Coercion dlt_layer_pr1 : dlt_layer >-> dlt_layer_0 . 
+Coercion dlt_layer_pr1 : dlt_layer >-> dlt_layer_0 .
 
-Definition dlt_ax1 { BB : lBsystem_carrier }
-           { T : T_ops_type BB }
-           ( dlt : dlt_layer T ) : dlt_ax1_type T dlt := pr2 dlt .
+Definition dlt_ax1 { BB : lBsystem_carrier } { T : T_ops_type BB } ( dlt : dlt_layer T ) :
+  dlt_ax1_type T dlt := pr2 dlt . 
 
 
 
@@ -161,10 +166,30 @@ Definition dlt_ax1 { BB : lBsystem_carrier }
 
 
 Definition lB0system :=
-  total2 ( fun BB : lB0system_non_unital => dlt_layer ( T_op BB ) ) .
+  total2 ( fun BB : lB0system_non_unital => dlt_layer ( @T_op BB ) ) .
 
 Definition lB0system_pr1 : lB0system -> lB0system_non_unital := pr1 .
-Coercion lB0system_pr1 : lB0system >-> lB0system_non_unital . 
+Coercion lB0system_pr1 : lB0system >-> lB0system_non_unital .
+
+Definition lB0system_pr2 ( BB : lB0system ) : dlt_layer ( @T_op BB ) := pr2 BB .
+Coercion lB0system_pr2 : lB0system >-> dlt_layer .
+
+Definition lB0system_to_prelBystem ( BB : lB0system ) : prelBsystem :=
+  tpair ( fun X : prelBsystem_non_unital => _ ) BB ( pr1 ( pr2 BB ) ) .
+Coercion lB0system_to_prelBystem : lB0system >-> prelBsystem . 
+
+
+
+
+
+(** *** Derived operations such as Tprod re-defined for lB0systems. 
+
+The re-definitions provide simplier lists of arguments and come
+with properties that are easier to use in proofs. *)
+
+(* Definition Tprod { BB : lB0system } ( X Y : BB ) : BB :=
+  lBsystems_T_fun_Tj_Ttj.Tprod *)
+  
 
 
 

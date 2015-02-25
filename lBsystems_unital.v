@@ -5,112 +5,65 @@ By Vladimir Voevodsky, started on Jan. 18, 2015 *)
 Unset Automatic Introduction.
 
 Require Export lBsystems.lBsystems_non_unital.
-Require Export lBsystems.lBsystems_dlt.
-
-
-(** The the structure formed by operations dlt *)
-
-
-Definition dlt_layer_0 ( BB : lBsystem_carrier ) :=
-  total2 ( fun dlt : dlt_ops_type BB => dlt_ax0_type dlt ) .
-
-Definition dlt_layer_0_to_dlt_ops_type ( BB : lBsystem_carrier ) :
-  dlt_layer_0 BB -> dlt_ops_type BB := pr1 .
-Coercion dlt_layer_0_to_dlt_ops_type : dlt_layer_0 >-> dlt_ops_type .
-
-
-
-(** The layer associated with operations dlt *)
-
-Definition dlt_layer { BB : lBsystem_carrier } ( T : T_ops_type BB ) :=
-  total2 ( fun dlt : dlt_layer_0 BB => dlt_ax1_type T dlt ) .
-
-Definition dlt_layer_pr1 { BB : lBsystem_carrier }
-           ( T : T_ops_type BB )
-           ( dlt : dlt_layer T ) : dlt_layer_0 BB := pr1 dlt .
-Coercion dlt_layer_pr1 : dlt_layer >-> dlt_layer_0 . 
-
-Definition dlt_ax1 { BB : lBsystem_carrier }
-           { T : T_ops_type BB }
-           ( dlt : dlt_layer T ) : dlt_ax1_type T dlt := pr2 dlt .
+Require Export lBsystems.lB0systems.
 
 
 (** Condition dltT *)
 
-Definition dltT { BB : lBsystem_carrier } { T : T_Tt_layer BB } ( dlt : dlt_layer T ) :=
-  dltT_type ( T_ax0 T ) ( T_ax1b T ) T ( dlt_ax1 dlt ) . 
+Definition dltT_type { BB : lB_nu } ( dlt : dlt_layer ( @T_op BB ) ) :=
+  lBsystems_dlt.dltT_type ( @T_ax0 BB ) ( @T_ax1b BB ) ( @Tt_op BB ) ( dlt_ax1 dlt ) . 
 
 (** Condition dltS *)
 
-Definition dltS { BB : lBsystem_carrier } { T : T_layer BB } ( dlt : dlt_layer T )
-           ( S : S_St_layer BB ) :=
-  dltS_type ( T_ax1b T ) ( S_ax0 S ) S ( dlt_ax1 dlt ) .
+Definition dltS_type { BB : lB_nu } ( dlt : dlt_layer ( @T_op BB ) ) :=
+  lBsystems_dlt.dltS_type ( @T_ax1b BB ) ( @S_ax0 BB ) ( @St_op BB ) ( dlt_ax1 dlt ) .
 
 
 (** Condition SdltT *)
 
-Definition SdltT { BB : lBsystem_carrier } { T : T_layer BB } ( dlt : dlt_layer T ) 
-           ( S : S_ops_type BB ) :=
-  SdltT_type ( T_ax0 T ) ( T_ax1a T ) ( dlt_ax1 dlt ) S .
+Definition SdltT_type { BB : lB_nu } ( dlt : dlt_layer ( @T_op BB ) ) :=
+  lBsystems_dlt.SdltT_type ( @T_ax0 BB ) ( @T_ax1a BB ) ( dlt_ax1 dlt ) ( @S_op BB ) .
 
 (** Condition StdltTt *)
 
-Definition StdltTt { BB : lBsystem_carrier } { T : T_Tt_layer BB } ( dlt : dlt_layer T ) 
-           ( St : St_ops_type BB ) :=
-  StdltTt_type ( T_ax0 T ) ( T_ax1a T ) ( dlt_ax1 dlt ) ( Tt_ax1 T ) St .
+Definition StdltTt_type { BB : lB_nu } ( dlt : dlt_layer ( @T_op BB ) ) :=
+  lBsystems_dlt.StdltTt_type ( @T_ax0 BB ) ( @T_ax1a BB ) ( dlt_ax1 dlt ) ( @Tt_ax1 BB ) ( @St_op BB ) .
 
 (** Condition dltSid *)
 
-Definition dltSid { BB : lBsystem_carrier } { T : T_layer BB } ( dlt : dlt_layer T ) 
-           ( St : St_ops_type BB ) :=
-  dltSid_type ( T_ax1b T ) ( dlt_ax1 dlt ) St .
-
-
-
-(** Packaging dlt and the conditions it needs to satisfy together *)
-
-
-Definition dlt_and_five { BB : lBsystem_carrier }
-           ( T : T_Tt_layer BB ) ( S : S_St_layer BB ) :=
-  total2 ( fun dlt : dlt_layer T =>
-             dirprod
-               ( dirprod
-                   ( dirprod ( dltT dlt ) ( dltS dlt S ) )
-                   ( dirprod ( SdltT dlt S ) ( StdltTt dlt S ) ) )
-               ( dltSid dlt S ) ) .
-
-Definition dlt_and_five_pr1 { BB : lBsystem_carrier }
-           ( T : T_Tt_layer BB ) ( S : S_St_layer BB ) :
-  dlt_and_five T S -> dlt_layer T := pr1 .
-Coercion  dlt_and_five_pr1 : dlt_and_five >-> dlt_layer . 
-
+Definition dltSid_type { BB : lB_nu } ( dlt : dlt_layer ( @T_op BB ) ) :=
+  lBsystems_dlt.dltSid_type ( @T_ax1b BB ) ( dlt_ax1 dlt ) ( @St_op BB ) .
 
 
 (** Unital lBsystem *)
 
-Definition lB := total2 ( fun BB : nu_lB => dlt_and_five BB BB ) .
-
-Definition lB_pr1 : lB -> nu_lB := pr1 .
-Coercion lB_pr1 : lB >-> nu_lB .
-
-Definition lB_pr2 ( BB : lB ) : dlt_and_five BB BB := pr2 BB .
-Coercion lB_pr2 : lB >-> dlt_and_five . 
-
-Definition dltT_ax ( BB : lB ) : dltT BB := pr1 ( pr1 ( pr1 ( pr2 ( pr2 BB ) ) ) ) . 
-
-Definition dltS_ax ( BB : lB ) : dltS BB BB := pr2 ( pr1 ( pr1 ( pr2 ( pr2 BB ) ) ) ) .
-
-Definition SdltT_ax ( BB : lB ) : SdltT BB BB := pr1 ( pr2 ( pr1 ( pr2 ( pr2 BB ) ) ) ) . 
-
-Definition StdltTt_ax ( BB : lB ) : StdltTt BB BB := pr2 ( pr2 ( pr1 ( pr2 ( pr2 BB ) ) ) ) . 
-
-Definition dltSid_ax ( BB : lB ) : dltSid BB BB := pr2 ( pr2 ( pr2 BB ) ) . 
+Definition lB :=
+  total2 ( fun BB : lB_nu =>
+             total2 ( fun dlt : dlt_layer ( @T_op BB ) =>
+             dirprod
+               ( dirprod
+                   ( dirprod ( dltT_type dlt ) ( dltS_type dlt ) )
+                   ( dirprod ( SdltT_type dlt ) ( StdltTt_type dlt ) ) )
+               ( dltSid_type dlt ) ) ) . 
 
 
+Definition lB_to_lB_nu : lB -> lB_nu := pr1 .
+Coercion lB_to_lB_nu : lB >-> lB_nu .
+
+Definition lB_to_lB0 ( BB : lB ) : lB0system :=
+  tpair ( fun BB : lB0system_non_unital => dlt_layer ( @T_op BB ) ) BB ( pr1 ( pr2 BB ) ) . 
+Coercion lB_to_lB0 : lB >-> lB0system .
 
 
+Definition dltT { BB : lB } : dltT_type BB := pr1 ( pr1 ( pr1 ( pr2 ( pr2 BB ) ) ) ) . 
 
+Definition dltS { BB : lB } : dltS_type BB := pr2 ( pr1 ( pr1 ( pr2 ( pr2 BB ) ) ) ) .
 
+Definition SdltT { BB : lB } : SdltT_type BB := pr1 ( pr2 ( pr1 ( pr2 ( pr2 BB ) ) ) ) . 
+
+Definition StdltTt { BB : lB } : StdltTt_type BB := pr2 ( pr2 ( pr1 ( pr2 ( pr2 BB ) ) ) ) . 
+
+Definition dltSid { BB : lB } : dltSid_type BB := pr2 ( pr2 ( pr2 BB ) ) . 
 
 
 

@@ -448,7 +448,7 @@ Definition ltower_Tj_fun { BB : lBsystem_carrier }
 (** *** Function Tprod for pointed l-Bsystems *)
 
 
-Definition Tprod_fun { BB : lBsystem_carrier } 
+Definition Tprod { BB : lBsystem_carrier } 
            { T : T_ops_type BB } ( ax1b : T_ax1b_type T )
            ( X1 : BB ) ( X2 : BB ) : ltower_over X1 .
 Proof .
@@ -459,9 +459,9 @@ Proof .
 Defined.
 
 
-Lemma isovmonot_Tprod_fun { BB : lBsystem_carrier }
+Lemma isovmonot_Tprod { BB : lBsystem_carrier }
            { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T )  ( ax1b : T_ax1b_type T )
-           ( X1 : BB ) : isovmonot ( Tprod_fun ax1b X1 ) . 
+           ( X1 : BB ) : isovmonot ( Tprod ax1b X1 ) . 
 Proof .
   intros .
   unfold isovmonot . 
@@ -476,17 +476,17 @@ Defined.
 Definition Tprod_ovmonotfun { BB : lBsystem_carrier } 
            { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T )  ( ax1b : T_ax1b_type T )
            ( X1 : BB ) : ovmonot_fun BB ( ltower_over X1 ) :=
-  ovmonot_fun_constr ( Tprod_fun ax1b X1 ) ( isovmonot_Tprod_fun ax0 ax1a ax1b X1 ) . 
+  ovmonot_fun_constr ( Tprod ax1b X1 ) ( isovmonot_Tprod ax0 ax1a ax1b X1 ) . 
 
 
 
 
-Lemma ll_Tprod_fun { BB : lBsystem_carrier } 
+Lemma ll_Tprod { BB : lBsystem_carrier } 
            { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
-           ( X1 : BB ) ( X2 : BB ) : ll ( Tprod_fun ax1b X1 X2 ) = ll X2 .
+           ( X1 : BB ) ( X2 : BB ) : ll ( Tprod ax1b X1 X2 ) = ll X2 .
 Proof .
   intros .
-  unfold Tprod_fun . 
+  unfold Tprod . 
   rewrite ll_Tj_fun .
   rewrite (@ll_to_ltower_over BB).
   apply idpath . 
@@ -495,12 +495,12 @@ Proof .
 
 Defined.
 
-Lemma isllmonot_Tprod_fun { BB : lBsystem_carrier }
+Lemma isllmonot_Tprod { BB : lBsystem_carrier }
            { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
-           ( X1 : BB ) : isllmonot ( Tprod_fun ax1b X1 ) .
+           ( X1 : BB ) : isllmonot ( Tprod ax1b X1 ) .
 Proof .
   intros . unfold isllmonot .  intros X Y . 
-  repeat rewrite ll_Tprod_fun . apply idpath . 
+  repeat rewrite ll_Tprod . apply idpath . 
 
   apply ax0 .
 
@@ -510,12 +510,12 @@ Defined.
 
   
 
-Lemma isbased_Tprod_fun { BB : lBsystem_carrier }
+Lemma isbased_Tprod { BB : lBsystem_carrier }
            { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1b : T_ax1b_type T )
-           ( X1 : BB ) : isbased ( Tprod_fun ax1b X1 ) .
+           ( X1 : BB ) : isbased ( Tprod ax1b X1 ) .
 Proof.
   intros. unfold isbased . intros X eq0 .
-  rewrite ll_Tprod_fun . 
+  rewrite ll_Tprod . 
 
   exact eq0.
 
@@ -524,13 +524,13 @@ Proof.
 Defined.
 
 
-Definition ltower_Tprod_fun { BB : lBsystem_carrier }
+Definition ltowerfun_Tprod { BB : lBsystem_carrier }
            { T : T_ops_type BB } ( ax0 : T_ax0_type T ) ( ax1a : T_ax1a_type T ) ( ax1b : T_ax1b_type T )
            ( X1 : BB ) :
   ltower_fun BB ( ltower_over X1 ) :=
-  ltower_fun_constr ( isovmonot_Tprod_fun ax0 ax1a ax1b X1 )
-                    ( isllmonot_Tprod_fun ax0 ax1b X1 )
-                    ( isbased_Tprod_fun ax0 ax1b X1 ) .
+  ltower_fun_constr ( isovmonot_Tprod ax0 ax1a ax1b X1 )
+                    ( isllmonot_Tprod ax0 ax1b X1 )
+                    ( isbased_Tprod ax0 ax1b X1 ) .
 
 
 

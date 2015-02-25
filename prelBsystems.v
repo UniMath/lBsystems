@@ -20,8 +20,6 @@ Definition T_layer_0_to_T_ops_type ( BB : lBsystem_carrier ) ( T : T_layer_0 BB 
   T_ops_type BB := pr1 T .
 Coercion T_layer_0_to_T_ops_type : T_layer_0 >-> T_ops_type .
 
-Definition T_ax0 { BB : lBsystem_carrier } ( T : T_layer_0 BB ) : T_ax0_type T :=
-  pr2 T .
 
 (** **** The structure formed by operations Tt *)
 
@@ -31,9 +29,6 @@ Definition Tt_layer_0 ( BB : lBsystem_carrier ) :=
 Definition Tt_layer_0_to_Tt_ops_type ( BB : lBsystem_carrier ) :
   Tt_layer_0 BB -> Tt_ops_type BB := pr1 .
 Coercion Tt_layer_0_to_Tt_ops_type : Tt_layer_0 >-> Tt_ops_type .
-
-Definition Tt_ax0 { BB : lBsystem_carrier } ( Tt : Tt_layer_0 BB ) : Tt_ax0_type Tt :=
-  pr2 Tt .
 
 
 (** **** The structure formed by operations S *)
@@ -46,9 +41,6 @@ Definition S_layer_0_to_S_ops_type { BB : lBsystem_carrier } ( S : S_layer_0 BB 
   S_ops_type BB := pr1 S .
 Coercion S_layer_0_to_S_ops_type : S_layer_0 >-> S_ops_type .
 
-
-Definition S_ax0 { BB : lBsystem_carrier } ( S : S_layer_0 BB ) : S_ax0_type S :=
-  pr2 S .
 
 
 (** **** The structure formed by operations St *)
@@ -72,16 +64,30 @@ Definition prelBsystem_non_unital :=
                ( dirprod ( S_layer_0 BB ) ( St_layer_0 BB ) ) ) .
 
 Definition prelBsystem_non_unital_pr1 : prelBsystem_non_unital -> lBsystem_carrier := pr1 .
-Coercion  prelBsystem_non_unital_pr1 : prelBsystem_non_unital >-> lBsystem_carrier .                                              
-Definition T_op ( BB : prelBsystem_non_unital ) : T_ops_type BB := pr1 ( pr1 ( pr2 BB ) ) . 
+Coercion  prelBsystem_non_unital_pr1 : prelBsystem_non_unital >-> lBsystem_carrier .
 
-Definition Tt_op ( BB : prelBsystem_non_unital ) : Tt_ops_type BB := pr2 ( pr1 ( pr2 BB ) ) . 
-
-Definition S_op ( BB : prelBsystem_non_unital ) : S_ops_type BB := pr1 ( pr2 ( pr2 BB ) ) . 
-
-Definition St_op ( BB : prelBsystem_non_unital ) : St_ops_type BB := pr2 ( pr2 ( pr2 BB ) ) . 
+(** **** Access functions to operations and axioms *)
 
 
+Definition T_op { BB : prelBsystem_non_unital } : T_ops_type BB := pr1 ( pr1 ( pr2 BB ) ) . 
+
+Definition Tt_op { BB : prelBsystem_non_unital } : Tt_ops_type BB := pr2 ( pr1 ( pr2 BB ) ) . 
+
+Definition S_op { BB : prelBsystem_non_unital } : S_ops_type BB := pr1 ( pr2 ( pr2 BB ) ) . 
+
+Definition St_op { BB : prelBsystem_non_unital } : St_ops_type BB := pr2 ( pr2 ( pr2 BB ) ) . 
+
+Definition T_ax0 { BB : prelBsystem_non_unital } : T_ax0_type ( @T_op BB ) :=
+  pr2 ( pr1 ( pr1 ( pr2 BB ) ) ) .
+
+Definition Tt_ax0 { BB : prelBsystem_non_unital }  : Tt_ax0_type ( @Tt_op BB ) :=
+  pr2 ( pr2 ( pr1 ( pr2 BB ) ) ) .
+
+Definition S_ax0 { BB : prelBsystem_non_unital } : S_ax0_type ( @S_op BB ) :=
+  pr2 ( pr1 ( pr2 ( pr2 BB ) ) ) .
+
+Definition St_ax0 { BB : prelBsystem_non_unital } : St_ax0_type ( @St_op BB ) :=
+  pr2 ( pr2 ( pr2 ( pr2 BB ) ) ) .
 
 
 
@@ -108,11 +114,14 @@ Definition prelBsystem :=
 Definition prelBsystem_pr1 : prelBsystem -> prelBsystem_non_unital := pr1 . 
 Coercion prelBsystem_pr1 : prelBsystem >-> prelBsystem_non_unital . 
 
-Definition dlt_op ( BB : prelBsystem ) : dlt_ops_type BB := pr2 BB . 
+
+(** **** Access functions for the operation dlt and its zeros axiom *)
 
 
+Definition dlt_op { BB : prelBsystem } : dlt_ops_type BB := pr2 BB . 
 
-
+Definition dlt_ax0 { BB : prelBsystem } : dlt_ax0_type ( @dlt_op BB ) :=
+  pr2 ( pr2 BB ) . 
 
 
 

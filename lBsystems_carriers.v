@@ -41,8 +41,8 @@ Defined.
 Definition lBsystem_carrier_to_ltower : lBsystem_carrier -> ltower := fun T => pr1 ( pr1 T ) .
 Coercion  lBsystem_carrier_to_ltower : lBsystem_carrier >-> ltower . 
 
-Definition lBsystem_carrier_pr1 : lBsystem_carrier -> pltower := pr1 .
-Coercion  lBsystem_carrier_pr1 : lBsystem_carrier >-> pltower .
+Definition lBsystem_carrier_pr1 : lBsystem_carrier -> hSet_pltower := pr1 .
+Coercion  lBsystem_carrier_pr1 : lBsystem_carrier >-> hSet_pltower .
                                                                      
                                
 Definition Tilde : lBsystem_carrier -> UU := fun BB => pr1 ( pr2 BB ) .

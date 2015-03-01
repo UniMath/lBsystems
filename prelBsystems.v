@@ -80,11 +80,15 @@ Definition St_op { BB : prelBsystem_non_unital } : St_ops_type BB := pr2 ( pr2 (
 Definition T_ax0 { BB : prelBsystem_non_unital } : T_ax0_type ( @T_op BB ) :=
   pr2 ( pr1 ( pr1 ( pr2 BB ) ) ) .
 
+Notation ll_T := T_ax0 .
+
 Definition Tt_ax0 { BB : prelBsystem_non_unital }  : Tt_ax0_type ( @Tt_op BB ) :=
   pr2 ( pr2 ( pr1 ( pr2 BB ) ) ) .
 
 Definition S_ax0 { BB : prelBsystem_non_unital } : S_ax0_type ( @S_op BB ) :=
   pr2 ( pr1 ( pr2 ( pr2 BB ) ) ) .
+
+Notation ll_S := S_ax0 . 
 
 Definition St_ax0 { BB : prelBsystem_non_unital } : St_ax0_type ( @St_op BB ) :=
   pr2 ( pr2 ( pr2 ( pr2 BB ) ) ) .

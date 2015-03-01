@@ -88,8 +88,8 @@ endif
 #                    #
 ######################
 
-VFILES:=lBsystems_to_precategories.v\
-  lBsystems.v\
+VFILES:=lBsystems.v\
+  lBsystems_to_precategories.v\
   lBsystems_S_fun.v\
   lBsystems_T_fun_Tj_Ttj.v\
   lBsystems_unital.v\

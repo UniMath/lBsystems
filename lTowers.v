@@ -158,21 +158,32 @@ Proof.
 
 Defined.
 
-
-
-
-
-  
-  
-Lemma lB_2014_12_07_l1 { m n : nat } ( gt : m > n ) : m - n = 1 + (( m - 1 ) - n ) .
+Definition ftnX_eq_X { T : ltower } ( n : nat ) { X : T } ( eq : ll X = 0 ) : ftn n X = X .
 Proof.
-  intros. induction m as [ | m IHm ] . induction ( natgehn0 _ gt ) .
-  clear IHm. change ( S m - n = S ( m - 0 - n ) ) . rewrite  ( natminuseqn m ) . 
-  exact ( nat1plusminusgt gt ) .
+  intros until n . induction n as [ | n IHn ] .
+  intros .  apply idpath . 
+
+  intros .  
+  rewrite <- ftn_ft . 
+  assert ( int : ftn n ( ft X ) = ft X ) .
+  apply IHn . 
+  rewrite ll_ft . 
+  rewrite eq . apply idpath .
+  rewrite int . 
+  apply ftX_eq_X . 
+  apply eq .
+
 Defined.
 
 
 
+
+
+
+
+
+
+  
 (* **** The predicate isover and its properties *)
 
 
@@ -300,11 +311,6 @@ Proof .
   exact ( ii2 is ) .
 
 Defined.
-
-
-
-
-
 
 
 
@@ -664,13 +670,35 @@ Proof.
 
 Defined.
 
+Definition ltower_idfun ( T : ltower ) : ltower_fun T T .
+Proof.
+  intros.
+  refine ( ltower_fun_constr _ _ _ ) . 
+  apply idfun . 
+
+  unfold isovmonot . 
+  intros X Y isov . apply isov .
+
+  unfold isllmonot . 
+  intros . 
+  apply idpath .
+
+  unfold isbased . 
+  intros X eq . 
+  apply eq .
+
+Defined.
+
+
+
+
+
+
+
+
+
+
   
-
-
-
-
-  
-
 (** *** Pointed ltowers
 
 A pointed ltower is an ltower such that the type of its elements of length 0 is contractible. 
@@ -723,6 +751,9 @@ Proof .
   exact ( maponpaths ( @pr1 _ ( fun X : T => ll X = 0 ) ) eq ) . 
 
 Defined.
+
+Definition isover_cntr { T : pltower } ( X : T ) : isover X ( cntr T ) :=
+  isoverll0 ( ll_cntr T ) X . 
 
 Lemma noparts_ispointed { T : pltower }
       { X Y : T } ( eqX : ll X = 0 ) ( eqY : ll Y = 0 ) : X = Y .

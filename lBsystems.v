@@ -42,9 +42,6 @@ Require Export lBsystems.lBsystems_T_fun_Tj_Ttj .
 
 Require Export lBsystems.lBsystems_S_fun .
 
-Require Export lBsystems.lBsystems_to_precategories . 
-
-
 
 
 

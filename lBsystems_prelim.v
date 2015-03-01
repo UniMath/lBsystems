@@ -33,32 +33,14 @@ Proof.
 
 Defined.
 
-
-
-
-
-
-  
-Lemma natminusmequalsn { m n : nat } ( ge : n >= m ) ( eq0 : n - m = 0 ) : n = m .
-Proof .
-  intro m . induction m as [ | m IHm ] .
-  intros . 
-
-  rewrite natminuseqn in eq0 . 
-  exact eq0 .
-
-  intros .
-  induction n as [ | n ] . 
-  assert ( absd : empty ) .
-  exact ( ge ( natgthsn0 _ ) ) .
-  
-  destruct absd .
-
-  apply ( maponpaths S ) . exact ( IHm n ge eq0 ) . 
-
+Lemma natminusind ( m n : nat ) : m - S n = ( m - 1 ) - n . 
+Proof . intros .
+        induction m as [ | m IHm ] .  apply idpath . simpl .  rewrite ( natminuseqn m ) . 
+        apply idpath .
 Defined.
 
-  
+
+
 
 Lemma natgthnnmius1 { n : nat } ( gt : n > 0 ) : n > n - 1 .
 Proof.
@@ -80,6 +62,27 @@ Proof.
 
 Defined.
 
+
+Lemma natminusmequalsn { m n : nat } ( ge : n >= m ) ( eq0 : n - m = 0 ) : n = m .
+Proof .
+  intro m . induction m as [ | m IHm ] .
+  intros . 
+
+  rewrite natminuseqn in eq0 . 
+  exact eq0 .
+
+  intros .
+  induction n as [ | n ] . 
+  assert ( absd : empty ) .
+  exact ( ge ( natgthsn0 _ ) ) .
+  
+  destruct absd .
+
+  apply ( maponpaths S ) . exact ( IHm n ge eq0 ) . 
+
+Defined.
+
+
 Lemma natmiusmius1mminus1 { n m : nat } ( gt1 : n > 0 ) ( gt2 : m > 0 ) :
   ( n - 1 ) - ( m - 1 ) = n - m .
 Proof .
@@ -95,13 +98,65 @@ Proof .
 
 Defined.
 
+Lemma natgthtominus1geh { m n : nat } : m > n -> m - 1 >= n .
+Proof.
+  intro m . induction m as [ | m IHm ] .
+  intros n gt . induction ( natgehn0 _ gt ) .
+  
+  intros n gt .
+  change ( m - 0 >= n ) . rewrite ( natminuseqn m ) . apply natgthsntogeh . exact gt .
+  
+Defined .
+
+Lemma natgthminus1togeh { n m : nat } : m > n - 1 -> m >= n .
+Proof.
+  intro n . induction n as [ | n IHn ] .
+  intros m gt . exact ( natgehn0 _ ) .
+  
+  intros m gt .
+  change ( S n - 1 ) with ( n - 0 ) in gt . rewrite ( natminuseqn n ) in gt .
+  apply natgthtogehsn . exact gt .
+  
+Defined .
+
+Lemma nat1plusminusgt { n m : nat } ( gt : 1 + m > n ) : ( 1 + m ) - n = 1 + ( m - n ) .
+Proof.
+  intros .
+  apply ( natplusrcan _ _ n ) . rewrite ( natplusassoc _ _ n ) .
+  rewrite ( minusplusnmm _ n ( natgthtogeh _ _ gt ) ) .
+  rewrite ( minusplusnmm _ n ) . 
+  apply idpath .
+
+  apply ( natgthsntogeh _ _ gt ) . 
+
+Defined.
+
+
+Lemma lB_2014_12_07_l1 { m n : nat } ( gt : m > n ) : m - n = 1 + (( m - 1 ) - n ) .
+Proof.
+  intros. induction m as [ | m IHm ] . induction ( natgehn0 _ gt ) .
+  clear IHm. change ( S m - n = S ( m - 0 - n ) ) . rewrite  ( natminuseqn m ) . 
+  exact ( nat1plusminusgt gt ) .
+Defined.
 
 
 
+Lemma natminusmmk { m k : nat } ( ge : m >= k ) : m - ( m - k ) = k .
+Proof.
+  intros .
+  apply ( natplusrcan _ _ ( m - k ) ) .
+  rewrite minusplusnmm . 
+  rewrite natpluscomm . 
+  rewrite minusplusnmm .
+  apply idpath . 
 
+  apply ge . 
 
+  apply natminuslehn. 
 
+Defined.
 
+ 
   
 Lemma natleftplustorightminus ( n m k : nat ) : n + m = k -> n = k - m .
 Proof.
@@ -114,33 +169,15 @@ Proof.
 Defined.
 
 
-Lemma natgthtominus1geh { m n : nat } : ( m > n ) -> ( m - 1 >= n ) .
-Proof.
-  intro m . induction m as [ | m IHm ] .
-  intros n gt . induction ( natgehn0 _ gt ) .
-  
-  intros n gt .
-  change ( m - 0 >= n ) . rewrite ( natminuseqn m ) . apply natgthsntogeh . exact gt .
-  
-Defined .
-
-Lemma natgthminus1togeh { n m : nat } : ( m > n - 1 ) -> ( m >= n ) .
-Proof.
-  intro n . induction n as [ | n IHn ] .
-  intros m gt . exact ( natgehn0 _ ) .
-  
-  intros m gt .
-  change ( S n - 1 ) with ( n - 0 ) in gt . rewrite ( natminuseqn n ) in gt .
-  apply natgthtogehsn . exact gt .
-  
-Defined .
 
 
 Definition natassocpmeq ( n m k : nat ) ( ge : m >= k ) : ( n + m ) - k =  n + ( m - k ) .
-Proof. intros.  apply ( natplusrcan _ _ k ) . rewrite ( natplusassoc n _ k ) .
-       rewrite ( minusplusnmm _ k ge ) .
-       set ( ge' := istransnatgeh _ _ _ ( natgehplusnmm n m ) ge ) .
-       rewrite ( minusplusnmm _ k ge' ) . apply idpath.
+Proof.
+  intros.  apply ( natplusrcan _ _ k ) . rewrite ( natplusassoc n _ k ) .
+  rewrite ( minusplusnmm _ k ge ) .
+  set ( ge' := istransnatgeh _ _ _ ( natgehplusnmm n m ) ge ) .
+  rewrite ( minusplusnmm _ k ge' ) . apply idpath.
+  
 Defined.
 
 Definition natassocmpeq ( n m k : nat ) ( isnm : n >= m ) ( ismk : m >= k ) :
@@ -155,11 +192,7 @@ Defined.
 
 
 
-Lemma natminusind ( m n : nat ) : m - S n = ( m - 1 ) - n . 
-Proof . intros .
-        induction m as [ | m IHm ] .  apply idpath . simpl .  rewrite ( natminuseqn m ) . 
-        apply idpath .
-Defined.
+
 
 
 Definition natminusassoc ( n m k : nat ) : ( n  - m ) - k = n - ( m + k ) .
@@ -182,19 +215,6 @@ Proof .
 Defined.
  
 
-Lemma nat1plusminusgt { n m : nat } ( gt : 1 + m > n ) : ( 1 + m ) - n = 1 + ( m - n ) .
-Proof.
-  intros .  assert ( ge : m >= n ) . apply ( natgthsntogeh _ _ gt ) . 
-  exact ( natassocpmeq _ _ _ ge ) . 
-Defined.
-
-
-Lemma natminusmmk { m k : nat } ( ge : m >= k ) : m - ( m - k ) = k .
-Proof.
-  intros .  rewrite ( ! ( natassocmpeq m m k ( isreflnatgeh m ) ge ) ) .
-  rewrite ( natminusnn m ) . 
-  apply idpath .
-Defined.
 
 
 Definition natminusinter { n m k : nat } ( ge1 : n >= m ) ( ge2 : m >= k ) :

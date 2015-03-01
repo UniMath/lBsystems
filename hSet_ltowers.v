@@ -401,6 +401,145 @@ Definition ltower_fun_second { T : hSet_ltower }
 
 
 
+(** **** The induction principle for isover *)
+
+
+Definition isover_ind_int { BB : ltower }
+           ( P : forall ( X Y : BB ) , UU )
+           ( P0 : forall ( X : BB ) , P X X )
+           ( Pft : forall ( X : BB ) ( gt0 : ll X > 0 ) , P X ( ft X ) )
+           ( Pcomp : forall ( X Y : BB ) , P X ( ft X ) -> P ( ft X ) Y -> P X Y ) :
+  forall ( n : nat ) ( X Y : BB ) ( eq : Y = ftn n X ) , P X Y .
+Proof.
+  intros until n .  induction n as [ | n IHn ] .
+  intros . change _ with ( Y = X ) in eq . 
+  rewrite eq . 
+  apply P0 .
+
+  intros .
+  destruct ( natgehchoice _ _ ( natgehn0 ( ll X ) ) ) as [ gt0 | eq0 ] . 
+  apply Pcomp . 
+  apply Pft . 
+  apply gt0 . 
+  assert ( eq' : Y = ftn n ( ft X ) ) . 
+  rewrite ftn_ft . 
+  apply eq .
+
+  apply ( IHn _ _ eq' ) .
+  rewrite ftnX_eq_X in eq . 
+  rewrite eq . 
+  apply P0 .
+
+  apply eq0.
+
+Defined.
+
+Lemma isover_ind_int_compt0 { BB : hSet_ltower }
+           ( P : forall ( X Y : BB ) , UU )
+           ( P0 : forall ( X : BB ) , P X X )
+           ( Pft : forall ( X : BB ) ( gt0 : ll X > 0 ) , P X ( ft X ) )
+           ( Pcomp : forall ( X Y : BB ) , P X ( ft X ) -> P ( ft X ) Y -> P X Y )
+           ( n : nat ) ( eq0 : n = 0 ) ( X : BB ) ( eq : X = ftn n X ) :
+  isover_ind_int P P0 Pft Pcomp n X X eq = P0 X .
+Proof. 
+  intros .
+  set ( Y := X ) . 
+  change _ with ( Y = ftn n X ) in eq . 
+  change _ with (isover_ind_int P P0 Pft Pcomp n X Y eq = P0 X).
+  generalize eq . 
+  rewrite eq0 . 
+  intro eq1. assert ( eqq : eq1 = idpath X ) .  apply isasetB .
+  simpl . rewrite eqq .
+  apply idpath . 
+
+Defined.
+
+Lemma isover_ind_int_comptS_eq_in_BB { BB : hSet_ltower }
+      { n m : nat } ( eqn : n = S m ) { X Y : BB } ( eq : Y = ftn n X ) :
+  Y = ftn m ( ft X ) .
+Proof .
+  intros .
+  rewrite ftn_ft . 
+  change ( 1 + m ) with ( S m ) . 
+  rewrite <- eqn . 
+  exact eq .
+
+Defined.
+
+
+Lemma isover_ind_int_comptS { BB : hSet_ltower }
+           ( P : forall ( X Y : BB ) , UU )
+           ( P0 : forall ( X : BB ) , P X X )
+           ( Pft : forall ( X : BB ) ( gt0 : ll X > 0 ) , P X ( ft X ) )
+           ( Pcomp : forall ( X Y : BB ) , P X ( ft X ) -> P ( ft X ) Y -> P X Y )
+           ( n m : nat ) ( eqn : n = S m ) ( X Y : BB ) ( gt0 : ll X > 0 )
+           ( eq : Y = ftn n X ) ( eq' : Y = ftn m ( ft X ) ) :
+  isover_ind_int P P0 Pft Pcomp n X Y eq =
+  Pcomp _ _ ( Pft X gt0 ) ( isover_ind_int P P0 Pft Pcomp m ( ft X ) Y eq' ) .
+Proof. 
+  intros until m .  intro eqn . rewrite eqn .
+  intros .
+  simpl .
+  destruct (natgehchoice (ll X) 0 (natgehn0 (ll X))) as [ gt0' | eq0 ] . 
+  assert ( int : gt0 = gt0' ) . apply proofirrelevance . apply ( pr2 ( _ > _ ) ) . 
+  rewrite int .
+  assert ( int' : (uu0a.internal_identity_rew_r BB (ftn m (ft X)) 
+           ((ft circ ftn m) X) (fun l : BB => Y = l) eq 
+           (ftn_ft m X)) = eq' ) .
+  apply isasetB . 
+  rewrite int' .
+  apply idpath .
+
+  assert ( gt0' : ll X > 0 ) . apply gt0 .
+
+  rewrite eq0 in gt0' . destruct ( negnatgthnn _ gt0' ) . 
+
+Defined.
+
+  
+  
+Definition isover_ind { BB : ltower }
+           ( P : forall ( X Y : BB ) , UU )
+           ( P0 : forall ( X : BB ) , P X X )
+           ( Pft : forall ( X : BB ) ( gt0 : ll X > 0 ) , P X ( ft X ) )
+           ( Pcomp : forall ( X Y : BB ) , P X ( ft X ) -> P ( ft X ) Y -> P X Y ) :
+  forall ( X Y : BB ) ( isov : isover X Y ) , P X Y :=
+  fun X Y isov => isover_ind_int P P0 Pft Pcomp ( ll X - ll Y ) X Y isov .
+
+
+Lemma isover_ind_compt0 { BB : hSet_ltower }
+           ( P : forall ( X Y : BB ) , UU )
+           ( P0 : forall ( X : BB ) , P X X )
+           ( Pft : forall ( X : BB ) ( gt0 : ll X > 0 ) , P X ( ft X ) )
+           ( Pcomp : forall ( X Y : BB ) , P X ( ft X ) -> P ( ft X ) Y -> P X Y )
+           ( X : BB ) ( isov : isover X X ) : isover_ind P P0 Pft Pcomp X X isov = P0 X .
+Proof.
+  intros.
+  apply isover_ind_int_compt0 . 
+  apply natminusnn . 
+
+Defined.
+
+Lemma isover_ind_comptS { BB : hSet_ltower }
+           ( P : forall ( X Y : BB ) , UU )
+           ( P0 : forall ( X : BB ) , P X X )
+           ( Pft : forall ( X : BB ) ( gt0 : ll X > 0 ) , P X ( ft X ) )
+           ( Pcomp : forall ( X Y : BB ) , P X ( ft X ) -> P ( ft X ) Y -> P X Y )
+           ( X Y : BB ) ( gt0 : ll X > 0 ) ( isab : isabove X Y ) :
+  isover_ind P P0 Pft Pcomp X Y isab =
+  Pcomp _ _ ( Pft X gt0 ) ( isover_ind P P0 Pft Pcomp ( ft X ) Y ( isover_ft' isab ) ) .
+Proof.
+  intros .
+  apply isover_ind_int_comptS .
+  rewrite ll_ft . 
+  apply lB_2014_12_07_l1 . 
+  apply ( isabove_gth isab ) . 
+
+Defined.
+
+
+
+
   
 
 (* End of the file hSet_ltowers.v *)

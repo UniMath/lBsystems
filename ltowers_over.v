@@ -346,8 +346,7 @@ Proof .
 
 Defined.
 
-
-
+  
 Lemma isllmonot_to_ltower_over ( T : pltower )  :
   isllmonot ( @to_ltower_over T ) .
 Proof .
@@ -366,6 +365,8 @@ Proof .
   exact eq0 .
 
 Defined.
+
+
 
 
   

@@ -115,7 +115,7 @@ Definition lB0system_non_unital_pr1 : lB0system_non_unital -> prelBsystem_non_un
 Coercion lB0system_non_unital_pr1 : lB0system_non_unital >-> prelBsystem_non_unital .
 
 
-(** **** Access functions to the and axioms *)
+(** **** Access functions to the axioms *)
 
  
 Definition T_ax1a { BB : lB0system_non_unital } : T_ax1a_type ( @T_op BB ) :=
@@ -148,19 +148,52 @@ Definition St_ax0 { BB : lB0system_non_unital } : St_ax0_type ( @St_op BB ) :=
 (** **** Derived operations re-defined in a more streamlined form *)
 
 
+Definition T_ext { BB : lB0system_non_unital }
+           ( X Y : BB ) ( gt0 : ll X > 0 ) ( isov : isover Y ( ft X ) ) : BB :=
+  T_ext (@T_op BB) ( T_ext_dom_constr gt0 isov ) .
 
-
+Definition T_fun { BB : lB0system_non_unital } ( X : BB ) ( gt0 : ll X > 0 ) :
+  ltower_fun ( ltower_over ( ft X ) ) ( ltower_over X ) :=
+  lBsystems_T_fun_Tj_Ttj.T_fun ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) gt0 . 
+  
 Definition Tj_fun { BB : lB0system_non_unital } { A X1 : BB } ( isov : isover X1 A ) :
   ltower_fun ( ltower_over A ) ( ltower_over X1 ) :=
-  ltower_Tj_fun ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) isov .
+  lBsystems_T_fun_Tj_Ttj.Tj_fun ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) isov .
+
+Definition Tj_fun_compt { BB : lB0system_non_unital } { X Y : BB } ( isab : isabove X Y ) :
+  Tj_fun isab = ltower_funcomp ( Tj_fun ( isover_ft' isab ) ) ( T_fun X ( isabove_gt0 isab ) ) :=
+  lBsystems.lBsystems_T_fun_Tj_Ttj.Tj_fun_compt ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) isab . 
+
+Definition Tj { BB : lB0system_non_unital } { X A Y : BB }
+           ( isov1 : isover X A ) ( isov2 : isover Y A ) : BB :=
+  pocto ( Tj_fun isov1 (  obj_over_constr isov2 ) ) .
+
+Definition isover_Tj { BB : lB0system_non_unital } { X A Y : BB }
+           ( isov1 : isover X A ) ( isov2 : isover Y A ) : isover ( Tj isov1 isov2 ) X :=
+  pr2 ( Tj_fun isov1 (  obj_over_constr isov2 ) ) .
+
+Definition Tj_compt { BB : lB0system_non_unital } { X A Y : BB }
+           ( isab : isabove X A ) ( isov2 : isover Y A ) :
+  Tj isab isov2 =
+  T_ext X ( Tj ( isover_ft' isab ) isov2 ) ( isabove_gt0 isab ) ( isover_Tj ( isover_ft' isab ) isov2 ) . 
+Proof.
+  intros.
+  unfold Tj .  
+  rewrite Tj_fun_compt . 
+  apply idpath . 
+
+Defined.
 
 
 Definition Tprod_over { BB : lB0system_non_unital } ( X1 : BB ) :
   ltower_fun BB ( ltower_over X1 ) :=
-  lBsystems.lBsystems_T_fun_Tj_Ttj.ltower_fun_Tprod ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) X1 .  
+  lBsystems.lBsystems_T_fun_Tj_Ttj.Tprod_fun ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) X1 .  
            
 
 Definition Tprod { BB : lB0system_non_unital } ( X Y : BB ) : BB := pocto ( Tprod_over X Y ) .
+
+Definition isover_Tprod { BB : lB0system_non_unital } ( X Y : BB ) :
+  isover ( Tprod X Y ) X := pr2 ( Tprod_over X Y ) .
 
 Lemma ll_Tprod { BB : lB0system_non_unital } ( X Y : BB ) : ll ( Tprod X Y ) = ll X + ll Y .
 Proof.
@@ -172,6 +205,21 @@ Proof.
   apply idpath . 
 
 Defined.
+
+
+
+Definition Tprod_compt { BB : lB0system_non_unital } ( X Y : BB ) ( gt0 : ll X > 0 ) :
+  Tprod X Y = T_ext X ( Tprod ( ft X ) Y ) gt0 ( isover_Tprod _ _ ) .
+Proof.
+  intros.
+  assert ( int :=
+             lBsystems.lBsystems_T_fun_Tj_Ttj.Tprod_compt
+               ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) X Y gt0 ).
+  exact ( maponpaths pocto int ) . 
+
+Defined.
+
+  
 
 Definition S_fun { BB : lB0system_non_unital } ( r : Tilde BB ) :
   ltower_fun ( ltower_over ( dd r ) ) ( ltower_over ( ft ( dd r ) ) ) :=
@@ -224,17 +272,6 @@ Definition lB0system_to_prelBystem ( BB : lB0system ) : prelBsystem :=
 Coercion lB0system_to_prelBystem : lB0system >-> prelBsystem . 
 
 
-
-
-
-(** *** Derived operations such as Tprod re-defined for lB0systems. 
-
-The re-definitions provide simplier lists of arguments and come
-with properties that are easier to use in proofs. *)
-
-(* Definition Tprod { BB : lB0system } ( X Y : BB ) : BB :=
-  lBsystems_T_fun_Tj_Ttj.Tprod *)
-  
 
 
 

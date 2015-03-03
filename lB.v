@@ -4,8 +4,8 @@ By Vladimir Voevodsky, started on Jan. 18, 2015 *)
 
 Unset Automatic Introduction.
 
-Require Export lBsystems.lBsystems_non_unital.
-Require Export lBsystems.lB0systems.
+Require Export lBsystems.lB_non_unital.
+Require Export lBsystems.lB0.
 
 
 (** Condition dltT *)
@@ -72,4 +72,4 @@ Definition dltSid { BB : lB } : dltSid_type BB := pr2 ( pr2 ( pr2 BB ) ) .
 
 
 
-(* End of the file lBsystems_unital.v *)
+(* End of the file lB.v *)

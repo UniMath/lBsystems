@@ -92,8 +92,8 @@ VFILES:=lB_to_precat.v\
   lBsystems.v\
   lBsystems_S_fun.v\
   lBsystems_T_fun_Tj_Ttj.v\
-  lBsystems_unital.v\
-  lBsystems_non_unital.v\
+  lB.v\
+  lB_non_unital.v\
   lB0.v\
   lB0_non_unital.v\
   prelB.v\

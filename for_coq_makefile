@@ -13,8 +13,8 @@ prelB_non_unital.v
 prelB.v
 lB0_non_unital.v
 lB0.v
-lBsystems_non_unital.v
-lBsystems_unital.v
+lB_non_unital.v
+lB.v
 lBsystems_T_fun_Tj_Ttj.v
 lBsystems_S_fun.v
 lBsystems.v

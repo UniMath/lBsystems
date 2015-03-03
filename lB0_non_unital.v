@@ -4,7 +4,7 @@ By Vladimir Voevodsky, started on Jan. 24, 2015 *)
 
 Unset Automatic Introduction.
 
-Require Export lBsystems.prelBsystems. 
+Require Export lBsystems.prelB. 
 Require Export lBsystems.lBsystems_TS_ST.
 Require Export lBsystems.lBsystems_STid .
 Require Export lBsystems.lBsystems_dlt .

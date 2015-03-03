@@ -7,7 +7,7 @@ Unset Automatic Introduction.
 Require Export lBsystems.lBsystems_T_fun_Tj_Ttj.
 Require Export lBsystems.lBsystems_S_fun.
 
-Require Export lBsystems.lB0systems .
+Require Export lBsystems.lB0 .
 
 Require Export lCsystems.lC_to_lB0.
 
@@ -165,12 +165,12 @@ Defined.
 
 
 
-(** We now start proving the comparison theorem showing that for lB0-systems of the form
+(** *** Comparison theorem showing that for lB0-systems of the form
 lB0_from_C CC our construction Mor_from_B recovers the morphisms in CC. *)
 
 
 
-(** Construction of a function from iterated_sections to morphisms *)
+(** **** Construction of a function from iterated_sections to morphisms *)
 
 Definition iter_sec_to_mor { CC : lCsystem } { m : nat } { Z : CC } { le : m <= ll Z }
            ( itrs : @iter_sec ( lB0_from_C CC ) m Z le ) : ftn m Z --> Z .
@@ -232,7 +232,7 @@ Proof.
 
 Defined.
 
-(** Construction of the (horizontal) projection from ( Tj X A Y ) to Y *)
+(** **** Construction of the (horizontal) projection from ( Tj X A Y ) to Y *)
 
 
 
@@ -294,6 +294,13 @@ Defined.
 
 
 
+
+(** **** The function from morphisms of the lB0-system constrcuted from a C-system to morphisms
+of the C-system. *)
+
+
+
+
 Definition Mor_lB0_from_C_to_Mor { CC : lCsystem } ( X Y : CC )
            ( f : @Mor_from_B ( lB0_from_C CC ) X Y ) : X --> Y . 
 Proof .
@@ -320,6 +327,10 @@ Proof .
   exact ( int1 ;; int2 ) . 
 
 Defined.
+
+
+(** **** The function from the morphisms of an lC-system to the morphisms of the associated 
+lB0-system. *)
 
 
 

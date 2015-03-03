@@ -9,11 +9,13 @@ lBsystems_S_St.v
 lBsystems_TS_ST.v
 lBsystems_STid.v
 lBsystems_dlt.v
-prelBsystems.v
-lB0systems.v
+prelB_non_unital.v
+prelB.v
+lB0_non_unital.v
+lB0.v
 lBsystems_non_unital.v
 lBsystems_unital.v
 lBsystems_T_fun_Tj_Ttj.v
 lBsystems_S_fun.v
 lBsystems.v
-lBsystems_to_precategories.v
+lB_to_precat.v

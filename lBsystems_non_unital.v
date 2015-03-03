@@ -6,7 +6,7 @@ Unset Automatic Introduction.
 
 Require Export lBsystems.lBsystems_TS_ST.
 Require Export lBsystems.lBsystems_STid .
-Require Export lBsystems.lB0systems. 
+Require Export lBsystems.lB0. 
 
 
 

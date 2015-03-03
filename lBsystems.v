@@ -30,9 +30,13 @@ Require Export lBsystems.lBsystems_STid .
 
 Require Export lBsystems.lBsystems_dlt .
 
-Require Export lBsystems.prelBsystems .
+Require Export lBsystems.prelB_non_unital.
 
-Require Export lBsystems.lB0systems .
+Require Export lBsystems.prelB .
+
+Require Export lBsystems.lB0_non_unital .
+
+Require Export lBsystems.lB0 .
 
 Require Export lBsystems.lBsystems_non_unital .
 

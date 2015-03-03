@@ -4,7 +4,7 @@ by Vladimir Voevodsky, started on Jan. 22, 2015 *)
 
 Unset Automatic Introduction.
 
-Require Export lBsystems.lBsystems_T_Tt .
+Require Export lBsystems.T_Tt .
 
 
 (** *** The definition of an extended operation T and its elementary properties. *)

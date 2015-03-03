@@ -7,7 +7,7 @@ lBsystems_carriers.v
 
 Unset Automatic Introduction.
 
-Require Export lBsystems.lBsystems_prelim.
+Require Export lBsystems.prelim.
 
 
 (** To uu0a.v *)

@@ -4,9 +4,9 @@ By Vladimir Voevodsky, started on Jan. 24, 2015 *)
 
 Unset Automatic Introduction.
 
-Require Export lBsystems.lBsystems_T_Tt.
-Require Export lBsystems.lBsystems_S_St .
-Require Export lBsystems.lBsystems_dlt . 
+Require Export lBsystems.T_Tt.
+Require Export lBsystems.S_St .
+Require Export lBsystems.dlt . 
 
 
 (** ** Non-unital pre-lB-systems *) 

@@ -4,8 +4,8 @@ By Vladimir Voevodsky, started on Jan. 16, 2015 *)
 
 Unset Automatic Introduction.
 
-Require Export lBsystems.lBsystems_TS_ST.
-Require Export lBsystems.lBsystems_STid .
+Require Export lBsystems.TS_ST.
+Require Export lBsystems.STid .
 Require Export lBsystems.lB0. 
 
 
@@ -14,10 +14,10 @@ Require Export lBsystems.lB0.
 (** Conditions TT and TTt *)
 
 Definition TT_type { BB : lB0system_non_unital } :=
-  lBsystems_T_Tt.TT_type ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) .
+  T_Tt.TT_type ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) .
 
 Definition TTt_type { BB : lB0system_non_unital } :=
-  lBsystems_T_Tt.TTt_type ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) ( @Tt_ax1 BB ) .
+  T_Tt.TTt_type ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) ( @Tt_ax1 BB ) .
 
 Definition TT_TTt_layer ( BB : lB0system_non_unital ) := dirprod ( @TT_type BB ) ( @TTt_type BB ) . 
                    
@@ -26,10 +26,10 @@ Definition TT_TTt_layer ( BB : lB0system_non_unital ) := dirprod ( @TT_type BB )
 (** Conditions SSt and StSt *)
 
 Definition SSt_type { BB : lB0system_non_unital } :=
-  lBsystems_S_St.SSt_type ( @S_ax0 BB ) ( @S_ax1a BB ) ( @S_ax1b BB ) ( @St_ax1 BB ) .
+  S_St.SSt_type ( @S_ax0 BB ) ( @S_ax1a BB ) ( @S_ax1b BB ) ( @St_ax1 BB ) .
 
 Definition StSt_type { BB : lB0system_non_unital } :=
-  lBsystems_S_St.StSt_type ( @S_ax0 BB ) ( @S_ax1a BB ) ( @S_ax1b BB ) ( @St_ax1 BB ) .
+  S_St.StSt_type ( @S_ax0 BB ) ( @S_ax1a BB ) ( @S_ax1b BB ) ( @St_ax1 BB ) .
 
 Definition SSt_StSt_layer ( BB : lB0system_non_unital ) := dirprod ( @SSt_type BB ) ( @StSt_type BB ) . 
 
@@ -38,10 +38,10 @@ Definition SSt_StSt_layer ( BB : lB0system_non_unital ) := dirprod ( @SSt_type B
 (** Conditions TS and TtS *)
 
 Definition TS_type { BB : lB0system_non_unital } :=
-  lBsystems_TS_ST.TS_type ( @T_ax1b BB ) ( @S_ax0 BB ) ( @S_ax1a BB ) ( @S_ax1b BB ) .
+  TS_ST.TS_type ( @T_ax1b BB ) ( @S_ax0 BB ) ( @S_ax1a BB ) ( @S_ax1b BB ) .
 
 Definition TtS_type { BB : lB0system_non_unital } :=
-  lBsystems_TS_ST.TtS_type ( @T_ax1b BB ) ( @Tt_ax1 BB )
+  TS_ST.TtS_type ( @T_ax1b BB ) ( @Tt_ax1 BB )
                            ( @S_ax0 BB ) ( @S_ax1a BB ) ( @S_ax1b BB ) ( @St_ax1 BB ) .
 
 Definition TS_TtS_layer ( BB : lB0system_non_unital ) := dirprod ( @TS_type BB ) ( @TtS_type BB ) .
@@ -51,10 +51,10 @@ Definition TS_TtS_layer ( BB : lB0system_non_unital ) := dirprod ( @TS_type BB )
 (** Conditions STt and StTt *)
 
 Definition STt_type { BB : lB0system_non_unital } :=
-  lBsystems_TS_ST.STt_type ( @T_ax0 BB ) ( @T_ax1a BB ) ( @Tt_ax1 BB ) ( @S_ax1b BB ) . 
+  TS_ST.STt_type ( @T_ax0 BB ) ( @T_ax1a BB ) ( @Tt_ax1 BB ) ( @S_ax1b BB ) . 
 
 Definition StTt_type { BB : lB0system_non_unital } :=
-  lBsystems_TS_ST.StTt_type ( @T_ax0 BB ) ( @T_ax1a BB ) ( @Tt_ax1 BB )  ( @S_ax1b BB ) ( @St_ax1 BB ) .
+  TS_ST.StTt_type ( @T_ax0 BB ) ( @T_ax1a BB ) ( @Tt_ax1 BB )  ( @S_ax1b BB ) ( @St_ax1 BB ) .
 
 Definition ST_StTt_layer ( BB : lB0system_non_unital ) := dirprod ( @STt_type BB ) ( @StTt_type BB ) .
 
@@ -63,10 +63,10 @@ Definition ST_StTt_layer ( BB : lB0system_non_unital ) := dirprod ( @STt_type BB
 (** Conditions STid and StTtid *) 
 
 Definition STid_type { BB : lB0system_non_unital } :=
-  lBsystems_STid.STid_type ( @T_ax1b BB ) ( @S_op BB ) . 
+  STid.STid_type ( @T_ax1b BB ) ( @S_op BB ) . 
 
 Definition StTtid_type { BB : lB0system_non_unital } :=
-  lBsystems_STid.StTtid_type ( @T_ax1b BB ) ( @Tt_ax1 BB ) ( @St_op BB ) .
+  STid.StTtid_type ( @T_ax1b BB ) ( @Tt_ax1 BB ) ( @St_op BB ) .
 
 Definition STid_layer ( BB : lB0system_non_unital ) := dirprod ( @STid_type BB ) ( @StTtid_type BB ) .
 

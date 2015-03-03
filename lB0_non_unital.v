@@ -5,12 +5,12 @@ By Vladimir Voevodsky, started on Jan. 24, 2015 *)
 Unset Automatic Introduction.
 
 Require Export lBsystems.prelB. 
-Require Export lBsystems.lBsystems_TS_ST.
-Require Export lBsystems.lBsystems_STid .
-Require Export lBsystems.lBsystems_dlt .
+Require Export lBsystems.TS_ST.
+Require Export lBsystems.STid .
+Require Export lBsystems.dlt .
 
-Require Export lBsystems.lBsystems_T_fun_Tj_Ttj.
-Require Export lBsystems.lBsystems_S_fun.
+Require Export lBsystems.T_fun.
+Require Export lBsystems.S_fun.
 
 
 
@@ -154,15 +154,15 @@ Definition T_ext { BB : lB0system_non_unital }
 
 Definition T_fun { BB : lB0system_non_unital } ( X : BB ) ( gt0 : ll X > 0 ) :
   ltower_fun ( ltower_over ( ft X ) ) ( ltower_over X ) :=
-  lBsystems_T_fun_Tj_Ttj.T_fun ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) gt0 . 
+  T_fun.T_fun ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) gt0 . 
   
 Definition Tj_fun { BB : lB0system_non_unital } { A X1 : BB } ( isov : isover X1 A ) :
   ltower_fun ( ltower_over A ) ( ltower_over X1 ) :=
-  lBsystems_T_fun_Tj_Ttj.Tj_fun ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) isov .
+  T_fun.Tj_fun ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) isov .
 
 Definition Tj_fun_compt { BB : lB0system_non_unital } { X Y : BB } ( isab : isabove X Y ) :
   Tj_fun isab = ltower_funcomp ( Tj_fun ( isover_ft' isab ) ) ( T_fun X ( isabove_gt0 isab ) ) :=
-  lBsystems.lBsystems_T_fun_Tj_Ttj.Tj_fun_compt ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) isab . 
+  lBsystems.T_fun.Tj_fun_compt ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) isab . 
 
 Definition Tj { BB : lB0system_non_unital } { X A Y : BB }
            ( isov1 : isover X A ) ( isov2 : isover Y A ) : BB :=
@@ -187,7 +187,7 @@ Defined.
 
 Definition Tprod_over { BB : lB0system_non_unital } ( X1 : BB ) :
   ltower_fun BB ( ltower_over X1 ) :=
-  lBsystems.lBsystems_T_fun_Tj_Ttj.Tprod_fun ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) X1 .  
+  lBsystems.T_fun.Tprod_fun ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) X1 .  
            
 
 Definition Tprod { BB : lB0system_non_unital } ( X Y : BB ) : BB := pocto ( Tprod_over X Y ) .
@@ -213,7 +213,7 @@ Definition Tprod_compt { BB : lB0system_non_unital } ( X Y : BB ) ( gt0 : ll X >
 Proof.
   intros.
   assert ( int :=
-             lBsystems.lBsystems_T_fun_Tj_Ttj.Tprod_compt
+             lBsystems.T_fun.Tprod_compt
                ( @T_ax0 BB ) ( @T_ax1a BB ) ( @T_ax1b BB ) X Y gt0 ).
   exact ( maponpaths pocto int ) . 
 

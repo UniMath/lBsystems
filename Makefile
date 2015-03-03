@@ -90,21 +90,21 @@ endif
 
 VFILES:=lB_to_precat.v\
   lBsystems.v\
-  lBsystems_S_fun.v\
-  lBsystems_T_fun_Tj_Ttj.v\
+  S_fun.v\
+  T_fun.v\
   lB.v\
   lB_non_unital.v\
   lB0.v\
   lB0_non_unital.v\
   prelB.v\
   prelB_non_unital.v\
-  lBsystems_dlt.v\
-  lBsystems_STid.v\
-  lBsystems_TS_ST.v\
-  lBsystems_S_St.v\
-  lBsystems_T_Tt.v\
-  lBsystems_carriers.v\
-  lBsystems_prelim.v\
+  dlt.v\
+  STid.v\
+  TS_ST.v\
+  S_St.v\
+  T_Tt.v\
+  lB_carriers.v\
+  prelim.v\
   hSet_ltowers.v\
   ltowers_over.v\
   ltowers.v

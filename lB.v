@@ -11,28 +11,28 @@ Require Export lBsystems.lB0.
 (** Condition dltT *)
 
 Definition dltT_type { BB : lB_nu } ( dlt : dlt_layer ( @T_op BB ) ) :=
-  lBsystems_dlt.dltT_type ( @T_ax0 BB ) ( @T_ax1b BB ) ( @Tt_op BB ) ( dlt_ax1 dlt ) . 
+  dlt.dltT_type ( @T_ax0 BB ) ( @T_ax1b BB ) ( @Tt_op BB ) ( dlt_ax1 dlt ) . 
 
 (** Condition dltS *)
 
 Definition dltS_type { BB : lB_nu } ( dlt : dlt_layer ( @T_op BB ) ) :=
-  lBsystems_dlt.dltS_type ( @T_ax1b BB ) ( @S_ax0 BB ) ( @St_op BB ) ( dlt_ax1 dlt ) .
+  dlt.dltS_type ( @T_ax1b BB ) ( @S_ax0 BB ) ( @St_op BB ) ( dlt_ax1 dlt ) .
 
 
 (** Condition SdltT *)
 
 Definition SdltT_type { BB : lB_nu } ( dlt : dlt_layer ( @T_op BB ) ) :=
-  lBsystems_dlt.SdltT_type ( @T_ax0 BB ) ( @T_ax1a BB ) ( dlt_ax1 dlt ) ( @S_op BB ) .
+  dlt.SdltT_type ( @T_ax0 BB ) ( @T_ax1a BB ) ( dlt_ax1 dlt ) ( @S_op BB ) .
 
 (** Condition StdltTt *)
 
 Definition StdltTt_type { BB : lB_nu } ( dlt : dlt_layer ( @T_op BB ) ) :=
-  lBsystems_dlt.StdltTt_type ( @T_ax0 BB ) ( @T_ax1a BB ) ( dlt_ax1 dlt ) ( @Tt_ax1 BB ) ( @St_op BB ) .
+  dlt.StdltTt_type ( @T_ax0 BB ) ( @T_ax1a BB ) ( dlt_ax1 dlt ) ( @Tt_ax1 BB ) ( @St_op BB ) .
 
 (** Condition dltSid *)
 
 Definition dltSid_type { BB : lB_nu } ( dlt : dlt_layer ( @T_op BB ) ) :=
-  lBsystems_dlt.dltSid_type ( @T_ax1b BB ) ( dlt_ax1 dlt ) ( @St_op BB ) .
+  dlt.dltSid_type ( @T_ax1b BB ) ( dlt_ax1 dlt ) ( @St_op BB ) .
 
 
 (** Unital lBsystem *)

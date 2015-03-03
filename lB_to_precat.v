@@ -4,8 +4,8 @@ by Vladimir Voevodsky, started on Jan. 22, 2015 *)
 
 Unset Automatic Introduction.
 
-Require Export lBsystems.lBsystems_T_fun_Tj_Ttj.
-Require Export lBsystems.lBsystems_S_fun.
+Require Export lBsystems.T_fun.
+Require Export lBsystems.S_fun.
 
 Require Export lBsystems.lB0 .
 

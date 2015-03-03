@@ -6,8 +6,8 @@ By Vladimir Voevodsky, started on Jan. 10, 2015 *)
 
 Unset Automatic Introduction.
 
-Require Export lBsystems.lBsystems_T_Tt .
-Require Export lBsystems.lBsystems_S_St .
+Require Export lBsystems.T_Tt .
+Require Export lBsystems.S_St .
 
 (** Properties of the domans of definition of operations S and St required to formulate 
 the properties STid and StTtid *)

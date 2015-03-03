@@ -4,7 +4,7 @@ by Vladimir Voevodsky, started on Feb. 1, 2015 *)
 
 Unset Automatic Introduction.
 
-Require Export lBsystems.lBsystems_S_St .
+Require Export lBsystems.S_St .
 
 
 (** *** The definition of an extended operation S and its elementary properties. *)

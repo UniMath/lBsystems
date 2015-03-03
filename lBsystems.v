@@ -10,7 +10,7 @@ A companion code to the paper "B-systems".
 
 
 
-Require Export lBsystems.lBsystems_prelim.
+Require Export lBsystems.prelim.
 
 Require Export lBsystems.ltowers.
 
@@ -18,17 +18,17 @@ Require Export lBsystems.ltowers_over.
 
 Require Export lBsystems.hSet_ltowers. 
 
-Require Export lBsystems.lBsystems_carriers.
+Require Export lBsystems.lB_carriers.
 
-Require Export lBsystems.lBsystems_T_Tt.
+Require Export lBsystems.T_Tt.
 
-Require Export lBsystems.lBsystems_S_St.
+Require Export lBsystems.S_St.
 
-Require Export lBsystems.lBsystems_TS_ST.
+Require Export lBsystems.TS_ST.
 
-Require Export lBsystems.lBsystems_STid .
+Require Export lBsystems.STid .
 
-Require Export lBsystems.lBsystems_dlt .
+Require Export lBsystems.dlt .
 
 Require Export lBsystems.prelB_non_unital.
 
@@ -38,13 +38,15 @@ Require Export lBsystems.lB0_non_unital .
 
 Require Export lBsystems.lB0 .
 
-Require Export lBsystems.lBsystems_non_unital .
+Require Export lBsystems.lB_non_unital .
 
-Require Export lBsystems.lBsystems_unital .
+Require Export lBsystems.lB .
 
-Require Export lBsystems.lBsystems_T_fun_Tj_Ttj .
+Require Export lBsystems.T_fun .
 
-Require Export lBsystems.lBsystems_S_fun .
+Require Export lBsystems.S_fun .
+
+Require Export lB_to_precat.
 
 
 

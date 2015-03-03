@@ -9,10 +9,6 @@ Require Export lBsystems.TS_ST.
 Require Export lBsystems.STid .
 Require Export lBsystems.dlt .
 
-Require Export lBsystems.T_fun.
-Require Export lBsystems.S_fun.
-
-
 
 
 (** ** Non-unital lB0-systems *)
@@ -148,9 +144,9 @@ Definition St_ax0 { BB : lB0system_non_unital } : St_ax0_type ( @St_op BB ) :=
 (** *** Derived operations re-defined in a more streamlined form *)
 
 
-Definition T_ext { BB : lB0system_non_unital }
-           ( X Y : BB ) ( gt0 : ll X > 0 ) ( isov : isover Y ( ft X ) ) : BB :=
-  T_ext (@T_op BB) ( T_ext_dom_constr gt0 isov ) .
+(** **** Derived operations related to operation T *)
+
+
 
 Definition T_fun { BB : lB0system_non_unital } ( X : BB ) ( gt0 : ll X > 0 ) :
   ltower_fun ( ltower_over ( ft X ) ) ( ltower_over X ) :=
@@ -219,7 +215,11 @@ Proof.
 
 Defined.
 
-  
+
+(** **** Derived operations related to operation S *)
+
+
+
 
 Definition S_fun { BB : lB0system_non_unital } ( r : Tilde BB ) :
   ltower_fun ( ltower_over ( dd r ) ) ( ltower_over ( ft ( dd r ) ) ) :=

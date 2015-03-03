@@ -19,6 +19,33 @@ in the associated lC-system. We do it for non-unital prelBsystems but the only s
 is actually required is an lBsystem_carrier and an operation of type S_ops_type satisfying
 axiom ax0. *)
 
+
+
+Lemma Tilden_dd_inn { BB : prelBsystem_non_unital }
+      { m : nat } { Z : BB } ( s : Tilde_dd ( ftn m Z ) ) : S_ext_dom s Z .
+Proof.
+  intros.
+  unfold S_ext_dom .
+  set ( eq := pr2 s : dd s = ftn m Z ) . simpl in eq .
+  rewrite eq .
+  apply isover_X_ftnX . 
+
+Defined.
+
+Fixpoint Tilden_dd { BB : prelBsystem_non_unital } ( n : nat ) ( X : BB ) : UU :=
+  match n with
+    | 0 => unit
+    | S n' => match n' with
+                | 0 => Tilde_dd X
+                | S n'' => total2 ( fun s1 : Tilde_dd ( ftn n' X ) =>
+                                      Tilden_dd n' ( S_ext s1 X ( Tilden_dd_inn s1 ) ) )
+              end
+  end .
+
+
+
+(* 
+
 Lemma iter_sec_inn { BB : prelBsystem_non_unital }
       { m : nat } { Z : BB } ( gt0 : m > 0 ) ( lesm : S m <= ll Z )
       ( s : Tilde_dd ( ftn m Z ) ) : S_dom s Z .
@@ -27,6 +54,7 @@ Proof.
   unfold S_dom .
   set ( eq := pr2 s : dd s = ftn m Z ) . simpl in eq .
   rewrite eq .
+  
   
   apply ( isabove_X_ftnX gt0 ) .
   apply ( natgehgthtrans _ _ _ lesm ( natgthsn0 _ ) ) .
@@ -71,18 +99,14 @@ Defined.
   iter_sec m Z lem =
   total2 ( fun s : Tilde_dd ( ftn m Z ) => iter_sec n ( S s Z ( inn s ) ))*)
 
+*)
+
 
 (** We now define morphisms X --> Y as iterated sections of the projection Tprod X Y --> X *)
 
 
-Definition Mor_from_B { BB : lB0system_non_unital } ( X Y : BB ) : UU .
-Proof.
-  intros.
-  refine ( iter_sec ( ll Y ) ( Tprod X Y ) _ ) .
-  rewrite ll_Tprod . 
-  apply natlehmplusnm . 
-
-Defined.
+Definition Mor_from_B { BB : lB0system_non_unital } ( X Y : BB ) : UU :=
+  Tilden_dd ( ll Y ) ( Tprod X Y )  .
 
 
 (** Here is another definition of morphisms that defines them together with the corresponding

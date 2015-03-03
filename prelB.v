@@ -5,6 +5,7 @@ By Vladimir Voevodsky, split off the file prelBsystems.v on March 3, 2015 *)
 Unset Automatic Introduction.
 
 Require Export lBsystems.prelB_non_unital.
+Require Export lBsystems.dlt.
 
 
 

@@ -4,9 +4,9 @@ By Vladimir Voevodsky, started on Jan. 24, 2015 *)
 
 Unset Automatic Introduction.
 
-Require Export lBsystems.T_Tt.
-Require Export lBsystems.S_St .
-Require Export lBsystems.dlt . 
+Require Export lBsystems.T_fun.
+Require Export lBsystems.S_fun .
+
 
 
 (** ** Non-unital pre-lB-systems *) 
@@ -95,6 +95,17 @@ Notation ll_S := S_ax0 .
 Definition St_ax0 { BB : prelBsystem_non_unital } : St_ax0_type ( @St_op BB ) :=
   pr2 ( pr2 ( pr2 ( pr2 BB ) ) ) .
 
+
+(** *** Some derived operations in a more streamlined form *)
+
+Definition T_ext { BB : prelBsystem_non_unital }
+           ( X Y : BB ) ( gt0 : ll X > 0 ) ( isov : isover Y ( ft X ) ) : BB :=
+  T_fun.T_ext (@T_op BB) ( T_ext_dom_constr gt0 isov ) .
+
+
+Definition S_ext { BB : prelBsystem_non_unital }
+           ( r : Tilde BB ) ( X : BB ) ( isov : isover X ( dd r ) ) : BB :=
+  S_fun.S_ext (@S_op BB) isov .
 
 
 

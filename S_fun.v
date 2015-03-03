@@ -39,6 +39,25 @@ Proof .
 
 Defined.
 
+
+Lemma ll_S_ext { BB : lBsystem_carrier }
+      { S : S_ops_type BB } ( ax0 : S_ax0_type S ) ( ax1b : S_ax1b_type S )
+      ( r : Tilde BB ) ( X : BB ) ( inn : S_ext_dom r X ) : ll ( S_ext S inn ) = ll X - 1.
+Proof.
+  intros .
+  unfold S_ext . 
+  simpl . 
+  destruct ( ovab_choice inn ) as [ isab | eq ] . 
+  apply ax0 . 
+
+  rewrite ll_ft .  
+  rewrite eq . 
+  apply idpath .
+
+Defined.
+
+
+
 Lemma isover_S_ext_S_ext_2 { BB : lBsystem_carrier }
       { S : S_ops_type BB } ( ax0 :  S_ax0_type S ) ( ax1a : S_ax1a_type S ) ( ax1b : S_ax1b_type S )
       { r : Tilde BB } { X2 X2' : BB } ( inn : S_ext_dom r X2 ) ( inn' : S_ext_dom r X2' )

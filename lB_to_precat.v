@@ -22,23 +22,40 @@ axiom ax0. *)
 
 
 Lemma Tilden_dd_inn { BB : prelBsystem_non_unital }
-      { m : nat } { Z : BB } ( s : Tilde_dd ( ftn m Z ) ) : S_ext_dom s Z .
+      { n' : nat } { X : BB } ( s : Tilde_dd ( ftn ( S n' ) X ) ) : S_dom s X .
 Proof.
   intros.
-  unfold S_ext_dom .
-  set ( eq := pr2 s : dd s = ftn m Z ) . simpl in eq .
-  rewrite eq .
-  apply isover_X_ftnX . 
+  unfold S_dom .
+  destruct s as [ s' eq ].
+  assert ( gt0 : ll ( ftn ( S n' ) X ) > 0 ).
+  rewrite <- eq.
+  apply ll_dd.
+
+  simpl. 
+  rewrite eq.
+  split.
+  rewrite ll_ftn.
+  rewrite ll_ftn in gt0.
+  apply natminuslthn.
+  assert ( gt := minusgth0inv _ _ gt0 ). 
+  apply ( istransnatgth _ _ _ gt ( natgthsn0 _ ) ). 
+
+  apply natgthsn0. 
+
+  apply ( isover_X_ftnX _ _ ). 
 
 Defined.
 
-Fixpoint Tilden_dd { BB : prelBsystem_non_unital } ( n : nat ) ( X : BB ) : UU :=
+Opaque Tilden_dd_inn.
+
+
+Fixpoint Tilden_dd { BB : prelBsystem_non_unital } ( n : nat )  ( X : BB )  : UU :=
   match n with
     | 0 => unit
     | S n' => match n' with
                 | 0 => Tilde_dd X
-                | S n'' => total2 ( fun s1 : Tilde_dd ( ftn n' X ) =>
-                                      Tilden_dd n' ( S_ext s1 X ( Tilden_dd_inn s1 ) ) )
+                | S n'' => total2 ( fun s1 : Tilde_dd ( ftn ( S n'' ) X ) =>
+                                      Tilden_dd n' ( S_op s1 X ( Tilden_dd_inn s1 ) ) )
               end
   end .
 

@@ -220,6 +220,18 @@ Defined.
 
 
 
+Lemma ll_S_ext { BB : lB0system_non_unital }
+      ( r : Tilde BB ) ( X : BB ) ( inn : isover X ( dd r )  ) : ll ( S_ext r X inn ) = ll X - 1.
+Proof.
+  intros.
+  apply S_fun.ll_S_ext .
+  apply ( @S_ax0 BB ) .
+
+  apply ( @S_ax1b BB ) . 
+
+Defined.
+
+  
 
 Definition S_fun { BB : lB0system_non_unital } ( r : Tilde BB ) :
   ltower_fun ( ltower_over ( dd r ) ) ( ltower_over ( ft ( dd r ) ) ) :=

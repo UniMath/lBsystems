@@ -370,6 +370,8 @@ Defined.
 
 
 
+
+
 (* Two-sided minus and greater or equal *) 
 
 Definition natgehandminusl ( n m k : nat ) ( ge : n >= m ) : k - m >= k - n .
@@ -401,6 +403,7 @@ Proof .
   exact ( ge' gt ) . 
 
 Defined.
+
 
 
   

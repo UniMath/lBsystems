@@ -227,8 +227,7 @@ Lemma Tj_fun_compt { BB : lBsystem_carrier }
 Proof.
   intros.
   unfold Tj_fun .
-  set ( gt0 := isabove_gt0 isab ) . 
-  rewrite (@isover_ind_comptS BB _ _ _ _ _ _ gt0 ). 
+  rewrite (@isover_ind_isab BB _ _ _ _ _ _ ). 
   apply idpath .
 
 Defined.

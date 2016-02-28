@@ -47,7 +47,7 @@ Lemma T_dom_gt0_2 { BB : lBsystem_carrier } { X1 X2 : BB } ( inn : T_dom X1 X2 )
   ll X2 > 0 .
 Proof .
   intros .
-  exact ( natgehgthtrans _ _ _ ( T_dom_geh inn ) ( T_dom_gt0 inn ) ) .
+  exact ( isabove_gt0 ( T_dom_isabove inn ) ) .
           
 Defined.
           
